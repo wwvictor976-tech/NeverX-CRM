@@ -33,9 +33,10 @@ function GithubIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   );
 }
 
-const inputWrapperClass = "group relative flex items-center transition-all duration-200 rounded-xl border border-slate-200 bg-slate-50/70 focus-within:bg-white focus-within:border-teal-600 focus-within:ring-4 focus-within:ring-teal-500/10 shadow-xs";
-const inputFieldClass = "h-10.5 w-full bg-transparent px-3.5 pl-10 text-xs font-normal text-slate-900 placeholder:text-slate-400 focus:outline-none border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors";
-const socialBtnClass = "h-10 w-full rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-800 transition-all duration-200 active:scale-[0.97] shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none";
+/* Classes refinadas para alto contraste contra fundo branco */
+const inputWrapperClass = "group relative flex items-center transition-all duration-200 rounded-xl border border-slate-300 bg-slate-100/60 focus-within:bg-white focus-within:border-teal-700 focus-within:ring-2 focus-within:ring-teal-700/20 shadow-2xs";
+const inputFieldClass = "h-11 w-full bg-transparent px-3.5 pl-10 text-sm font-normal text-slate-900 placeholder:text-slate-500 focus:outline-none border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors";
+const socialBtnClass = "h-10.5 w-full rounded-xl border border-slate-300 bg-white hover:bg-slate-100/80 text-xs font-semibold text-slate-900 transition-all duration-200 active:scale-[0.97] shadow-2xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,10 +73,10 @@ export default function LoginPage() {
         className="flex flex-col gap-4 sm:gap-5"
       >
         <div className="space-y-1 text-left">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950">
             Painel do Lojista
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs font-medium text-slate-600">
             Entre para gerenciar seus clientes, histórico de compras e pós-venda.
           </p>
         </div>
@@ -86,26 +87,26 @@ export default function LoginPage() {
             <span>Google</span>
           </motion.button>
           <motion.button whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.97 }} type="button" className={socialBtnClass} disabled={isLoading}>
-            <GithubIcon className="text-slate-900" />
+            <GithubIcon className="text-slate-950" />
             <span>GitHub</span>
           </motion.button>
         </div>
 
         <div className="relative flex items-center py-0.5">
-          <div className="h-px flex-1 bg-slate-200" />
-          <span className="px-3 text-[10px] font-mono uppercase tracking-widest text-slate-400">
+          <div className="h-px flex-1 bg-slate-300" />
+          <span className="px-3 text-[10px] font-mono font-semibold uppercase tracking-widest text-slate-500">
             ou via e-mail
           </span>
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-slate-300" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5" noValidate>
           <div className="space-y-1.5">
-            <Label htmlFor="login-email" className="text-[11px] font-semibold text-slate-800">
+            <Label htmlFor="login-email" className="text-xs font-semibold text-slate-900">
               E-mail corporativo
             </Label>
             <div className={inputWrapperClass}>
-              <Mail className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
+              <Mail className="absolute left-3.5 h-4 w-4 text-slate-500 group-focus-within:text-teal-700 transition-colors" />
               <Input
                 id="login-email"
                 type="email"
@@ -117,19 +118,19 @@ export default function LoginPage() {
               />
             </div>
             {errors.email && (
-              <p className="flex items-center gap-1 text-[11px] font-medium text-red-600">
-                <AlertCircle className="h-3 w-3 shrink-0" />
+              <p className="flex items-center gap-1 text-xs font-medium text-red-700 mt-1">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                 {errors.email.message}
               </p>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="login-password" className="text-[11px] font-semibold text-slate-800">
+            <Label htmlFor="login-password" className="text-xs font-semibold text-slate-900">
               Senha
             </Label>
             <div className={inputWrapperClass}>
-              <Lock className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
+              <Lock className="absolute left-3.5 h-4 w-4 text-slate-500 group-focus-within:text-teal-700 transition-colors" />
               <Input
                 id="login-password"
                 type={showPassword ? "text" : "password"}
@@ -142,14 +143,14 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 p-1 text-slate-400 hover:text-slate-700 transition-colors focus:outline-none cursor-pointer"
+                className="absolute right-3 p-1 text-slate-500 hover:text-slate-900 transition-colors focus:outline-none cursor-pointer"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             {errors.password && (
-              <p className="flex items-center gap-1 text-[11px] font-medium text-red-600">
-                <AlertCircle className="h-3 w-3 shrink-0" />
+              <p className="flex items-center gap-1 text-xs font-medium text-red-700 mt-1">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                 {errors.password.message}
               </p>
             )}
@@ -161,16 +162,16 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded border-slate-300 bg-slate-100 text-teal-600 focus:ring-teal-500/20 transition-colors cursor-pointer accent-teal-600"
+                  className="h-4 w-4 rounded border-slate-400 bg-slate-100 text-teal-700 focus:ring-teal-700/20 transition-colors cursor-pointer accent-teal-700"
                 />
-                <span className="text-[11px] font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                <span className="text-xs font-medium text-slate-700 hover:text-slate-950 transition-colors">
                   Lembrar-me
                 </span>
               </label>
 
               <Link
                 href="/auth/forgot-password"
-                className="text-[11px] font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+                className="text-xs font-semibold text-teal-700 hover:text-teal-800 transition-colors underline-offset-2 hover:underline"
               >
                 Esqueceu a senha?
               </Link>
@@ -178,8 +179,8 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs font-medium text-red-600">
-              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 rounded-xl border border-red-300 bg-red-50 p-3 text-xs font-medium text-red-800">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-red-600" />
               <span>{error}</span>
             </div>
           )}
@@ -187,7 +188,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="group relative h-10.5 w-full overflow-hidden rounded-xl bg-slate-900 text-xs font-semibold text-white shadow-md transition-all duration-200 hover:bg-slate-950 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-400"
+            className="group relative h-11 w-full overflow-hidden rounded-xl bg-slate-950 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-slate-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-600"
           >
             {isLoading ? (
               <span className="inline-flex items-center justify-center gap-2">
@@ -203,11 +204,11 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="pt-1 text-center text-xs text-slate-500">
+        <div className="pt-1 text-center text-xs text-slate-600">
           Ainda não cadastrou sua loja?{" "}
           <Link
             href="/register"
-            className="font-semibold text-teal-600 hover:underline cursor-pointer"
+            className="font-semibold text-teal-700 hover:text-teal-800 underline-offset-2 hover:underline cursor-pointer"
           >
             Criar conta
           </Link>

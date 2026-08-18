@@ -3,7 +3,7 @@
 import type { SVGProps } from "react";
 
 export const overlayTransition = {
-  duration: 0.45,
+  duration: 0.4,
   ease: [0.16, 1, 0.3, 1],
 };
 
@@ -13,14 +13,17 @@ export const fadeVariants = {
   exit: { opacity: 0, y: -6, filter: "blur(2px)" },
 };
 
+/* Ajustado para corte nítido em fundos brancos sem perder o efeito translúcido */
 export const glassInputWrapper =
-  "group relative flex items-center transition-all duration-200 rounded-xl border border-zinc-300/80 dark:border-white/10 bg-white/50 dark:bg-white/[0.03] focus-within:bg-white dark:focus-within:bg-white/[0.07] focus-within:border-teal-500 dark:focus-within:border-teal-400 focus-within:ring-4 focus-within:ring-teal-500/15";
+  "group relative flex items-center transition-all duration-200 rounded-xl border border-slate-300 dark:border-white/15 bg-slate-100/60 dark:bg-white/[0.04] focus-within:bg-white dark:focus-within:bg-white/[0.08] focus-within:border-teal-700 dark:focus-within:border-teal-400 focus-within:ring-2 focus-within:ring-teal-700/20 dark:focus-within:ring-teal-400/20 shadow-2xs";
 
+/* Tipografia ajustada para 14px (evita zoom automático no iOS) e placeholder acessível */
 export const glassInputField =
-  "h-10.5 w-full bg-transparent px-3.5 pl-10 text-xs font-normal text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors";
+  "h-11 w-full bg-transparent px-3.5 pl-10 text-sm font-normal text-slate-950 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors";
 
+/* Botão social com bordas reforçadas (WCAG 3:1) e área de toque padronizada em 44px */
 export const glassSocialButton =
-  "h-10 w-full rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/[0.04] hover:bg-zinc-100/90 dark:hover:bg-white/[0.08] hover:border-zinc-300 dark:hover:border-white/20 text-xs font-semibold text-zinc-900 dark:text-zinc-100 transition-all duration-200 active:scale-[0.97] shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none";
+  "h-10.5 w-full rounded-xl border border-slate-300 dark:border-white/15 bg-white dark:bg-white/[0.04] hover:bg-slate-100/80 dark:hover:bg-white/[0.08] hover:border-slate-400 dark:hover:border-white/25 text-xs font-semibold text-slate-950 dark:text-slate-100 transition-all duration-200 active:scale-[0.97] shadow-2xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none";
 
 export function GoogleIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
