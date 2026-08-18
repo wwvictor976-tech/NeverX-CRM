@@ -29,14 +29,14 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
   const isRegister = mode === "register";
 
   return (
-    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-slate-950 p-4 sm:p-6 lg:p-8">
-      {/* Deep colored mesh for depth + high contrast against the white card */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(13,148,136,0.18),transparent_45%),radial-gradient(circle_at_85%_85%,rgba(79,70,229,0.18),transparent_45%)]" />
-      {/* Subtle technical grid, masked to the center */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_72%)]" />
+    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-white p-4 sm:p-6 lg:p-8">
+      {/* Subtle light grid to add texture without breaking the white background */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.03)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+      {/* Faint brand tint anchored to the corners */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,rgba(15,118,110,0.06),transparent_40%),radial-gradient(circle_at_88%_88%,rgba(29,78,216,0.05),transparent_40%)]" />
 
-      {/* Main card — white surface floating on a near-black backdrop for strong separation */}
-      <div className="relative z-10 min-h-[600px] w-full max-w-[980px] overflow-hidden rounded-3xl border border-white/10 bg-white text-slate-950 shadow-2xl shadow-black/50 ring-1 ring-black/5">
+      {/* Main card — defined with a crisp border and soft shadow on the white surface */}
+      <div className="relative z-10 min-h-[600px] w-full max-w-[980px] overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-950 shadow-2xl shadow-slate-300/50 ring-1 ring-slate-900/5">
         {/* Desktop — two columns with a sliding dark panel */}
         <div className="relative hidden h-full min-h-[600px] w-full grid-cols-2 lg:grid">
           {/* Register form column (left) */}

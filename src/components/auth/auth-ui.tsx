@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import type { SVGProps } from "react";
-import { motion, AnimatePresence, type HTMLMotionProps } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, ArrowRight, Eye, EyeOff, Loader2, type LucideIcon } from "lucide-react";
+import { Button, type ButtonProps } from "@/components/ui/button";
 
 /* -------------------------------------------------------------------------- */
 /*                                Brand Icons                                 */
@@ -115,45 +116,40 @@ export const AuthField = React.forwardRef<HTMLInputElement, AuthFieldProps>(func
 /*                              Social / buttons                              */
 /* -------------------------------------------------------------------------- */
 
-export function SocialButton({ children, className = "", ...props }: HTMLMotionProps<"button">) {
+export function SocialButton({ children, className = "", ...props }: ButtonProps) {
   return (
-    <motion.button
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.97 }}
-      type="button"
-      className={`flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-slate-400 hover:bg-slate-50 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 ${className}`}
-      {...props}
-    >
+    <Button variant="outline" size="lg" className={`group w-full ${className}`} {...props}>
       {children}
-    </motion.button>
+    </Button>
   );
 }
 
-interface AuthSubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface AuthSubmitButtonProps extends ButtonProps {
   isLoading?: boolean;
   loadingLabel?: string;
 }
 
-export function AuthSubmitButton({ isLoading, loadingLabel = "Processando...", children, className = "", ...props }: AuthSubmitButtonProps) {
+export function AuthSubmitButton({
+  isLoading,
+  loadingLabel = "Processando...",
+  children,
+  className = "",
+  ...props
+}: AuthSubmitButtonProps) {
   return (
-    <button
-      type="submit"
-      disabled={isLoading}
-      className={`group relative flex h-11 w-full items-center justify-center overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-b from-slate-800 to-slate-950 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-200 hover:from-slate-700 hover:to-slate-900 active:scale-[0.98] disabled:cursor-not-allowed disabled:border-slate-200 disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-600 disabled:shadow-none ${className}`}
-      {...props}
-    >
+    <Button type="submit" variant="default" size="lg" disabled={isLoading} className={`group w-full ${className}`} {...props}>
       {isLoading ? (
-        <span className="inline-flex items-center gap-2">
-          <Loader2 className="h-4 w-4 animate-spin text-slate-300" />
-          <span className="text-slate-200">{loadingLabel}</span>
-        </span>
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          {loadingLabel}
+        </>
       ) : (
-        <span className="flex items-center justify-center gap-1.5">
+        <>
           {children}
-          <ArrowRight className="h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white" />
-        </span>
+          <ArrowRight className="h-3.5 w-3.5 opacity-70 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
+        </>
       )}
-    </button>
+    </Button>
   );
 }
 
