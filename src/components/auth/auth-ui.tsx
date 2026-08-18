@@ -6,9 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, ArrowRight, Eye, EyeOff, Loader2, type LucideIcon } from "lucide-react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 
-/* -------------------------------------------------------------------------- */
-/*                                Brand Icons                                 */
-/* -------------------------------------------------------------------------- */
 
 export function GoogleIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
@@ -33,9 +30,6 @@ export function GithubIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                Field error                                 */
-/* -------------------------------------------------------------------------- */
 
 export function FieldError({ message }: { message?: string }) {
   return (
