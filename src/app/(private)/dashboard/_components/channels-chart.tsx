@@ -1,22 +1,7 @@
 "use client";
 
 import { Mail, Globe } from "lucide-react";
-
-/* Ícone Oficial do WhatsApp */
-const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.286-.143-1.689-.833-1.951-.928-.262-.095-.453-.143-.644.143-.191.286-.739.928-.906 1.119-.167.191-.334.215-.62.072-.286-.143-1.208-.445-2.301-1.42-.85-.758-1.424-1.693-1.591-1.979-.167-.286-.018-.441.126-.583.129-.128.286-.334.429-.501.143-.167.191-.286.286-.477.095-.191.048-.358-.024-.501-.072-.143-.644-1.551-.882-2.122-.232-.557-.468-.481-.644-.49-.167-.008-.358-.01-.549-.01-.191 0-.501.072-.763.358-.262.286-1.002.978-1.002 2.385 0 1.407 1.026 2.766 1.169 2.957.143.191 2.019 3.084 4.891 4.324.684.295 1.218.471 1.634.603.687.218 1.312.187 1.807.113.553-.083 1.689-.691 1.927-1.359.238-.668.238-1.24.167-1.359-.071-.119-.262-.191-.548-.334z" />
-  </svg>
-);
-
-/* Ícone Oficial do Instagram */
-const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-  </svg>
-);
+import { SiInstagram, SiWhatsapp } from "react-icons/si";
 
 interface Channel {
   name: string;
@@ -32,7 +17,7 @@ const channels: Channel[] = [
     percentage: 52,
     value: "6.682 respostas",
     color: "#25D366",
-    icon: WhatsAppIcon,
+    icon: SiWhatsapp,
   },
   {
     name: "E-mail",
@@ -46,7 +31,7 @@ const channels: Channel[] = [
     percentage: 17,
     value: "2.184 respostas",
     color: "#E1306C",
-    icon: InstagramIcon,
+    icon: SiInstagram,
   },
   {
     name: "Outros",
