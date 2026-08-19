@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Lock, Mail, ArrowRight } from "lucide-react";
+
 import { setMockUserSession } from "@/lib/mock-auth";
 import { loginSchema, type LoginInput } from "@/features/auth/schemas/auth.schema";
 import { AuthLayout } from "@/components/auth/auth-layout";
@@ -15,14 +16,13 @@ import {
   AuthDivider,
   AuthErrorBanner,
   AuthField,
-  GithubIcon,
+  AppleIcon,
   GoogleIcon,
-  SocialButton,
 } from "@/components/auth/auth-ui";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
+  const [socialLoading, setSocialLoading] = useState<"google" | "apple" | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,14 +54,14 @@ export default function LoginPage() {
     }
   };
 
-  const handleSocialLogin = async (provider: "google" | "github") => {
+  const handleSocialLogin = async (provider: "google" | "apple") => {
     setSocialLoading(provider);
     setError(null);
     try {
       await new Promise((resolve) => setTimeout(resolve, 600));
       setMockUserSession({
         email: `lojista.${provider}@neverx.com`,
-        name: provider === "google" ? "Lojista Google" : "Lojista GitHub",
+        name: provider === "google" ? "Lojista Google" : "Lojista Apple",
       });
       router.push("/dashboard");
     } catch {
@@ -75,48 +75,22 @@ export default function LoginPage() {
   return (
     <AuthLayout mode="login">
       <motion.div
-        initial={{ opacity: 0, y: 6 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.18, ease: "easeOut" }}
-        className="flex flex-col gap-5"
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="flex flex-col gap-6"
       >
-        <div className="space-y-1 text-left">
+        {/* Cabeçalho */}
+        <div className="space-y-1.5 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Acessar conta
+            Bem-vindo de volta
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Entre com suas credenciais para acessar o painel NeverX.
+          <p className="text-sm text-muted-foreground leading-relaxed px-1">
+            Entre na sua conta e continue gerenciando relacionamentos que geram resultados.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <SocialButton
-            type="button"
-            disabled={isAnyLoading}
-            onClick={() => handleSocialLogin("google")}
-            className="w-full justify-center"
-          >
-            <GoogleIcon />
-            <span className="font-medium text-xs text-foreground">
-              {socialLoading === "google" ? "Conectando..." : "Google"}
-            </span>
-          </SocialButton>
-
-          <SocialButton
-            type="button"
-            disabled={isAnyLoading}
-            onClick={() => handleSocialLogin("github")}
-            className="w-full justify-center"
-          >
-            <GithubIcon className="text-foreground" />
-            <span className="font-medium text-xs text-foreground">
-              {socialLoading === "github" ? "Conectando..." : "GitHub"}
-            </span>
-          </SocialButton>
-        </div>
-
-        <AuthDivider label="ou continue com e-mail" />
-
+        {/* Formulário de E-mail/Senha */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           <AuthField
             id="login-email"
@@ -124,7 +98,7 @@ export default function LoginPage() {
             icon={Mail}
             type="email"
             autoComplete="email"
-            placeholder="nome@empresa.com"
+            placeholder="seu@email.com"
             disabled={isAnyLoading}
             error={errors.email?.message}
             {...register("email")}
@@ -146,7 +120,8 @@ export default function LoginPage() {
               {...register("password")}
             />
 
-            <div className="flex items-center justify-between pt-0.5">
+            {/* Lembrar de mim & Esqueceu a senha */}
+            <div className="flex items-center justify-between pt-1">
               <label
                 htmlFor="remember-me"
                 className="group flex cursor-pointer select-none items-center gap-2"
@@ -157,7 +132,7 @@ export default function LoginPage() {
                   checked={rememberMe}
                   disabled={isAnyLoading}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-600/20 disabled:opacity-50"
+                  className="h-4 w-4 rounded border-border text-foreground accent-foreground focus:ring-accent/20 disabled:opacity-50 transition-colors"
                 />
                 <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
                   Lembrar de mim
@@ -166,34 +141,81 @@ export default function LoginPage() {
 
               <Link
                 href="/auth/forgot-password"
-                className="text-xs font-medium text-teal-600 hover:text-teal-700 hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+                className="auth-link text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
               >
-                Esqueceu a senha?
+                Esqueceu sua senha?
               </Link>
             </div>
           </div>
 
           {error && <AuthErrorBanner message={error} />}
 
+          {/* Botão de Submit */}
           <Button
             type="submit"
+            variant="default"
             size="lg"
             isLoading={isLoading}
             disabled={isAnyLoading}
-            className="w-full group bg-primary hover:bg-primary-hover text-primary-foreground font-medium"
+            className="w-full relative group"
           >
-            <span>Entrar na plataforma</span>
+            <span>Entrar</span>
             {!isLoading && (
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="h-4 w-4 absolute right-4 transition-transform group-hover:translate-x-1" />
             )}
           </Button>
         </form>
 
-        <p className="text-center text-xs text-muted-foreground">
-          Não tem uma conta?{" "}
+        {/* Divisor */}
+        <AuthDivider label="ou continue com" />
+
+        {/* Botões Sociais */}
+        <div className="flex flex-col gap-3">
+          <Button
+            type="button"
+            variant="social"
+            size="lg"
+            disabled={isAnyLoading}
+            isLoading={socialLoading === "google"}
+            onClick={() => handleSocialLogin("google")}
+            className="w-full relative"
+          >
+            {socialLoading !== "google" && (
+              <div className="absolute left-4">
+                <GoogleIcon />
+              </div>
+            )}
+            <span>
+              {socialLoading === "google" ? "Conectando..." : "Continuar com Google"}
+            </span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="social"
+            size="lg"
+            disabled={isAnyLoading}
+            isLoading={socialLoading === "apple"}
+            onClick={() => handleSocialLogin("apple")}
+            className="w-full relative"
+          >
+            {socialLoading !== "apple" && (
+              <div className="absolute left-4">
+                <AppleIcon className="text-foreground" />
+              </div>
+            )}
+            <span>
+              {socialLoading === "apple" ? "Conectando..." : "Continuar com Apple"}
+            </span>
+          </Button>
+        </div>
+
+        {/* Rodapé */}
+        <p className="text-center text-xs text-muted-foreground mt-1">
+          Ainda não tem uma conta?{" "}
           <Link
             href="/register"
-            className="font-semibold text-teal-600 hover:text-teal-700 hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+            className="auth-link font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             Criar conta
           </Link>

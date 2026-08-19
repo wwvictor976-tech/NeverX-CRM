@@ -2,21 +2,22 @@ import * as React from "react";
 import { Loader2 } from "lucide-react";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "default" | "navy" | "teal" | "secondary" | "outline" | "ghost" | "danger";
-  size?: "default" | "sm" | "lg";
+  // Removidas cores legadas (navy/teal) e adicionadas variantes específicas do NeverX
+  variant?: "default" | "accent" | "social" | "secondary" | "outline" | "ghost" | "danger";
+  size?: "default" | "sm" | "lg" | "icon";
   isLoading?: boolean;
 };
 
+// Base ajustada: duration-200 (mais suave) e rounded-xl (padrão NeverX para botões e inputs)
 const baseClasses = [
   "inline-flex",
   "items-center",
   "justify-center",
   "gap-2",
   "rounded-xl",
-  "font-semibold",
-  "text-sm",
+  "font-medium", // Ajustado para medium para não pesar tanto quanto semibold na UI limpa
   "transition-all",
-  "duration-150",
+  "duration-200",
   "cursor-pointer",
   "select-none",
   "disabled:pointer-events-none",
@@ -29,26 +30,38 @@ const baseClasses = [
 ].join(" ");
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
+  // Botão Escuro Principal (ex: Entrar, Criar conta)
   default:
-    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active shadow-xs",
-  navy:
-    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active shadow-xs",
-  teal:
-    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active shadow-xs",
+    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active",
+  
+  // Botão Dourado de Destaque (caso precise no dashboard)
+  accent:
+    "bg-accent text-accent-foreground hover:bg-accent-hover shadow-sm",
+  
+  // Botões do Google/Apple
+  social:
+    "border border-border bg-card text-foreground hover:bg-muted active:bg-border-subtle",
+  
+  // Ações secundárias
   secondary:
-    "bg-muted text-muted-foreground hover:bg-slate-200/80 active:bg-slate-200",
+    "bg-muted text-muted-foreground hover:text-foreground hover:bg-border-subtle",
+  
+  // Contornos e Fantasmas (para filtros e ações menores)
   outline:
-    "border border-border-subtle bg-background text-foreground hover:bg-muted shadow-xs",
+    "border border-border bg-transparent text-foreground hover:bg-muted",
   ghost:
-    "text-muted-foreground hover:bg-muted hover:text-foreground",
+    "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+  
+  // Destrutivo
   danger:
-    "bg-danger text-white hover:opacity-90 shadow-xs",
+    "bg-danger text-white hover:opacity-90",
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
-  default: "h-10 px-4 text-xs font-semibold",
-  sm: "h-8.5 px-3 text-xs",
-  lg: "h-11 px-5 text-sm font-semibold",
+  default: "h-10 px-4 py-2 text-sm",
+  sm: "h-8 px-3 text-xs",
+  lg: "h-11 px-6 text-sm", // O tamanho exato usado nos botões de Auth (h-11)
+  icon: "h-10 w-10", // Adicionado para botões apenas com ícone
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -67,8 +80,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const classes = [
       baseClasses,
-      variantClasses[variant] || variantClasses.default,
-      sizeClasses[size] || sizeClasses.default,
+      variantClasses[variant],
+      sizeClasses[size],
       className,
     ]
       .filter(Boolean)
@@ -83,7 +96,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin shrink-0" />}
-        {children}
+        {/* Se estiver carregando, o conteúdo fica levemente opaco para destacar o spinner */}
+        <span className={`inline-flex items-center gap-2 ${isLoading ? 'opacity-70' : ''}`}>
+          {children}
+        </span>
       </button>
     );
   }

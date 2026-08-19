@@ -3,12 +3,12 @@
 import * as React from "react";
 import type { SVGProps } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, ArrowRight, Eye, EyeOff, Loader2, type LucideIcon } from "lucide-react";
+import { AlertCircle, ArrowRight, Eye, EyeOff, type LucideIcon } from "lucide-react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 
-export function GoogleIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
+export function GoogleIcon({ className = "", ...props }: SVGProps<SVGSVGElement>) {
   return (
-    <svg className={`h-4 w-4 shrink-0 ${className || ""}`} viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    <svg className={`h-4 w-4 shrink-0 ${className}`} viewBox="0 0 24 24" aria-hidden="true" {...props}>
       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
       <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
@@ -17,14 +17,10 @@ export function GoogleIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function GithubIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
+export function AppleIcon({ className = "", ...props }: SVGProps<SVGSVGElement>) {
   return (
-    <svg className={`h-4 w-4 shrink-0 fill-current ${className || ""}`} viewBox="0 0 24 24" aria-hidden="true" {...props}>
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-      />
+    <svg className={`h-4 w-4 shrink-0 fill-current text-foreground ${className}`} viewBox="0 0 24 24" aria-hidden="true" {...props}>
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.67-.82 1.13-1.96.99-3.1-.98.04-2.19.66-2.88 1.47-.62.72-1.17 1.88-1.02 3.01 1.1.08 2.24-.56 2.91-1.38z" />
     </svg>
   );
 }
@@ -34,12 +30,12 @@ export function FieldError({ message }: { message?: string }) {
     <AnimatePresence>
       {message && (
         <motion.p
-          initial={{ opacity: 0, y: -4 }}
+          initial={{ opacity: 0, y: -2 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="flex items-center gap-1.5 pt-0.5 text-[11px] font-medium text-danger"
+          className="flex items-center gap-1 text-[11px] font-medium text-danger"
         >
-          <AlertCircle className="h-3.5 w-3.5 shrink-0 text-danger" />
+          <AlertCircle className="h-3 w-3 shrink-0 text-danger" />
           {message}
         </motion.p>
       )}
@@ -61,24 +57,24 @@ export const AuthField = React.forwardRef<HTMLInputElement, AuthFieldProps>(func
   ref,
 ) {
   return (
-    <div className="space-y-1.5 text-left">
-      <label htmlFor={id} className="text-xs font-semibold tracking-tight text-foreground">
+    <div className="space-y-1 text-left">
+      <label htmlFor={id} className="text-[11px] font-medium text-foreground">
         {label}
       </label>
       <div
-        className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+        className={`group relative flex items-center rounded-xl border bg-card transition-all duration-200 ${
           error
-            ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
-            : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+            ? "border-danger focus-within:border-danger focus-within:ring-1 focus-within:ring-danger/20"
+            : "border-input focus-within:border-accent focus-within:ring-1 focus-within:ring-ring"
         }`}
       >
-        <Icon className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+        <Icon className="pointer-events-none absolute left-3 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-accent" />
         <input
           ref={ref}
           id={id}
           aria-invalid={Boolean(error)}
-          className={`h-11 w-full bg-transparent pl-10 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none ${
-            showPasswordToggle ? "pr-10" : "pr-3.5"
+          className={`h-10 w-full rounded-xl bg-transparent pl-9 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none ${
+            showPasswordToggle ? "pr-9" : "pr-3"
           } ${className}`}
           {...props}
         />
@@ -88,9 +84,9 @@ export const AuthField = React.forwardRef<HTMLInputElement, AuthFieldProps>(func
             onClick={onTogglePassword}
             tabIndex={-1}
             aria-label={isPasswordVisible ? "Ocultar senha" : "Mostrar senha"}
-            className="absolute right-3 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground focus:outline-none"
+            className="absolute right-2.5 rounded-md p-1 text-muted-foreground hover:text-foreground focus:outline-none"
           >
-            {isPasswordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {isPasswordVisible ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
           </button>
         )}
       </div>
@@ -103,7 +99,12 @@ AuthField.displayName = "AuthField";
 
 export function SocialButton({ children, className = "", ...props }: ButtonProps) {
   return (
-    <Button variant="outline" size="lg" className={`group w-full ${className}`} {...props}>
+    <Button
+      variant="social"
+      size="default"
+      className={`w-full relative h-9 text-xs ${className}`}
+      {...props}
+    >
       {children}
     </Button>
   );
@@ -116,22 +117,27 @@ interface AuthSubmitButtonProps extends ButtonProps {
 
 export function AuthSubmitButton({
   isLoading,
-  loadingLabel = "Processando...",
+  loadingLabel = "Entrando...",
   children,
   className = "",
   ...props
 }: AuthSubmitButtonProps) {
   return (
-    <Button type="submit" variant="default" size="lg" disabled={isLoading} className={`group w-full ${className}`} {...props}>
+    <Button
+      type="submit"
+      variant="default"
+      size="default"
+      isLoading={isLoading}
+      disabled={isLoading || props.disabled}
+      className={`w-full relative group h-10 ${className}`}
+      {...props}
+    >
       {isLoading ? (
-        <>
-          <Loader2 className="h-4 w-4 animate-spin shrink-0" />
-          {loadingLabel}
-        </>
+        <span>{loadingLabel}</span>
       ) : (
         <>
-          {children}
-          <ArrowRight className="h-3.5 w-3.5 opacity-70 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
+          <span>{children}</span>
+          <ArrowRight className="h-4 w-4 absolute right-3 transition-transform duration-200 group-hover:translate-x-0.5" />
         </>
       )}
     </Button>
@@ -140,18 +146,21 @@ export function AuthSubmitButton({
 
 export function AuthDivider({ label }: { label: string }) {
   return (
-    <div className="relative flex items-center py-0.5">
-      <div className="h-px flex-1 bg-gradient-to-r from-transparent to-border-subtle" />
-      <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</span>
-      <div className="h-px flex-1 bg-gradient-to-l from-transparent to-border-subtle" />
+    <div className="relative flex items-center justify-center py-1">
+      <div className="absolute inset-0 flex items-center">
+        <div className="w-full border-t border-border-subtle" />
+      </div>
+      <span className="relative bg-card px-2.5 text-[10px] font-normal text-muted-foreground">
+        {label}
+      </span>
     </div>
   );
 }
 
 export function AuthErrorBanner({ message }: { message: string }) {
   return (
-    <div className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-medium text-danger">
-      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" />
+    <div className="flex items-start gap-2 rounded-xl border border-danger/20 bg-danger/10 p-2.5 text-xs font-medium text-danger">
+      <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-danger" />
       <span>{message}</span>
     </div>
   );
