@@ -1,35 +1,56 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #ffffff;
-  --color-foreground: #020617;
+  /* =========================================
+     CORES BASE (Styleguide Oficial NeverX)
+     ========================================= */
+  --color-background: #F5F6F8;
+  --color-foreground: #111111;
 
-  --color-card: #ffffff;
-  --color-card-foreground: #020617;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #111111;
 
-  --color-primary: #1e3a8a;
-  --color-primary-hover: #172554;
-  --color-primary-active: #0f172a;
-  --color-primary-foreground: #ffffff;
+  /* Botão principal (Entrar / Criar conta / Ações Primárias) */
+  --color-primary: #111111;
+  --color-primary-hover: #222222;
+  --color-primary-active: #000000;
+  --color-primary-foreground: #FFFFFF;
 
-  --color-muted: #f1f5f9;
-  --color-muted-foreground: #334155;
+  /* Destaques e Links em Dourado NeverX */
+  --color-accent: #D4AF37;
+  --color-accent-hover: #B89428;
+  --color-accent-foreground: #FFFFFF;
 
-  --color-border: #94a3b8;
-  --color-border-subtle: #cbd5e1;
-  --color-input: #94a3b8;
-  --color-ring: #1e3a8a;
+  /* Textos secundários e elementos suaves */
+  --color-muted: #F5F6F8;
+  --color-muted-foreground: #6E6E73;
 
-  --color-accent: #2563eb;
-  --color-accent-foreground: #ffffff;
+  /* Bordas e Inputs */
+  --color-border: #E5E7EB;
+  --color-border-subtle: #F0EEEE;
+  --color-input: #E5E7EB;
+  --color-ring: #D4AF37;
 
-  --color-success: #166534;
-  --color-warning: #92400e;
-  --color-danger: #991b1b;
+  /* Status */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
 
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* =========================================
+     TIPOGRAFIA
+     ========================================= */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* =========================================
+     SOMBRAS (Elevation Tokens)
+     ========================================= */
+  --shadow-auth: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 15px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 4px 20px -2px rgba(17, 17, 17, 0.03);
 }
 
+/* =========================================
+   BASE E RESETS
+   ========================================= */
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
@@ -39,17 +60,22 @@ body {
   min-height: 100vh;
   font-family: var(--font-sans);
   background-color: var(--color-background);
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(30, 58, 138, 0.08) 0%, transparent 80%),
-    linear-gradient(180deg, #ffffff 60%, #f8fafc 100%);
   color: var(--color-foreground);
+
+  /* Imagem de Fundo Global Fixo */
+  background-image: url("/bg.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: rgba(30, 58, 138, 0.2);
+  background: rgba(212, 175, 55, 0.2); /* Dourado com opacidade */
   color: var(--color-foreground);
 }
 
@@ -62,19 +88,48 @@ body {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
+
+  /* Reset para o preenchimento automático (Autofill) dos navegadores Webkit */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-foreground);
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-card) inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
+/* =========================================
+   COMPONENTES REUTILIZÁVEIS
+   ========================================= */
 @layer components {
+  /* Card do Auth (Modais de Login/Register com sombra destacada) */
+  .auth-card {
+    @apply rounded-2xl border border-black/[0.04] bg-card shadow-auth transition-all duration-200;
+  }
+
+  /* Superfície padrão de Cards e Widgets no Dashboard */
   .card-surface {
-    @apply rounded-xl border border-slate-300 bg-card transition-all duration-200 ease-in-out;
-    box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+    @apply rounded-2xl border border-border-subtle bg-card shadow-card transition-all duration-200;
   }
 
-  .card-surface-interactive {
-    @apply rounded-xl border border-slate-300 bg-card transition-all duration-200 ease-in-out hover:border-slate-400 hover:shadow-md active:scale-[0.99];
+  /* Inputs arredondados */
+  .auth-input {
+    @apply flex h-11 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-colors;
   }
 
-  .text-balance {
-    text-wrap: balance;
+  /* Botão escuro de submissão */
+  .auth-button-primary {
+    @apply flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover active:bg-primary-active disabled:opacity-50;
+  }
+
+  /* Botões sociais (Google / Apple) */
+  .auth-button-social {
+    @apply flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted active:bg-border-subtle;
+  }
+
+  /* Links dourados de destaque */
+  .auth-link {
+    @apply text-sm font-medium text-accent transition-colors hover:text-accent-hover;
   }
 }

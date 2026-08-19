@@ -3,15 +3,13 @@ import * as React from "react";
 export type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 
 export const labelClasses = [
-  "text-xs",
-  "font-semibold",
+  "text-sm", // Ajustado de xs para sm (melhor legibilidade, conforme o design)
+  "font-medium", // "Medium" mantém a elegância sem pesar tanto quanto o "semibold"
   "leading-none",
-  "tracking-tight",
-  "text-slate-900",
-  "dark:text-slate-100",
+  "text-foreground", // Usa a nossa variável base (#111111)
   "select-none",
   "peer-disabled:cursor-not-allowed",
-  "peer-disabled:opacity-60",
+  "peer-disabled:opacity-50", // Padrão de 50% de opacidade para itens desabilitados
 ].join(" ");
 
 export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
@@ -27,3 +25,5 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
 );
 
 Label.displayName = "Label";
+
+export default Label;
