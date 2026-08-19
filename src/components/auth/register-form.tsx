@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, ArrowRight, Check, Eye, EyeOff, KeyRound, Loader2, Lock, Mail, User } from "lucide-react";
+import { AlertCircle, ArrowRight, Check, Eye, EyeOff, KeyRound, Lock, Mail, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -18,7 +19,6 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Regras de validação em tempo real
   const watchPassword = form.password;
   const hasMinLength = watchPassword.length >= 8;
   const hasUpper = /[A-Z]/.test(watchPassword);
@@ -80,22 +80,24 @@ export function RegisterForm() {
   return (
     <form className="space-y-3.5" onSubmit={handleSubmit} noValidate>
       {/* Campo: Nome */}
-      <div className="space-y-1">
-        <label htmlFor="name" className="text-[12px] font-semibold text-slate-900 tracking-tight">
+      <div className="space-y-1.5 text-left">
+        <label htmlFor="name" className="block text-xs font-semibold text-foreground tracking-tight">
           Nome do responsável ou loja
         </label>
-        <div className="relative flex items-center group">
-          <User className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-700 transition-colors pointer-events-none z-10" />
+        <div
+          className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+            errors.name
+              ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
+              : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+          }`}
+        >
+          <User className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary z-10" />
           <input
             id="name"
             type="text"
             value={form.name}
             onChange={(event) => handleChange("name", event.target.value)}
-            className={`h-11 w-full rounded-xl border bg-slate-50/50 pl-10 pr-3.5 text-sm font-normal text-slate-950 placeholder:text-slate-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] focus:bg-white focus:outline-none transition-all duration-200 ${
-              errors.name
-                ? "border-red-400 focus:border-red-600 focus:ring-3 focus:ring-red-500/15"
-                : "border-slate-300/90 hover:border-slate-400 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/15"
-            }`}
+            className="h-11 w-full rounded-xl bg-transparent pl-10 pr-3.5 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none"
             placeholder="Ex: Ana Silva ou Boutique Modas"
             aria-invalid={Boolean(errors.name)}
             disabled={isSubmitting}
@@ -103,8 +105,8 @@ export function RegisterForm() {
         </div>
         <AnimatePresence>
           {errors.name && (
-            <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 text-[11px] font-medium text-red-700 pt-0.5">
-              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-600" />
+            <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 text-[11px] font-medium text-danger pt-0.5">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-danger" />
               {errors.name}
             </motion.p>
           )}
@@ -112,23 +114,25 @@ export function RegisterForm() {
       </div>
 
       {/* Campo: E-mail */}
-      <div className="space-y-1">
-        <label htmlFor="register-email" className="text-[12px] font-semibold text-slate-900 tracking-tight">
+      <div className="space-y-1.5 text-left">
+        <label htmlFor="register-email" className="block text-xs font-semibold text-foreground tracking-tight">
           E-mail corporativo
         </label>
-        <div className="relative flex items-center group">
-          <Mail className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-700 transition-colors pointer-events-none z-10" />
+        <div
+          className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+            errors.email
+              ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
+              : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+          }`}
+        >
+          <Mail className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary z-10" />
           <input
             id="register-email"
             type="email"
             autoComplete="email"
             value={form.email}
             onChange={(event) => handleChange("email", event.target.value)}
-            className={`h-11 w-full rounded-xl border bg-slate-50/50 pl-10 pr-3.5 text-sm font-normal text-slate-950 placeholder:text-slate-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] focus:bg-white focus:outline-none transition-all duration-200 ${
-              errors.email
-                ? "border-red-400 focus:border-red-600 focus:ring-3 focus:ring-red-500/15"
-                : "border-slate-300/90 hover:border-slate-400 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/15"
-            }`}
+            className="h-11 w-full rounded-xl bg-transparent pl-10 pr-3.5 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none"
             placeholder="contato@sualoja.com.br"
             aria-invalid={Boolean(errors.email)}
             disabled={isSubmitting}
@@ -136,8 +140,8 @@ export function RegisterForm() {
         </div>
         <AnimatePresence>
           {errors.email && (
-            <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 text-[11px] font-medium text-red-700 pt-0.5">
-              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-600" />
+            <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 text-[11px] font-medium text-danger pt-0.5">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-danger" />
               {errors.email}
             </motion.p>
           )}
@@ -145,24 +149,26 @@ export function RegisterForm() {
       </div>
 
       {/* Agrupamento em Grid: Senha e Confirmação */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
         {/* Campo: Senha */}
-        <div className="space-y-1">
-          <label htmlFor="register-password" className="text-[12px] font-semibold text-slate-900 tracking-tight">
+        <div className="space-y-1.5">
+          <label htmlFor="register-password" className="block text-xs font-semibold text-foreground tracking-tight">
             Criar senha
           </label>
-          <div className="relative flex items-center group">
-            <Lock className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-700 transition-colors pointer-events-none z-10" />
+          <div
+            className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+              errors.password
+                ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
+                : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+            }`}
+          >
+            <Lock className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary z-10" />
             <input
               id="register-password"
               type={showPassword ? "text" : "password"}
               value={form.password}
               onChange={(event) => handleChange("password", event.target.value)}
-              className={`h-11 w-full rounded-xl border bg-slate-50/50 pl-10 pr-3.5 text-sm font-normal text-slate-950 placeholder:text-slate-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] focus:bg-white focus:outline-none transition-all duration-200 ${
-                errors.password
-                  ? "border-red-400 focus:border-red-600 focus:ring-3 focus:ring-red-500/15"
-                  : "border-slate-300/90 hover:border-slate-400 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/15"
-              }`}
+              className="h-11 w-full rounded-xl bg-transparent pl-10 pr-3.5 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none"
               placeholder="••••••••"
               disabled={isSubmitting}
             />
@@ -170,29 +176,31 @@ export function RegisterForm() {
         </div>
 
         {/* Campo: Confirmar Senha */}
-        <div className="space-y-1">
-          <label htmlFor="confirm-password" className="text-[12px] font-semibold text-slate-900 tracking-tight">
+        <div className="space-y-1.5">
+          <label htmlFor="confirm-password" className="block text-xs font-semibold text-foreground tracking-tight">
             Confirmar senha
           </label>
-          <div className="relative flex items-center group">
-            <KeyRound className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-700 transition-colors pointer-events-none z-10" />
+          <div
+            className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+              errors.confirmPassword
+                ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
+                : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+            }`}
+          >
+            <KeyRound className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary z-10" />
             <input
               id="confirm-password"
               type={showPassword ? "text" : "password"}
               value={form.confirmPassword}
               onChange={(event) => handleChange("confirmPassword", event.target.value)}
-              className={`h-11 w-full rounded-xl border bg-slate-50/50 pl-10 pr-9 text-sm font-normal text-slate-950 placeholder:text-slate-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] focus:bg-white focus:outline-none transition-all duration-200 ${
-                errors.confirmPassword
-                  ? "border-red-400 focus:border-red-600 focus:ring-3 focus:ring-red-500/15"
-                  : "border-slate-300/90 hover:border-slate-400 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/15"
-              }`}
+              className="h-11 w-full rounded-xl bg-transparent pl-10 pr-9 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none"
               placeholder="••••••••"
               disabled={isSubmitting}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2.5 p-1 text-slate-400 hover:text-slate-700 transition-colors focus:outline-none cursor-pointer rounded-md"
+              className="absolute right-2.5 p-1 text-muted-foreground hover:text-foreground transition-colors focus:outline-none cursor-pointer rounded-md"
               tabIndex={-1}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -204,58 +212,53 @@ export function RegisterForm() {
       {/* Erros das Senhas */}
       <AnimatePresence>
         {(errors.password || errors.confirmPassword) && (
-          <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 text-[11px] font-medium text-red-700 pt-0.5">
-            <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-600" />
+          <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 text-[11px] font-medium text-danger pt-0.5 text-left">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0 text-danger" />
             {errors.password || errors.confirmPassword}
           </motion.p>
         )}
       </AnimatePresence>
 
       {/* Checklist Dinâmico de Segurança da Senha */}
-      <div className="rounded-xl border border-slate-200/90 bg-slate-50/70 p-3 space-y-2 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+      <div className="rounded-xl border border-border-subtle bg-muted/50 p-3 space-y-2 text-left">
         <div className="flex items-center justify-between text-[11px]">
-          <span className="font-semibold text-slate-700">Requisitos da senha:</span>
-          <span className="font-mono text-[10px] font-bold text-slate-500">{rulesPassed}/3 atendidos</span>
+          <span className="font-semibold text-foreground">Requisitos da senha:</span>
+          <span className="font-mono text-[10px] font-bold text-muted-foreground">{rulesPassed}/3 atendidos</span>
         </div>
 
         <div className="grid grid-cols-3 gap-1.5 text-[11px]">
-          <span className={`flex items-center gap-1.5 font-medium transition-colors ${hasMinLength ? "text-emerald-700 font-semibold" : "text-slate-400"}`}>
+          <span className={`flex items-center gap-1.5 font-medium transition-colors ${hasMinLength ? "text-emerald-700 font-semibold" : "text-muted-foreground"}`}>
             <Check className={`h-3.5 w-3.5 ${hasMinLength ? "text-emerald-600 opacity-100" : "opacity-30"}`} /> 8+ letras
           </span>
-          <span className={`flex items-center gap-1.5 font-medium transition-colors ${hasUpper ? "text-emerald-700 font-semibold" : "text-slate-400"}`}>
+          <span className={`flex items-center gap-1.5 font-medium transition-colors ${hasUpper ? "text-emerald-700 font-semibold" : "text-muted-foreground"}`}>
             <Check className={`h-3.5 w-3.5 ${hasUpper ? "text-emerald-600 opacity-100" : "opacity-30"}`} /> Maiúscula
           </span>
-          <span className={`flex items-center gap-1.5 font-medium transition-colors ${hasNumber ? "text-emerald-700 font-semibold" : "text-slate-400"}`}>
+          <span className={`flex items-center gap-1.5 font-medium transition-colors ${hasNumber ? "text-emerald-700 font-semibold" : "text-muted-foreground"}`}>
             <Check className={`h-3.5 w-3.5 ${hasNumber ? "text-emerald-600 opacity-100" : "opacity-30"}`} /> Número
           </span>
         </div>
       </div>
 
-      {/* Botão de Submissão */}
-      <button
+      {/* Botão de Submissão via Design System */}
+      <Button
         type="submit"
-        disabled={isSubmitting}
-        className="group relative h-11 w-full overflow-hidden rounded-xl bg-gradient-to-b from-slate-900 to-slate-950 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.15)] border border-slate-800 transition-all duration-200 hover:from-slate-800 hover:to-slate-900 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer flex items-center justify-center mt-3"
+        variant="default"
+        size="lg"
+        isLoading={isSubmitting}
+        className="w-full group font-semibold mt-3"
       >
-        {isSubmitting ? (
-          <span className="inline-flex items-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin text-slate-300" />
-            <span className="text-slate-200">Criando conta...</span>
-          </span>
-        ) : (
-          <span className="flex items-center justify-center gap-1.5">
-            Cadastrar minha loja
-            <ArrowRight className="h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white" />
-          </span>
+        <span>Cadastrar minha loja</span>
+        {!isSubmitting && (
+          <ArrowRight className="h-3.5 w-3.5 opacity-80 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
         )}
-      </button>
+      </Button>
 
       {/* Link para Login */}
-      <p className="pt-1 text-center text-xs text-slate-600">
+      <p className="pt-1 text-center text-xs text-muted-foreground">
         Já possui conta registrada?{" "}
         <Link
           href="/login"
-          className="font-semibold text-teal-700 hover:text-teal-800 underline-offset-4 hover:underline transition-colors"
+          className="font-semibold text-primary hover:text-primary-hover hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
         >
           Acessar painel
         </Link>

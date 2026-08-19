@@ -10,31 +10,31 @@ interface AuthLayoutProps {
 }
 
 const overlayTransition = {
-  duration: 0.45,
+  duration: 0.5,
   ease: [0.16, 1, 0.3, 1] as const,
 };
 
 const fadeVariants = {
-  hidden: { opacity: 0, y: 6, filter: "blur(2px)" },
+  hidden: { opacity: 0, y: 8, filter: "blur(4px)" },
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-  exit: { opacity: 0, y: -6, filter: "blur(2px)" },
+  exit: { opacity: 0, y: -8, filter: "blur(4px)" },
 };
 
 const highlights = [
   {
     icon: Users,
     label: "Histórico unificado e perfil 360º do cliente",
-    tone: "text-teal-300 bg-teal-500/15 border-teal-500/25",
+    tone: "text-blue-300 bg-blue-500/15 border-blue-400/20",
   },
   {
     icon: ShoppingBag,
     label: "Automações de pós-venda e recompra",
-    tone: "text-emerald-300 bg-emerald-500/15 border-emerald-500/25",
+    tone: "text-emerald-300 bg-emerald-500/15 border-emerald-400/20",
   },
   {
     icon: TrendingUp,
     label: "Métricas de retenção e LTV em tempo real",
-    tone: "text-indigo-300 bg-indigo-500/15 border-indigo-500/25",
+    tone: "text-indigo-300 bg-indigo-500/15 border-indigo-400/20",
   },
 ];
 
@@ -42,39 +42,59 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
   const isRegister = mode === "register";
 
   return (
-    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-white p-4 sm:p-6 lg:p-8">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.03)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,rgba(15,118,110,0.06),transparent_40%),radial-gradient(circle_at_88%_88%,rgba(29,78,216,0.05),transparent_40%)]" />
+    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-slate-50/60 p-4 sm:p-6 lg:p-8">
+      {/* Luzes e iluminação básica de fundo */}
+      <div className="pointer-events-none absolute -top-32 -left-32 h-[450px] w-[450px] rounded-full bg-blue-400/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-32 -right-32 h-[450px] w-[450px] rounded-full bg-sky-400/10 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(59,130,246,0.05),transparent_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.02)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_95%)]" />
 
-      <div className="relative z-10 min-h-[600px] w-full max-w-[980px] overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-950 shadow-2xl shadow-slate-300/50 ring-1 ring-slate-900/5">
-        <div className="relative hidden h-full min-h-[600px] w-full grid-cols-2 lg:grid">
-          <div className="mx-auto flex w-full max-w-[390px] flex-col justify-center p-8 xl:p-10">
-            {isRegister && children}
+      {/* Container Principal */}
+      <div className="relative z-10 min-h-[620px] w-full max-w-[1000px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white text-slate-950 shadow-2xl shadow-slate-200/60 ring-1 ring-slate-900/5">
+        <div className="relative hidden h-full min-h-[620px] w-full grid-cols-2 lg:grid">
+          <div className="mx-auto flex w-full max-w-[400px] flex-col justify-center p-8 xl:p-10">
+            {isRegister ? children : null}
           </div>
 
-          <div className="mx-auto flex w-full max-w-[390px] flex-col justify-center p-8 xl:p-10">
-            {!isRegister && children}
+          <div className="mx-auto flex w-full max-w-[400px] flex-col justify-center p-8 xl:p-10">
+            {!isRegister ? children : null}
           </div>
 
+          {/* Painel com Imagem de Fundo (bg.jpg) e Transição com Degradê */}
           <motion.div
-            className="absolute bottom-2 left-0 top-2 z-20 flex w-[calc(50%-8px)] flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-8 text-white shadow-2xl will-change-transform xl:p-10"
+            className={`absolute inset-y-0 left-0 z-20 flex h-full w-1/2 flex-col justify-between overflow-hidden bg-slate-950 p-8 text-white shadow-2xl xl:p-10 ${
+              isRegister
+                ? "rounded-r-3xl border-l border-blue-900/40"
+                : "rounded-l-3xl border-r border-blue-900/40"
+            }`}
             initial={false}
-            animate={{ x: isRegister ? "102%" : "4%" }}
+            animate={{ x: isRegister ? "100%" : "0%" }}
             transition={overlayTransition}
           >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(20,184,166,0.16),transparent_55%)]" />
-            <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-indigo-500/10 blur-3xl" />
+            {/* Imagem de Fundo com opacidade baixa */}
+            <div className="pointer-events-none absolute inset-0 bg-[url('/bg.jpg')] bg-cover bg-center opacity-25 mix-blend-luminosity" />
 
+            {/* Degradê de fusão direcionado para o lado do formulário */}
+            <div
+              className={`pointer-events-none absolute inset-0 bg-gradient-to-r ${
+                isRegister
+                  ? "from-slate-950 via-blue-950/80 to-slate-950/40"
+                  : "from-slate-950/40 via-blue-950/80 to-slate-950"
+              }`}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950/90" />
+
+            {/* Conteúdo do Painel */}
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white font-mono text-xs font-black text-slate-950 shadow-sm">
                   NX
                 </div>
-                <span className="text-sm font-bold tracking-tight text-white">NexerX</span>
+                <span className="text-sm font-bold tracking-tight text-white">NeverX</span>
               </div>
 
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-400/30 bg-teal-500/15 px-3 py-1 text-[11px] font-semibold text-teal-300 backdrop-blur-md">
-                <ShieldCheck className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/15 px-3 py-1 text-[11px] font-semibold text-blue-200 backdrop-blur-md">
+                <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
                 CRM Lojista
               </span>
             </div>
@@ -85,8 +105,8 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
               initial="hidden"
               animate="visible"
               exit="exit"
-              transition={{ duration: 0.2 }}
-              className="relative z-10 my-auto max-w-[300px] py-4"
+              transition={{ duration: 0.25 }}
+              className="relative z-10 my-auto max-w-[320px] py-4"
             >
               <h1 className="text-2xl font-bold leading-tight tracking-tight text-white text-balance xl:text-3xl">
                 {isRegister ? "Fidelize seus clientes finais" : "Conecte sua loja ao seu cliente"}
@@ -97,7 +117,7 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
                   : "Acesse o histórico de interações, preferências e compras dos seus clientes em tempo real."}
               </p>
 
-              <div className="mt-6 space-y-3.5 border-t border-slate-800 pt-5">
+              <div className="mt-6 space-y-3 border-t border-slate-800/80 pt-5">
                 {highlights.map(({ icon: Icon, label, tone }) => (
                   <div key={label} className="flex items-center gap-3 text-xs font-medium text-slate-200">
                     <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border ${tone}`}>
@@ -109,22 +129,23 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
               </div>
             </motion.div>
 
-            <div className="relative z-10 flex items-center justify-between border-t border-slate-800 pt-4 text-[11px] text-slate-400">
-              <span>© 2026 NexerX</span>
-              <span className="font-semibold text-slate-300">Feito para Lojistas</span>
+            <div className="relative z-10 flex items-center justify-between border-t border-slate-800/80 pt-4 text-[11px] text-slate-400">
+              <span>© {new Date().getFullYear()} NeverX CRM</span>
+              <span className="font-semibold text-slate-300">Plataforma para Lojistas</span>
             </div>
           </motion.div>
         </div>
 
+        {/* Layout Mobile */}
         <div className="flex flex-col p-6 sm:p-8 lg:hidden">
           <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-4">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-950 font-mono text-xs font-black text-white shadow-xs">
                 NX
               </div>
-              <span className="text-base font-bold text-slate-950">NexerX</span>
+              <span className="text-base font-bold text-slate-950">NeverX</span>
             </div>
-            <span className="rounded-full border border-teal-200 bg-teal-50 px-2.5 py-1 text-[10px] font-semibold text-teal-700">
+            <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-800">
               CRM Lojista
             </span>
           </div>

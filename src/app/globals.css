@@ -1,37 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  /* Color Palette - Calibrada para Acessibilidade WCAG AA/AAA */
-  --color-background: #f8fafc;
-  --color-foreground: #0f172a; /* Slate 900 - Contraste 15.6:1 */
+  --color-background: #ffffff;
+  --color-foreground: #020617;
 
   --color-card: #ffffff;
-  --color-card-foreground: #0f172a;
+  --color-card-foreground: #020617;
 
-  /* Primary & Accents com contraste reforçado no fundo claro */
-  --color-primary: #0f766e; /* Teal 700 - Contraste 6.3:1 com texto branco */
-  --color-primary-hover: #115e59; /* Teal 800 */
+  --color-primary: #1e3a8a;
+  --color-primary-hover: #172554;
+  --color-primary-active: #0f172a;
   --color-primary-foreground: #ffffff;
 
-  --color-muted: #f1f5f9; /* Slate 100 */
-  --color-muted-foreground: #475569; /* Slate 600 - Elevado de #64748b para garantir 7.1:1 */
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #334155;
 
-  --color-border: #cbd5e1; /* Slate 300 - Separação estrutural nítida (3.0:1) */
-  --color-border-subtle: #e2e8f0; /* Slate 200 */
-  --color-input: #cbd5e1;
-  --color-ring: #0f766e; /* Indicador de foco de alta visibilidade */
+  --color-border: #94a3b8;
+  --color-border-subtle: #cbd5e1;
+  --color-input: #94a3b8;
+  --color-ring: #1e3a8a;
 
-  --color-accent: #1d4ed8; /* Blue 700 - Leitura e ação destacadas */
+  --color-accent: #2563eb;
   --color-accent-foreground: #ffffff;
 
-  /* Estados Semânticos Legíveis */
-  --color-success: #15803d; /* Green 700 - Texto e ícones nítidos em branco/cinza */
-  --color-warning: #b45309; /* Amber 700 - Subposto a #d97706 para evitar ilegibilidade */
-  --color-danger: #b91c1c; /* Red 700 - Alertas críticos com alto contraste */
+  --color-success: #166534;
+  --color-warning: #92400e;
+  --color-danger: #991b1b;
 
-  /* Tipografia & Bordas */
-  --radius: 0.75rem; /* 12px - Proporção mais equilibrada para telas web modernas */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 html {
@@ -44,8 +40,8 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-background);
   background-image: 
-    radial-gradient(ellipse at top, rgba(15, 118, 110, 0.08) 0%, transparent 45%),
-    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(30, 58, 138, 0.08) 0%, transparent 80%),
+    linear-gradient(180deg, #ffffff 60%, #f8fafc 100%);
   color: var(--color-foreground);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -53,7 +49,7 @@ body {
 }
 
 ::selection {
-  background: rgba(15, 118, 110, 0.2);
+  background: rgba(30, 58, 138, 0.2);
   color: var(--color-foreground);
 }
 
@@ -62,28 +58,20 @@ body {
     @apply border-border-subtle;
   }
 
-  /* Foco Global Acessível (Teclado/Acessibilidade) */
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
-
-  a {
-    @apply transition-colors duration-150 ease-in-out;
-  }
 }
 
 @layer components {
-  /* Estilo base compartilhado via seletores compostos */
-  .card-surface,
-  .card-surface-interactive {
-    @apply rounded-xl border border-slate-200/80 bg-card shadow-xs transition-all duration-200 ease-in-out;
-    box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  .card-surface {
+    @apply rounded-xl border border-slate-300 bg-card transition-all duration-200 ease-in-out;
+    box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
   }
 
-  /* Estados específicos de interatividade adicionados separadamente */
   .card-surface-interactive {
-    @apply hover:border-slate-300 hover:shadow-md active:scale-[0.99];
+    @apply rounded-xl border border-slate-300 bg-card transition-all duration-200 ease-in-out hover:border-slate-400 hover:shadow-md active:scale-[0.99];
   }
 
   .text-balance {

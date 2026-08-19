@@ -8,30 +8,29 @@ export const inputClasses = [
   "w-full",
   "rounded-xl",
   "border",
-  "border-slate-300",
-  "bg-slate-50/60",
+  "border-border-subtle",
+  "bg-background",
   "px-3.5",
   "py-2",
   "text-sm",
   "font-normal",
-  "text-slate-900",
-  "placeholder:text-slate-500",
-  "shadow-2xs",
+  "text-foreground",
+  "placeholder:text-muted-foreground",
+  "shadow-xs",
   "transition-colors",
   "duration-150",
-  "hover:border-slate-400",
-  "focus:bg-white",
-  "focus:border-teal-700",
+  "hover:border-border",
+  "focus:border-primary",
   "focus:outline-none",
   "focus:ring-2",
-  "focus:ring-teal-700/20",
+  "focus:ring-ring/20",
   "disabled:cursor-not-allowed",
   "disabled:opacity-50",
-  "disabled:bg-slate-100",
+  "disabled:bg-muted",
 ].join(" ");
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className = "", type, ...props }, ref) => {
+  ({ className = "", type = "text", ...props }, ref) => {
     return (
       <input
         ref={ref}
@@ -44,3 +43,5 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = "Input";
+
+export default Input;

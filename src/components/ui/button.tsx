@@ -1,8 +1,10 @@
 import * as React from "react";
+import { Loader2 } from "lucide-react";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "default" | "teal" | "secondary" | "outline" | "ghost";
+  variant?: "default" | "navy" | "teal" | "secondary" | "outline" | "ghost" | "danger";
   size?: "default" | "sm" | "lg";
+  isLoading?: boolean;
 };
 
 const baseClasses = [
@@ -11,30 +13,36 @@ const baseClasses = [
   "justify-center",
   "gap-2",
   "rounded-xl",
-  "font-medium",
+  "font-semibold",
   "text-sm",
-  "transition-colors",
+  "transition-all",
   "duration-150",
   "cursor-pointer",
+  "select-none",
   "disabled:pointer-events-none",
   "disabled:opacity-50",
+  "active:scale-[0.98]",
   "focus-visible:outline-none",
   "focus-visible:ring-2",
-  "focus-visible:ring-teal-700",
+  "focus-visible:ring-ring",
   "focus-visible:ring-offset-2",
 ].join(" ");
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   default:
-    "bg-slate-900 text-white hover:bg-slate-800 shadow-xs",
+    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active shadow-xs",
+  navy:
+    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active shadow-xs",
   teal:
-    "bg-teal-700 text-white hover:bg-teal-800 shadow-xs",
+    "bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active shadow-xs",
   secondary:
-    "bg-slate-100 text-slate-900 hover:bg-slate-200/80",
+    "bg-muted text-muted-foreground hover:bg-slate-200/80 active:bg-slate-200",
   outline:
-    "border border-slate-300 bg-white text-slate-900 hover:bg-slate-50 shadow-xs",
+    "border border-border-subtle bg-background text-foreground hover:bg-muted shadow-xs",
   ghost:
-    "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+    "text-muted-foreground hover:bg-muted hover:text-foreground",
+  danger:
+    "bg-danger text-white hover:opacity-90 shadow-xs",
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -43,21 +51,44 @@ const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
   lg: "h-11 px-5 text-sm font-semibold",
 };
 
-export function Button({
-  className = "",
-  variant = "default",
-  size = "default",
-  type = "button",
-  ...props
-}: ButtonProps) {
-  const classes = [
-    baseClasses,
-    variantClasses[variant],
-    sizeClasses[size],
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className = "",
+      variant = "default",
+      size = "default",
+      type = "button",
+      isLoading = false,
+      disabled,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const classes = [
+      baseClasses,
+      variantClasses[variant] || variantClasses.default,
+      sizeClasses[size] || sizeClasses.default,
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-  return <button type={type} className={classes} {...props} />;
-}
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={disabled || isLoading}
+        className={classes}
+        {...props}
+      >
+        {isLoading && <Loader2 className="h-4 w-4 animate-spin shrink-0" />}
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";
+
+export default Button;

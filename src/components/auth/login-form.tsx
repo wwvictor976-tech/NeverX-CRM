@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail, ArrowRight } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Lock, Mail, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -69,26 +70,26 @@ export function LoginForm() {
   return (
     <form className="space-y-4" onSubmit={handleSubmit} noValidate>
       {/* Input de E-mail */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between">
-          <label htmlFor="email" className="text-[12px] font-semibold text-slate-900 tracking-tight">
-            E-mail corporativo
-          </label>
-        </div>
+      <div className="space-y-1.5 text-left">
+        <label htmlFor="email" className="block text-xs font-semibold text-foreground tracking-tight">
+          E-mail corporativo
+        </label>
         
-        <div className="relative flex items-center group">
-          <Mail className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-700 transition-colors pointer-events-none z-10" />
+        <div
+          className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+            errors.email
+              ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
+              : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+          }`}
+        >
+          <Mail className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary z-10" />
           <input
             id="email"
             type="email"
             autoComplete="email"
             value={form.email}
             onChange={(event) => handleChange("email", event.target.value)}
-            className={`h-11 w-full rounded-xl border bg-slate-50/50 pl-10 pr-3.5 text-sm font-normal text-slate-950 placeholder:text-slate-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] focus:bg-white focus:outline-none transition-all duration-200 ${
-              errors.email
-                ? "border-red-400 focus:border-red-600 focus:ring-3 focus:ring-red-500/15"
-                : "border-slate-300/90 hover:border-slate-400 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/15"
-            }`}
+            className="h-11 w-full rounded-xl bg-transparent pl-10 pr-3.5 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none"
             placeholder="nome@empresa.com.br"
             aria-invalid={Boolean(errors.email)}
             disabled={isSubmitting}
@@ -101,9 +102,9 @@ export function LoginForm() {
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-1.5 text-[11px] font-medium text-red-700 pt-0.5"
+              className="flex items-center gap-1.5 text-[11px] font-medium text-danger pt-0.5"
             >
-              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-600" />
+              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-danger" />
               {errors.email}
             </motion.p>
           )}
@@ -111,32 +112,34 @@ export function LoginForm() {
       </div>
 
       {/* Input de Senha */}
-      <div className="space-y-1.5">
+      <div className="space-y-1.5 text-left">
         <div className="flex items-center justify-between">
-          <label htmlFor="password" className="text-[12px] font-semibold text-slate-900 tracking-tight">
+          <label htmlFor="password" className="text-xs font-semibold text-foreground tracking-tight">
             Senha de acesso
           </label>
           <Link
             href="/auth/forgot-password"
-            className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 transition-colors underline-offset-2 hover:underline"
+            className="text-xs font-medium text-primary hover:text-primary-hover transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             Esqueceu?
           </Link>
         </div>
 
-        <div className="relative flex items-center group">
-          <Lock className="absolute left-3.5 h-4 w-4 text-slate-400 group-focus-within:text-teal-700 transition-colors pointer-events-none z-10" />
+        <div
+          className={`group relative flex items-center rounded-xl border bg-background transition-all duration-200 ${
+            errors.password
+              ? "border-danger focus-within:border-danger focus-within:ring-2 focus-within:ring-danger/20"
+              : "border-border-subtle hover:border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/20"
+          }`}
+        >
+          <Lock className="pointer-events-none absolute left-3.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary z-10" />
           <input
             id="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             value={form.password}
             onChange={(event) => handleChange("password", event.target.value)}
-            className={`h-11 w-full rounded-xl border bg-slate-50/50 pl-10 pr-10 text-sm font-normal text-slate-950 placeholder:text-slate-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] focus:bg-white focus:outline-none transition-all duration-200 ${
-              errors.password
-                ? "border-red-400 focus:border-red-600 focus:ring-3 focus:ring-red-500/15"
-                : "border-slate-300/90 hover:border-slate-400 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/15"
-            }`}
+            className="h-11 w-full rounded-xl bg-transparent pl-10 pr-10 text-sm font-normal text-foreground placeholder:text-muted-foreground focus:outline-none"
             placeholder="••••••••"
             aria-invalid={Boolean(errors.password)}
             disabled={isSubmitting}
@@ -144,7 +147,7 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 p-1 text-slate-400 hover:text-slate-700 transition-colors focus:outline-none cursor-pointer rounded-md"
+            className="absolute right-3 p-1 text-muted-foreground hover:text-foreground transition-colors focus:outline-none cursor-pointer rounded-md"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -157,9 +160,9 @@ export function LoginForm() {
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-1.5 text-[11px] font-medium text-red-700 pt-0.5"
+              className="flex items-center gap-1.5 text-[11px] font-medium text-danger pt-0.5"
             >
-              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-600" />
+              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-danger" />
               {errors.password}
             </motion.p>
           )}
@@ -174,58 +177,55 @@ export function LoginForm() {
             type="checkbox"
             checked={form.rememberMe}
             onChange={(e) => handleChange("rememberMe", e.target.checked)}
-            className="h-4 w-4 rounded-md border-slate-300 bg-slate-100 text-teal-700 focus:ring-2 focus:ring-teal-700/20 cursor-pointer accent-teal-700 transition-all"
+            className="h-4 w-4 rounded border-border-subtle text-primary focus:ring-ring/20 accent-primary transition-all cursor-pointer"
           />
-          <span className="text-[12px] font-medium text-slate-700 group-hover:text-slate-950 transition-colors">
+          <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
             Lembrar deste dispositivo
           </span>
         </label>
       </div>
 
-      {/* Botão Principal de Login (Efeito Vercel / Linear) */}
-      <button
+      {/* Botão Principal via Design System */}
+      <Button
         type="submit"
-        disabled={isSubmitting}
-        className="group relative h-11 w-full overflow-hidden rounded-xl bg-gradient-to-b from-slate-900 to-slate-950 text-xs font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.15)] border border-slate-800 transition-all duration-200 hover:from-slate-800 hover:to-slate-900 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer flex items-center justify-center mt-2"
+        variant="default"
+        size="lg"
+        isLoading={isSubmitting}
+        className="w-full group font-semibold mt-2"
       >
-        {isSubmitting ? (
-          <span className="inline-flex items-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin text-slate-300" />
-            <span className="text-slate-200">Autenticando...</span>
-          </span>
-        ) : (
-          <span className="flex items-center justify-center gap-1.5">
-            Acessar plataforma
-            <ArrowRight className="h-3.5 w-3.5 text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white" />
-          </span>
+        <span>Acessar plataforma</span>
+        {!isSubmitting && (
+          <ArrowRight className="h-3.5 w-3.5 opacity-80 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
         )}
-      </button>
+      </Button>
 
       {/* Separador Orgânico */}
-      <div className="relative flex items-center py-1.5">
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-        <span className="px-3 text-[10px] font-mono font-semibold uppercase tracking-widest text-slate-400">
+      <div className="relative flex items-center py-1">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
+        <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
           ou continue com
         </span>
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
       </div>
 
-      {/* Botão Social Google */}
-      <button
+      {/* Botão Social Google via Design System */}
+      <Button
         type="button"
+        variant="outline"
+        size="lg"
         disabled={isSubmitting}
-        className="h-10.5 w-full rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold text-slate-800 transition-all duration-200 active:scale-[0.985] shadow-[0_1px_2px_rgba(0,0,0,0.04)] flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
+        className="w-full justify-center gap-2.5"
       >
         <GoogleIcon />
         <span>Conta Google</span>
-      </button>
+      </Button>
 
       {/* Rodapé do Formulário */}
-      <p className="pt-2 text-center text-xs text-slate-600">
+      <p className="pt-2 text-center text-xs text-muted-foreground">
         Novo por aqui?{" "}
         <Link
           href="/register"
-          className="font-semibold text-teal-700 hover:text-teal-800 underline-offset-4 hover:underline transition-colors"
+          className="font-semibold text-primary hover:text-primary-hover hover:underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
         >
           Cadastre sua loja
         </Link>
