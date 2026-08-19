@@ -17,16 +17,16 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
-  { href: "/clientes", label: "Clientes", icon: Users },
-  { href: "/conversas", label: "Conversas", icon: MessageSquare },
-  { href: "/jornadas", label: "Jornadas", icon: Route },
-  { href: "/pedidos", label: "Pedidos", icon: ShoppingBag },
-  { href: "/automacoes", label: "Automações", icon: CircleDashed },
-  { href: "/campanhas", label: "Campanhas", icon: Sparkles },
-  { href: "/integracoes", label: "Integrações", icon: BriefcaseBusiness },
-  { href: "/relatorios", label: "Relatórios", icon: BarChart3 },
-  { href: "/configuracoes", label: "Configurações", icon: Settings },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutGrid, available: true },
+  { href: "/clientes", label: "Clientes", icon: Users, available: true },
+  { href: "/conversas", label: "Conversas", icon: MessageSquare, available: false },
+  { href: "/jornadas", label: "Jornadas", icon: Route, available: false },
+  { href: "/pedidos", label: "Pedidos", icon: ShoppingBag, available: false },
+  { href: "/automacoes", label: "Automações", icon: CircleDashed, available: false },
+  { href: "/campanhas", label: "Campanhas", icon: Sparkles, available: false },
+  { href: "/integracoes", label: "Integrações", icon: BriefcaseBusiness, available: false },
+  { href: "/relatorios", label: "Relatórios", icon: BarChart3, available: false },
+  { href: "/configuracoes", label: "Configurações", icon: Settings, available: false },
 ];
 
 export function Sidebar({ mobile = false }: { mobile?: boolean }) {
@@ -58,20 +58,24 @@ export function Sidebar({ mobile = false }: { mobile?: boolean }) {
 
       {/* Navegação Principal */}
       <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
-        {navItems.map(({ href, icon: Icon, label }) => {
+        {navItems.map(({ href, icon: Icon, label, available }) => {
           const isActive =
             pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
 
-          return (
+          const className = [
+            "flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-xs font-medium transition-all duration-150",
+            available
+              ? isActive
+                ? "bg-muted text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+              : "cursor-not-allowed text-muted-foreground/50",
+          ].join(" ");
+
+          return available ? (
             <Link
               key={label}
               href={href}
-              className={[
-                "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all duration-150",
-                isActive
-                  ? "bg-muted text-foreground font-semibold shadow-xs"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
-              ].join(" ")}
+              className={className}
             >
               <Icon
                 className={[
@@ -81,6 +85,21 @@ export function Sidebar({ mobile = false }: { mobile?: boolean }) {
               />
               <span>{label}</span>
             </Link>
+          ) : (
+            <button
+              key={label}
+              type="button"
+              className={className}
+              disabled
+              title={`${label} estará disponível em breve`}
+              aria-label={`${label}, disponível em breve`}
+            >
+              <Icon className="h-4 w-4 text-muted-foreground/50" />
+              <span className="flex-1">{label}</span>
+              <span className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground/60">
+                Em breve
+              </span>
+            </button>
           );
         })}
       </nav>

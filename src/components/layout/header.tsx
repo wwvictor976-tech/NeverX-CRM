@@ -39,6 +39,7 @@ export function Header({
           <input
             type="text"
             placeholder="Buscar na plataforma..."
+            aria-label="Buscar na plataforma"
             className="h-9 w-36 rounded-xl border border-border-subtle bg-background/80 pl-8 pr-3 text-xs text-foreground placeholder:text-muted-foreground transition-all duration-200 hover:border-border hover:bg-background focus:w-52 focus:border-accent focus:bg-card focus:outline-none focus:ring-1 focus:ring-ring sm:w-48 sm:pl-9 sm:focus:w-64"
           />
         </div>
