@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -52,7 +50,7 @@ const kpis: KpiItem[] = [
     value: "72",
     detail: "sem compra há 90+ dias",
     change: "-4,1%",
-    isPositive: true, // Redução de clientes em risco é positiva
+    isPositive: true,
     isDecrease: true,
     icon: HeartPulse,
   },
@@ -68,20 +66,20 @@ export function CustomersKpis() {
         return (
           <div
             key={kpi.label}
-            className="group rounded-2xl border border-border-subtle bg-card p-4 shadow-card transition-all duration-200 hover:border-border hover:shadow-md sm:p-5"
+            className="group rounded-2xl border border-border-subtle bg-card p-4 shadow-card transition-all duration-200 hover:border-border"
           >
-            <div className="flex items-start justify-between gap-3">
-              <p className="text-xs font-bold text-muted-foreground">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-medium text-muted-foreground">
                 {kpi.label}
               </p>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent transition-transform duration-200 group-hover:scale-105">
-                <Icon className="h-4.5 w-4.5" />
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                <Icon className="h-3.5 w-3.5" />
               </div>
             </div>
 
-            <div className="mt-3 flex items-end justify-between gap-2">
-              <div>
-                <p className="text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+            <div className="mt-2.5 flex items-end justify-between gap-2">
+              <div className="min-w-0">
+                <p className="truncate text-lg font-bold tracking-tight text-foreground sm:text-xl">
                   {kpi.value}
                 </p>
                 <p className="mt-1 text-[11px] font-medium text-muted-foreground">
@@ -90,10 +88,8 @@ export function CustomersKpis() {
               </div>
 
               <span
-                className={`inline-flex items-center gap-0.5 rounded-lg border px-2 py-0.5 text-[11px] font-extrabold ${
-                  kpi.isPositive
-                    ? "bg-success/10 text-success border-success/20"
-                    : "bg-warning/10 text-warning border-warning/20"
+                className={`inline-flex shrink-0 items-center gap-0.5 text-[11px] font-semibold ${
+                  kpi.isPositive ? "text-success" : "text-danger"
                 }`}
               >
                 <TrendIcon className="h-3 w-3" />

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { FilterX, Smartphone, Store } from "lucide-react";
 import { SiShopee } from "react-icons/si";
+import { Button } from "@/components/ui/button";
 import { MercadoLivreIcon } from "@/components/mercado-livre-icon";
 import { SheinIcon } from "@/components/shein-icon";
 import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
@@ -182,7 +183,7 @@ export function CustomersContent() {
   const handleResetFilters = () => setFilters(defaultFilters);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Topo da Aba de Clientes */}
       <CustomersHeader />
 
@@ -207,14 +208,16 @@ export function CustomersContent() {
           </p>
 
           {hasActiveFilters && (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={handleResetFilters}
-              className="flex items-center gap-1.5 font-semibold text-accent hover:underline transition-all"
+              className="h-auto gap-1.5 rounded-lg px-1.5 py-1 text-xs font-semibold text-accent hover:bg-accent/5 hover:text-accent-hover"
             >
               <FilterX className="h-3.5 w-3.5" />
               <span>Limpar filtros</span>
-            </button>
+            </Button>
           )}
         </div>
       </div>

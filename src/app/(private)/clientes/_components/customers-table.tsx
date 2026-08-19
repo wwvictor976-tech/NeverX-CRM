@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowUpRight, UserX } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import type { ElementType } from "react";
@@ -51,9 +49,8 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-border-subtle bg-card shadow-card">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1060px] text-left border-collapse">
-          {/* Cabeçalho */}
-          <thead className="border-b border-border-subtle bg-background/60 text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground select-none">
+        <table className="w-full min-w-[1060px] border-collapse text-left">
+          <thead className="border-b border-border-subtle bg-background/50 text-[10px] font-bold uppercase tracking-wider text-muted-foreground select-none">
             <tr>
               <th className="px-5 py-3.5">Cliente</th>
               <th className="px-5 py-3.5">Canal de Origem</th>
@@ -67,7 +64,6 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
             </tr>
           </thead>
 
-          {/* Corpo da Tabela */}
           <tbody className="divide-y divide-border-subtle/70">
             {customers.map((customer) => {
               const ChannelIcon = customer.channelIcon;
@@ -77,55 +73,50 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
                 <tr
                   key={customer.id}
                   onClick={() => onSelect(customer)}
-                  className="group cursor-pointer text-xs transition-all duration-150 hover:bg-muted/40 active:bg-muted/60"
+                  className="group cursor-pointer text-xs transition-colors duration-150 hover:bg-muted/30 active:bg-muted/50"
                 >
-                  {/* Identificação do Cliente */}
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 border border-accent/20 text-[11px] font-extrabold text-accent shadow-2xs transition-transform duration-150 group-hover:scale-105">
+                  <td className="px-5 py-3.5">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent/20 bg-accent/10 text-[10px] font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
                         {customer.initials}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-foreground truncate transition-colors group-hover:text-accent">
+                        <p className="truncate font-semibold text-foreground transition-colors group-hover:text-accent">
                           {customer.name}
                         </p>
-                        <p className="mt-0.5 text-[11px] font-medium text-muted-foreground truncate">
+                        <p className="mt-0.5 truncate text-[11px] font-medium text-muted-foreground">
                           {customer.email}
                         </p>
                       </div>
                     </div>
                   </td>
 
-                  {/* Canal de Origem */}
-                  <td className="px-5 py-4 whitespace-nowrap">
+                  <td className="whitespace-nowrap px-5 py-3.5">
                     <span className="inline-flex items-center gap-2 font-semibold text-foreground">
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border-subtle bg-background">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-background">
                         <ChannelIcon className={`h-3.5 w-3.5 ${customer.channelColor}`} />
-                      </div>
+                      </span>
                       <span>{customer.channel}</span>
                     </span>
                   </td>
 
-                  {/* LTV & Histórico de Pedidos */}
-                  <td className="px-5 py-4 whitespace-nowrap">
-                    <p className="font-extrabold text-foreground">{customer.ltv}</p>
+                  <td className="whitespace-nowrap px-5 py-3.5">
+                    <p className="font-bold text-foreground">{customer.ltv}</p>
                     <p className="mt-0.5 text-[11px] font-medium text-muted-foreground">
                       {customer.orders} pedidos
                     </p>
                   </td>
 
-                  {/* Data da Última Compra */}
-                  <td className="px-5 py-4 whitespace-nowrap">
+                  <td className="whitespace-nowrap px-5 py-3.5">
                     <p className="font-semibold text-foreground">{customer.lastPurchase}</p>
                     <p className="mt-0.5 text-[11px] font-medium text-muted-foreground">
                       {customer.daysSincePurchase}
                     </p>
                   </td>
 
-                  {/* Previsão de Recompra */}
-                  <td className="px-5 py-4 whitespace-nowrap">
+                  <td className="whitespace-nowrap px-5 py-3.5">
                     {isLateRepurchase ? (
-                      <span className="inline-flex items-center rounded-md border border-warning/30 bg-warning/15 px-2 py-0.5 text-[10px] font-extrabold text-warning">
+                      <span className="inline-flex items-center rounded-md border border-warning/30 bg-warning/10 px-2 py-0.5 text-[10px] font-bold text-warning">
                         Em atraso
                       </span>
                     ) : (
@@ -135,15 +126,12 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
                     )}
                   </td>
 
-                  {/* Badge de Status */}
-                  <td className="px-5 py-4 whitespace-nowrap">
+                  <td className="whitespace-nowrap px-5 py-3.5">
                     <CustomerStatusBadge status={customer.status} />
                   </td>
 
-                  {/* Ações Rápidas */}
-                  <td className="px-5 py-4 whitespace-nowrap">
+                  <td className="whitespace-nowrap px-5 py-3.5">
                     <div className="flex items-center justify-end gap-1.5">
-                      {/* WhatsApp Direct Link */}
                       <a
                         href={`https://wa.me/${customer.phone.replace(/\D/g, "")}`}
                         target="_blank"
@@ -151,19 +139,18 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
                         onClick={(event) => event.stopPropagation()}
                         aria-label={`Iniciar conversa no WhatsApp com ${customer.name}`}
                         title="Conversar no WhatsApp"
-                        className="flex h-8 w-8 items-center justify-center rounded-xl border border-transparent text-success transition-all hover:border-success/20 hover:bg-success/10 active:scale-95"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl border border-transparent text-success transition-colors hover:border-success/20 hover:bg-success/10 active:scale-[0.98]"
                       >
                         <SiWhatsapp className="h-4 w-4 text-[#25D366]" />
                       </a>
 
-                      {/* Abrir Modal Visão 360° */}
                       <button
                         type="button"
                         onClick={(event) => {
                           event.stopPropagation();
                           onSelect(customer);
                         }}
-                        className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-xl border border-border-subtle bg-background px-3 text-[11px] font-bold text-foreground shadow-2xs transition-all hover:border-border hover:bg-muted active:scale-95"
+                        className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-xl border border-border-subtle bg-background px-3 text-[11px] font-semibold text-foreground transition-colors hover:border-border hover:bg-muted active:scale-[0.98]"
                       >
                         <span>Perfil 360°</span>
                         <ArrowUpRight className="h-3 w-3 text-muted-foreground transition-colors group-hover:text-foreground" />
@@ -177,7 +164,6 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
         </table>
       </div>
 
-      {/* Rodapé da Tabela */}
       <div className="flex items-center justify-between border-t border-border-subtle bg-background/40 px-5 py-3.5 text-[11px] font-semibold text-muted-foreground">
         <span>
           Mostrando <strong className="text-foreground">{customers.length}</strong> clientes
