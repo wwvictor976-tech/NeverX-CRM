@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { FilterX, ShoppingBag, Smartphone, Store } from "lucide-react";
+import { FilterX, Smartphone, Store } from "lucide-react";
 import { SiShopee } from "react-icons/si";
+import { MercadoLivreIcon } from "@/components/mercado-livre-icon";
+import { SheinIcon } from "@/components/shein-icon";
 import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
 import { CustomerDetailsSheet } from "./customer-details-sheet";
 import { CustomersHeader } from "./customers-header";
@@ -19,7 +21,7 @@ const initialCustomers: Customer[] = [
     phone: "+55 (11) 99845-1020",
     cpf: "***.***.***-42",
     channel: "Mercado Livre",
-    channelIcon: ShoppingBag,
+    channelIcon: MercadoLivreIcon,
     channelColor: "text-[#FFE600]",
     ltv: "R$ 12.480,00",
     averageTicket: "R$ 624,00",
@@ -110,7 +112,7 @@ const initialCustomers: Customer[] = [
     phone: "+55 (51) 99871-2205",
     cpf: "***.***.***-81",
     channel: "Shein",
-    channelIcon: ShoppingBag,
+    channelIcon: SheinIcon,
     channelColor: "text-foreground",
     ltv: "R$ 18.200,00",
     averageTicket: "R$ 910,00",

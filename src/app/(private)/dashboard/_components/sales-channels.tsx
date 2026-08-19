@@ -1,7 +1,9 @@
 "use client";
 
-import { ShoppingBag, Smartphone, Store, TrendingUp } from "lucide-react";
+import { Smartphone, Store, TrendingUp } from "lucide-react";
 import { SiShopee } from "react-icons/si";
+import { MercadoLivreIcon } from "@/components/mercado-livre-icon";
+import { SheinIcon } from "@/components/shein-icon";
 
 // ============================================================================
 // DADOS DOS CANAIS DE VENDA
@@ -27,7 +29,7 @@ const salesChannels: SalesChannel[] = [
     orders: 1240,
     percentage: 38,
     color: "#FFE600",
-    icon: ShoppingBag,
+    icon: MercadoLivreIcon,
   },
   {
     id: "site",
@@ -67,7 +69,7 @@ const salesChannels: SalesChannel[] = [
     orders: 280,
     percentage: 7,
     color: "#D4AF37",
-    icon: ShoppingBag,
+    icon: SheinIcon,
   },
 ];
 
