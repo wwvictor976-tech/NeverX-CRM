@@ -27,12 +27,12 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutGrid, available: true },
   { href: "/clientes", label: "Clientes", icon: Users, available: true },
-  { href: "/conversas", label: "Conversas", icon: MessageSquare, available: false },
+  { href: "/conversas", label: "Conversas", icon: MessageSquare, available: true },
   { href: "/jornadas", label: "Jornadas", icon: Route, available: false },
   { href: "/pedidos", label: "Pedidos", icon: ShoppingBag, available: false },
   { href: "/automacoes", label: "Automações", icon: CircleDashed, available: false },
   { href: "/campanhas", label: "Campanhas", icon: Sparkles, available: false },
-  { href: "/integracoes", label: "Integrações", icon: BriefcaseBusiness, available: false },
+  { href: "/integracoes", label: "Integrações", icon: BriefcaseBusiness, available: true },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3, available: false },
   { href: "/configuracoes", label: "Configurações", icon: Settings, available: false },
 ];

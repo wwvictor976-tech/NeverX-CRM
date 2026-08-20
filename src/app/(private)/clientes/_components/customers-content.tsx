@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { 
   CheckSquare, 
   FilterX, 
@@ -21,6 +22,7 @@ import { SheinIcon } from "@/components/shein-icon";
 import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
 import { CustomerDetailsSheet } from "./customer-details-sheet";
 import { CustomersHeader } from "./customers-header";
+import { CustomerActionModals, type CustomerAction } from "./customer-action-modals";
 import { CustomersKpis } from "./customers-kpis";
 
 export interface CustomerHistoryItem {
@@ -180,9 +182,11 @@ const statusStyles: Record<string, { label: string; className: string }> = {
 };
 
 export function CustomersContent() {
+  const router = useRouter();
   const [filters, setFilters] = useState<CustomerFiltersValue>(defaultFilters);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [activeAction, setActiveAction] = useState<CustomerAction>(null);
 
   const filteredCustomers = useMemo(() => {
     return initialCustomers
@@ -232,9 +236,17 @@ export function CustomersContent() {
     filters.segment !== "Todos" ||
     filters.sort !== "recent";
 
+  const handleStartConversation = useCallback(
+    (channel: "email" | "whatsapp" | "outro") => {
+      if (!selectedCustomer) return;
+      router.push(`/conversas?cliente=${encodeURIComponent(selectedCustomer.id)}&canal=${channel}`);
+    },
+    [router, selectedCustomer]
+  );
+
   return (
     <div className="relative space-y-6 pb-12">
-      <CustomersHeader />
+      <CustomersHeader onAction={setActiveAction} />
 
       <section aria-label="Métricas de Relacionamento">
         <CustomersKpis />
@@ -432,6 +444,13 @@ export function CustomersContent() {
         customer={selectedCustomer}
         isOpen={!!selectedCustomer}
         onClose={() => setSelectedCustomer(null)}
+        onStartConversation={handleStartConversation}
+      />
+
+      <CustomerActionModals
+        action={activeAction}
+        selectedCount={selectedIds.size}
+        onClose={() => setActiveAction(null)}
       />
     </div>
   );

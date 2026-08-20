@@ -20,7 +20,8 @@ import {
   UserCheck,
   ChevronRight,
   Activity,
-  Plus
+  Plus,
+  Globe2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Customer } from "./customers-content";
@@ -29,6 +30,7 @@ export interface CustomerDetailsSheetProps {
   customer: Customer | null;
   isOpen?: boolean;
   onClose: () => void;
+  onStartConversation: (channel: "email" | "whatsapp" | "outro") => void;
 }
 
 type TabType = "overview" | "orders" | "activity";
@@ -60,6 +62,7 @@ export function CustomerDetailsSheet({
   customer,
   isOpen = false,
   onClose,
+  onStartConversation,
 }: CustomerDetailsSheetProps) {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -176,7 +179,7 @@ export function CustomerDetailsSheet({
             <Button
               size="sm"
               className="h-8 gap-1.5 rounded-xl bg-accent text-accent-foreground font-semibold text-xs shadow-sm hover:opacity-90"
-              onClick={() => window.open(`https://wa.me/${customer.phone.replace(/[^0-9]/g, "")}`, "_blank")}
+              onClick={() => onStartConversation("whatsapp")}
             >
               <MessageSquare className="h-3.5 w-3.5" />
               <span>WhatsApp</span>
@@ -186,7 +189,7 @@ export function CustomerDetailsSheet({
               size="sm"
               variant="outline"
               className="h-8 gap-1.5 rounded-xl text-xs font-semibold border-border/70"
-              onClick={() => window.location.href = `mailto:${customer.email}`}
+              onClick={() => onStartConversation("email")}
             >
               <Mail className="h-3.5 w-3.5 text-muted-foreground" />
               <span>E-mail</span>
@@ -196,6 +199,16 @@ export function CustomerDetailsSheet({
               size="sm"
               variant="outline"
               className="h-8 gap-1.5 rounded-xl text-xs font-semibold border-border/70"
+              onClick={() => onStartConversation("outro")}
+            >
+              <Globe2 className="h-3.5 w-3.5 text-muted-foreground" />
+              <span>Outro canal</span>
+            </Button>
+
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-8 gap-1.5 rounded-xl text-xs font-semibold"
               onClick={() => handleCopy(JSON.stringify(customer, null, 2), "all")}
             >
               {copiedField === "all" ? (
@@ -470,7 +483,7 @@ export function CustomerDetailsSheet({
               type="button"
               size="sm"
               className="gap-2 rounded-xl bg-accent text-accent-foreground font-bold text-xs shadow-md hover:opacity-95"
-              onClick={() => window.open(`https://wa.me/${customer.phone.replace(/[^0-9]/g, "")}`, "_blank")}
+              onClick={() => onStartConversation("whatsapp")}
             >
               <MessageSquare className="h-3.5 w-3.5" />
               <span>Iniciar Atendimento</span>
