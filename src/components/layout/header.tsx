@@ -84,7 +84,7 @@ export function Header({
   };
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/95 px-3 py-3 shadow-[0_1px_0_rgba(17,17,17,0.03)] backdrop-blur-md transition-all sm:px-6 sm:py-3.5">
+    <header ref={headerRef} className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/95 px-3 py-3 shadow-[0_1px_0_rgba(17,17,17,0.03)] backdrop-blur-md transition-all sm:px-6 sm:py-3.5 lg:px-8">
       <div className="flex min-w-0 max-w-[105px] flex-1 flex-col pr-2 sm:max-w-none sm:pr-3">
         <h1 className="truncate text-base font-extrabold tracking-[-0.03em] text-foreground sm:text-xl">{title}</h1>
         {subtitle ? <p className="mt-1 hidden truncate text-xs leading-none text-muted-foreground sm:block">{subtitle}</p> : null}
