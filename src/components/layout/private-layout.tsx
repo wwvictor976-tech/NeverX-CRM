@@ -17,8 +17,8 @@ export function PrivateLayout({
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
-      <div className="border-b border-border bg-card/95 lg:hidden">
+    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground">
+      <div className="shrink-0 border-b border-border bg-card/95 lg:hidden">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-accent/20 bg-accent/10 text-sm font-black text-accent">X</div>
@@ -40,11 +40,13 @@ export function PrivateLayout({
         {isMobileSidebarOpen ? <div className="border-t border-border-subtle bg-card"><Sidebar mobile /></div> : null}
       </div>
 
-      <div className="flex min-h-screen">
+      <div className="flex min-h-0 flex-1">
         <Sidebar />
-        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <Header title={title} subtitle={subtitle} />
-          <main className="min-w-0 flex-1 px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8"><div className="mx-auto w-full max-w-[1600px]">{children}</div></main>
+          <main className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
+            <div className="mx-auto w-full max-w-[1600px]">{children}</div>
+          </main>
         </div>
       </div>
     </div>

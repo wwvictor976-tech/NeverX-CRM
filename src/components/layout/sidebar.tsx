@@ -21,7 +21,7 @@ const navItems: NavItem[] = [
 
 export function Sidebar({ mobile = false }: { mobile?: boolean }) {
   const pathname = usePathname();
-  const asideClass = mobile ? "w-full border-0" : "hidden h-dvh max-h-dvh w-64 shrink-0 overflow-hidden border-r border-border bg-card lg:sticky lg:top-0 lg:flex";
+  const asideClass = mobile ? "w-full border-0" : "hidden h-full max-h-full w-64 shrink-0 overflow-hidden border-r border-border bg-card lg:flex";
 
   return (
     <aside className={`${asideClass} flex select-none flex-col bg-card`}>
