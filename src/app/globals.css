@@ -4,10 +4,10 @@
   /* =========================================
      CORES BASE (Styleguide Oficial NeverX)
      ========================================= */
-  --color-background: #F5F6F8;
+  --color-background: #ECEEF2;
   --color-foreground: #111111;
 
-  --color-card: #FFFFFF;
+  --color-card: #FCFCFD;
   --color-card-foreground: #111111;
 
   /* Botão principal (Entrar / Criar conta / Ações Primárias) */
@@ -22,13 +22,13 @@
   --color-accent-foreground: #FFFFFF;
 
   /* Textos secundários e elementos suaves */
-  --color-muted: #F5F6F8;
-  --color-muted-foreground: #6E6E73;
+  --color-muted: #E7E9EE;
+  --color-muted-foreground: #5F636B;
 
   /* Bordas e Inputs */
-  --color-border: #E5E7EB;
-  --color-border-subtle: #F0EEEE;
-  --color-input: #E5E7EB;
+  --color-border: #D5D9E0;
+  --color-border-subtle: #E1E4E9;
+  --color-input: #D2D7DF;
   --color-ring: #D4AF37;
 
   /* Status */
@@ -45,7 +45,7 @@
      SOMBRAS (Elevation Tokens)
      ========================================= */
   --shadow-auth: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 15px rgba(0, 0, 0, 0.02);
-  --shadow-card: 0 4px 20px -2px rgba(17, 17, 17, 0.03);
+  --shadow-card: 0 8px 24px -10px rgba(17, 17, 17, 0.18), 0 2px 6px rgba(17, 17, 17, 0.04);
 }
 
 /* =========================================
@@ -110,12 +110,16 @@ body {
 
   /* Superfície padrão de Cards e Widgets no Dashboard */
   .card-surface {
-    @apply rounded-2xl border border-border-subtle bg-card shadow-card transition-all duration-200;
+    @apply rounded-2xl border border-border bg-card shadow-card transition-all duration-200;
+  }
+
+  .popover-surface {
+    @apply rounded-2xl border border-border bg-card shadow-[0_18px_48px_rgba(17,17,17,0.14)];
   }
 
   /* Inputs arredondados */
   .auth-input {
-    @apply flex h-11 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-colors;
+    @apply flex h-11 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   /* Botão escuro de submissão */
