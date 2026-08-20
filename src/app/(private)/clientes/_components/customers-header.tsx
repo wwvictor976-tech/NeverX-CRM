@@ -13,7 +13,7 @@ export function CustomersHeader({ onAction, hasSelection }: CustomersHeaderProps
   return (
     <div className="flex flex-col gap-5 border-b border-border-subtle pb-6 lg:flex-row lg:items-end lg:justify-between">
       <div className="min-w-0">
-        <div className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold text-muted-foreground"><CheckCircle2 className="h-3.5 w-3.5 text-success" /><span>Base conectada a E-commerce e Marketplaces</span></div>
+        <div className="-ml-2 mb-3 inline-flex items-center gap-2 text-[11px] font-semibold text-muted-foreground"><CheckCircle2 className="h-3.5 w-3.5 text-success" /><span>Base conectada a E-commerce e Marketplaces</span></div>
         <h1 className="text-[1.85rem] font-extrabold tracking-[-0.04em] text-foreground sm:text-3xl">Todos os clientes</h1>
         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground sm:text-sm">Uma visão 360º da sua base para acompanhar valor, recorrência e próximas oportunidades de recompra.</p>
       </div>
