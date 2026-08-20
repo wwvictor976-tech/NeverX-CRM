@@ -43,3 +43,7 @@ A feature Conversas foi validada em desktop com a página contida no viewport: a
 A captura mobile de Conversas confirma que o viewport não expande para além da página; fila, histórico e contexto ficam contidos no módulo. A captura mobile de Login confirma que o fundo permanece visível nas margens e que o formulário e os diferenciais continuam responsivos.
 
 A versão final de Conversas foi recapturada: no mobile a fila fica limitada a uma faixa com scroll próprio, o chat ocupa o espaço restante e o contexto é ocultado para não empurrar o histórico; no desktop a grelha mantém fila, chat e contexto lado a lado, com o histórico central como área de scroll.
+
+## Nova experiência de Conversas
+
+A inbox foi reorganizada com métricas de tickets em aberto e prioridade alta no cabeçalho, filtros com contadores, fila com prioridade e SLA por ticket, cabeçalho do cliente com estado explícito, faixa de responsável/pedido/SLA, histórico com identificação de autor e contador de mensagens, e compositor com canal e instruções mais claras. A captura mobile confirma que a fila, o ticket e o selector de canal continuam legíveis em largura reduzida.
