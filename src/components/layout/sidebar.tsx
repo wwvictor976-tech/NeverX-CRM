@@ -30,7 +30,7 @@ export function Sidebar({ mobile = false }: { mobile?: boolean }) {
         <div className="flex min-w-0 flex-col"><span className="text-lg font-extrabold tracking-tight text-foreground">Never<span className="text-accent">X</span></span><span className="mt-1 text-[9px] font-bold leading-none tracking-[0.18em] text-muted-foreground uppercase">CRM para e-commerce</span></div>
       </div>
 
-      <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto px-3 py-4 [scrollbar-width:thin]" aria-label="Navegação principal">
+      <nav className="flex-1 space-y-1 overflow-visible px-3 py-4" aria-label="Navegação principal">
         <p className="mb-2 px-3 text-[9px] font-bold uppercase tracking-[0.16em] text-muted-foreground/70">Workspace</p>
         {navItems.map(({ href, icon: Icon, label, available }) => {
           const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
