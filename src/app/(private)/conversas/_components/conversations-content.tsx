@@ -9,6 +9,7 @@ import { PlatformLogo, type PlatformLogoKey } from "@/components/platform-logo";
 import { PageIntro, StatusPill } from "@/components/layout/page-structure";
 import { Button } from "@/components/ui/button";
 import { orders } from "@/lib/crm-data";
+import { useCrmSettings } from "@/components/settings/crm-settings-context";
 
 type Channel = "email" | "whatsapp" | "outro";
 type TicketStatus = "aguardando" | "atendimento" | "resolvida";
@@ -59,11 +60,13 @@ const priorityTones: Record<Conversation["priority"], "success" | "warning" | "d
 const orderCurrency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 export function ConversationsContent() {
+  const { settings, isIntegrationConnected } = useCrmSettings();
   const searchParams = useSearchParams();
   const requestedCustomer = searchParams.get("cliente");
   const requestedChannel = searchParams.get("canal") as Channel | null;
   const initialConversation = conversations.find((conversation) => conversation.id === requestedCustomer) ?? conversations[0];
-  const initialChannel = channelOptions.some((channel) => channel.id === requestedChannel) ? requestedChannel as Channel : initialConversation.channel;
+  const configuredDefaultChannel = settings.defaultChannel === "whatsapp" && !isIntegrationConnected("whatsapp") ? initialConversation.channel : settings.defaultChannel;
+  const initialChannel = channelOptions.some((channel) => channel.id === requestedChannel) ? requestedChannel as Channel : configuredDefaultChannel;
   const [selectedId, setSelectedId] = useState(initialConversation.id);
   const [activeChannel, setActiveChannel] = useState<Channel>(initialChannel);
   const [query, setQuery] = useState("");

@@ -16,7 +16,7 @@ const navItems: NavItem[] = [
   { href: "/campanhas", label: "Campanhas", icon: Sparkles, available: true },
   { href: "/integracoes", label: "Integrações", icon: BriefcaseBusiness, available: true },
   { href: "/relatorios", label: "Relatórios", icon: BarChart3, available: true },
-  { href: "/configuracoes", label: "Configurações", icon: Settings, available: false },
+  { href: "/configuracoes", label: "Configurações", icon: Settings, available: true },
 ];
 
 export function Sidebar({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {

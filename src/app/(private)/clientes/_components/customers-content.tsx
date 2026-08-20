@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { 
   CheckSquare, 
@@ -176,10 +177,14 @@ const statusStyles: Record<string, { label: string; className: string }> = {
 
 export function CustomersContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedCustomer = searchParams.get("cliente");
+  const initialSelectedCustomer = initialCustomers.find((item) => item.id === requestedCustomer) ?? null;
   const [filters, setFilters] = useState<CustomerFiltersValue>(defaultFilters);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(initialSelectedCustomer);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [activeAction, setActiveAction] = useState<CustomerAction>(null);
+
 
   const filteredCustomers = useMemo(() => {
     return initialCustomers

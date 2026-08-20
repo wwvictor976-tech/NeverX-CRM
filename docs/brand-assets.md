@@ -47,3 +47,11 @@ A versão final de Conversas foi recapturada: no mobile a fila fica limitada a u
 ## Nova experiência de Conversas
 
 A inbox foi reorganizada com métricas de tickets em aberto e prioridade alta no cabeçalho, filtros com contadores, fila com prioridade e SLA por ticket, cabeçalho do cliente com estado explícito, faixa de responsável/pedido/SLA, histórico com identificação de autor e contador de mensagens, e compositor com canal e instruções mais claras. A captura mobile confirma que a fila, o ticket e o selector de canal continuam legíveis em largura reduzida.
+
+## Configurações e ligações de operação
+
+A nova página Configurações foi validada em desktop com métricas de workspace, integrações, pedidos e alertas, navegação lateral de preferências e formulário de identidade. O deep-link `?integration=nuvemshop` abre directamente o modal de gestão da Nuvemshop e reconhece o estado partilhado como conectado.
+
+As capturas mobile confirmam que Configurações empilha as métricas sem overflow e mantém a navegação de preferências acessível abaixo do primeiro viewport; Pedidos mantém os indicadores operacionais e o CTA de exportação legíveis no mesmo shell responsivo.
+
+Validação interactiva concluída: `/clientes?cliente=ana-souza` abre automaticamente o sheet 360º de Ana Souza com ações de WhatsApp, E-mail e Outro canal; `/integracoes?integration=nuvemshop` abre o modal de gestão da Nuvemshop, exibindo a conta como conectada e a ação Desconectar conta.
