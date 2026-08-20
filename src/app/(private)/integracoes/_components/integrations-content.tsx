@@ -1,15 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check, CheckCircle2, CreditCard, Database, ExternalLink, Mail, MessageSquare, PlugZap, Settings2, Store, X } from "lucide-react";
-import { SiShopify, SiShopee } from "react-icons/si";
-import { MercadoLivreIcon } from "@/components/mercado-livre-icon";
-import { SheinIcon } from "@/components/shein-icon";
+import { CheckCircle2, CreditCard, Database, ExternalLink, Mail, MessageSquare, PlugZap, Settings2, Store, X } from "lucide-react";
+import { PlatformLogo, type PlatformLogoKey } from "@/components/platform-logo";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 
 type IntegrationCategory = "vendas" | "relacionamento" | "operacao";
-type IntegrationId = "ecommerce" | "mercadolivre" | "shopify" | "shein" | "shopee" | "whatsapp" | "email" | "erp" | "pdv";
+type IntegrationId = "ecommerce" | "nuvemshop" | "mercadolivre" | "shopify" | "shein" | "shopee" | "whatsapp" | "email" | "erp" | "pdv";
 
 type Integration = {
   id: IntegrationId;
@@ -19,16 +17,18 @@ type Integration = {
   helper: string;
   icon: React.ElementType;
   iconClass: string;
+  logo?: PlatformLogoKey;
   fields: string[];
 };
 
 const integrations: Integration[] = [
   { id: "ecommerce", category: "vendas", name: "E-commerce próprio", description: "Sincronize clientes, pedidos e origem de compra da sua loja.", helper: "API da sua plataforma", icon: Store, iconClass: "text-accent", fields: ["Nome da loja", "URL da loja", "Chave de API"] },
-  { id: "mercadolivre", category: "vendas", name: "Mercado Livre", description: "Traga vendas e clientes do maior marketplace da operação.", helper: "OAuth do Mercado Livre", icon: MercadoLivreIcon, iconClass: "text-[#FFE600]", fields: ["Conta vendedora", "Ambiente de conexão"] },
-  { id: "shopify", category: "vendas", name: "Shopify", description: "Conecte a loja Shopify ao perfil unificado do consumidor.", helper: "Shopify Admin API", icon: SiShopify, iconClass: "text-[#95BF47]", fields: ["Domínio da loja", "Token de acesso"] },
-  { id: "shein", category: "vendas", name: "Shein", description: "Associe os pedidos do marketplace aos clientes do CRM.", helper: "Conta de vendedor Shein", icon: SheinIcon, iconClass: "text-foreground", fields: ["ID da loja", "Chave de integração"] },
-  { id: "shopee", category: "vendas", name: "Shopee", description: "Centralize pedidos, canais de origem e histórico de compra.", helper: "Shopee Open Platform", icon: SiShopee, iconClass: "text-[#EE4D2D]", fields: ["Partner ID", "Shop ID", "Chave secreta"] },
-  { id: "whatsapp", category: "relacionamento", name: "WhatsApp Business", description: "Prepare o atendimento e o histórico de mensagens no CRM.", helper: "WhatsApp Business Platform", icon: MessageSquare, iconClass: "text-[#25D366]", fields: ["Número de telefone", "ID do WhatsApp Business", "Token de acesso"] },
+  { id: "nuvemshop", category: "vendas", name: "Nuvemshop", description: "Conecte a loja Nuvemshop ao perfil unificado do consumidor.", helper: "Nuvemshop Developers API", icon: Store, iconClass: "text-accent", logo: "nuvemshop", fields: ["URL da loja", "Token de acesso"] },
+  { id: "mercadolivre", category: "vendas", name: "Mercado Livre", description: "Traga vendas e clientes do maior marketplace da operação.", helper: "OAuth do Mercado Livre", icon: Store, iconClass: "text-[#FFE600]", logo: "mercadolivre", fields: ["Conta vendedora", "Ambiente de conexão"] },
+  { id: "shopify", category: "vendas", name: "Shopify", description: "Conecte a loja Shopify ao perfil unificado do consumidor.", helper: "Shopify Admin API", icon: Store, iconClass: "text-[#95BF47]", logo: "shopify", fields: ["Domínio da loja", "Token de acesso"] },
+  { id: "shein", category: "vendas", name: "SHEIN", description: "Associe os pedidos do marketplace aos clientes do CRM.", helper: "Conta de vendedor SHEIN", icon: Store, iconClass: "text-foreground", logo: "shein", fields: ["ID da loja", "Chave de integração"] },
+  { id: "shopee", category: "vendas", name: "Shopee", description: "Centralize pedidos, canais de origem e histórico de compra.", helper: "Shopee Open Platform", icon: Store, iconClass: "text-[#EE4D2D]", logo: "shopee", fields: ["Partner ID", "Shop ID", "Chave secreta"] },
+  { id: "whatsapp", category: "relacionamento", name: "WhatsApp Business", description: "Prepare o atendimento e o histórico de mensagens no CRM.", helper: "WhatsApp Business Platform", icon: MessageSquare, iconClass: "text-[#25D366]", logo: "whatsapp", fields: ["Número de telefone", "ID do WhatsApp Business", "Token de acesso"] },
   { id: "email", category: "relacionamento", name: "E-mail", description: "Conecte o canal para comunicação transacional e relacionamento.", helper: "SMTP ou provedor de e-mail", icon: Mail, iconClass: "text-blue-500", fields: ["Provedor", "E-mail de envio", "Chave ou senha"] },
   { id: "erp", category: "operacao", name: "ERP / Gateway", description: "Deixe a operação preparada para dados financeiros e logísticos.", helper: "API do sistema operacional", icon: Database, iconClass: "text-violet-500", fields: ["Sistema", "URL da API", "Chave de acesso"] },
   { id: "pdv", category: "operacao", name: "PDV", description: "Relacione compras presenciais ao histórico digital do cliente.", helper: "Ponto de venda físico", icon: CreditCard, iconClass: "text-emerald-500", fields: ["Unidade", "Código do PDV"] },
@@ -86,7 +86,7 @@ export function IntegrationsContent() {
             const isConnected = connected.has(integration.id);
             return (
               <article key={integration.id} className={`card-surface group flex min-h-52 flex-col p-5 ${isConnected ? "border-success/30" : ""}`}>
-                <div className="flex items-start justify-between gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-xl border border-border-subtle bg-muted/40"><Icon className={`h-5 w-5 ${integration.iconClass}`} /></div><span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[10px] font-bold ${isConnected ? "border-success/20 bg-success/5 text-success" : "border-border-subtle bg-muted/30 text-muted-foreground"}`}><span className={`h-1.5 w-1.5 rounded-full ${isConnected ? "bg-success" : "bg-muted-foreground/50"}`} />{isConnected ? "Conectado" : "Não conectado"}</span></div>
+                <div className="flex items-start justify-between gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-xl border border-border-subtle bg-muted/40">{integration.logo ? <PlatformLogo platform={integration.logo} size="md" framed={false} /> : <Icon className={`h-5 w-5 ${integration.iconClass}`} />}</div><span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[10px] font-bold ${isConnected ? "border-success/20 bg-success/5 text-success" : "border-border-subtle bg-muted/30 text-muted-foreground"}`}><span className={`h-1.5 w-1.5 rounded-full ${isConnected ? "bg-success" : "bg-muted-foreground/50"}`} />{isConnected ? "Conectado" : "Não conectado"}</span></div>
                 <div className="mt-4 flex-1"><h4 className="text-sm font-bold text-foreground">{integration.name}</h4><p className="mt-1 text-xs leading-relaxed text-muted-foreground">{integration.description}</p><p className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/80">{integration.helper}</p></div>
                 <div className="mt-4 flex items-center justify-between gap-2"><button type="button" onClick={() => handleOpen(integration)} className="inline-flex items-center gap-1 text-[11px] font-bold text-muted-foreground transition-colors hover:text-foreground"><Settings2 className="h-3.5 w-3.5" /> Configurar</button><Button variant={isConnected ? "outline" : "accent"} size="sm" onClick={() => handleOpen(integration)} className="h-8 text-xs font-bold">{isConnected ? "Gerir conta" : "Conectar conta"}</Button></div>
               </article>
@@ -112,7 +112,7 @@ export function IntegrationsContent() {
         description={selectedIntegration?.description}
         footer={selectedIntegration ? <><Button variant="ghost" size="sm" onClick={handleClose}>Cancelar</Button><Button variant={connected.has(selectedIntegration.id) ? "danger" : "accent"} size="sm" onClick={handleConnect}>{connected.has(selectedIntegration.id) ? <><X className="h-3.5 w-3.5" /> Desconectar conta</> : <><CheckCircle2 className="h-3.5 w-3.5" /> Conectar conta</>}</Button></> : null}
       >
-        {selectedIntegration ? <div className="space-y-4"><div className="flex items-center gap-3 rounded-xl border border-accent/20 bg-accent/5 p-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-card shadow-sm"><selectedIntegration.icon className={`h-5 w-5 ${selectedIntegration.iconClass}`} /></div><div><p className="text-xs font-bold text-foreground">{selectedIntegration.name}</p><p className="text-[11px] text-muted-foreground">{selectedIntegration.helper}</p></div></div><div className="grid gap-3">{selectedIntegration.fields.map((field) => { const key = `${selectedIntegration.id}-${field}`; return <label key={field} className="space-y-1.5 text-xs font-semibold text-foreground">{field}<input value={formValues[key] ?? ""} onChange={(event) => setFormValues((current) => ({ ...current, [key]: event.target.value }))} className="auth-input" placeholder={`Informe ${field.toLowerCase()}`} /></label>; })}</div><div className="flex items-start gap-2 rounded-xl border border-border-subtle bg-muted/20 p-3 text-[11px] leading-relaxed text-muted-foreground"><ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" />A autenticação segura será concluída quando o provedor estiver configurado para esta conta.</div>{feedback ? <p className="rounded-xl border border-success/20 bg-success/5 p-3 text-xs font-semibold text-success">{feedback}</p> : null}</div> : null}
+        {selectedIntegration ? <div className="space-y-4"><div className="flex items-center gap-3 rounded-xl border border-accent/20 bg-accent/5 p-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-card shadow-sm">{selectedIntegration.logo ? <PlatformLogo platform={selectedIntegration.logo} size="sm" framed={false} /> : <selectedIntegration.icon className={`h-5 w-5 ${selectedIntegration.iconClass}`} />}</div><div><p className="text-xs font-bold text-foreground">{selectedIntegration.name}</p><p className="text-[11px] text-muted-foreground">{selectedIntegration.helper}</p></div></div><div className="grid gap-3">{selectedIntegration.fields.map((field) => { const key = `${selectedIntegration.id}-${field}`; return <label key={field} className="space-y-1.5 text-xs font-semibold text-foreground">{field}<input value={formValues[key] ?? ""} onChange={(event) => setFormValues((current) => ({ ...current, [key]: event.target.value }))} className="auth-input" placeholder={`Informe ${field.toLowerCase()}`} /></label>; })}</div><div className="flex items-start gap-2 rounded-xl border border-border-subtle bg-muted/20 p-3 text-[11px] leading-relaxed text-muted-foreground"><ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" />A autenticação segura será concluída quando o provedor estiver configurado para esta conta.</div>{feedback ? <p className="rounded-xl border border-success/20 bg-success/5 p-3 text-xs font-semibold text-success">{feedback}</p> : null}</div> : null}
       </Modal>
     </div>
   );

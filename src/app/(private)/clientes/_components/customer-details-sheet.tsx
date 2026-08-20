@@ -24,6 +24,7 @@ import {
   Globe2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PlatformLogo } from "@/components/platform-logo";
 import type { Customer } from "./customers-content";
 
 export interface CustomerDetailsSheetProps {
@@ -156,9 +157,7 @@ export function CustomerDetailsSheet({
                   </button>
                   <span>•</span>
                   <div className="flex items-center gap-1.5 font-medium text-foreground">
-                    {ChannelIcon ? (
-                      <ChannelIcon className={`h-3.5 w-3.5 ${customer.channelColor}`} />
-                    ) : null}
+                    {customer.channelLogo ? <PlatformLogo platform={customer.channelLogo} size="xs" framed={false} /> : ChannelIcon ? <ChannelIcon className="h-3.5 w-3.5 text-muted-foreground" /> : null}
                     <span>{customer.channel}</span>
                   </div>
                 </div>

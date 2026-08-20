@@ -1,6 +1,7 @@
 import { ArrowUpRight, UserX } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import type { ElementType } from "react";
+import { PlatformLogo } from "@/components/platform-logo";
 import { CustomerStatusBadge, type CustomerStatus } from "./customer-status-badge";
 
 export interface Customer {
@@ -11,8 +12,8 @@ export interface Customer {
   phone: string;
   cpf: string;
   channel: string;
-  channelIcon: ElementType;
-  channelColor: string;
+  channelLogo?: import("@/components/platform-logo").PlatformLogoKey;
+  channelIcon?: ElementType;
   ltv: string;
   averageTicket: string;
   orders: number;
@@ -32,7 +33,7 @@ interface CustomersTableProps {
 export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
   if (customers.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-border-subtle bg-card p-12 text-center shadow-card">
+        <div className="data-surface flex flex-col items-center justify-center p-12 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border-subtle bg-muted/60 text-muted-foreground">
           <UserX className="h-6 w-6" />
         </div>
@@ -47,7 +48,7 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border-subtle bg-card shadow-card">
+    <div className="data-surface overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1060px] border-collapse text-left">
           <thead className="border-b border-border-subtle bg-background/50 text-[10px] font-bold uppercase tracking-wider text-muted-foreground select-none">
@@ -66,7 +67,7 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
 
           <tbody className="divide-y divide-border-subtle/70">
             {customers.map((customer) => {
-              const ChannelIcon = customer.channelIcon;
+                  const ChannelIcon = customer.channelIcon;
               const isLateRepurchase = customer.repurchaseDate === "em atraso";
 
               return (
@@ -94,7 +95,7 @@ export function CustomersTable({ customers, onSelect }: CustomersTableProps) {
                   <td className="whitespace-nowrap px-5 py-3.5">
                     <span className="inline-flex items-center gap-2 font-semibold text-foreground">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-background">
-                        <ChannelIcon className={`h-3.5 w-3.5 ${customer.channelColor}`} />
+                        {customer.channelLogo ? <PlatformLogo platform={customer.channelLogo} size="xs" framed={false} /> : ChannelIcon ? <ChannelIcon className="h-3.5 w-3.5 text-muted-foreground" /> : null}
                       </span>
                       <span>{customer.channel}</span>
                     </span>

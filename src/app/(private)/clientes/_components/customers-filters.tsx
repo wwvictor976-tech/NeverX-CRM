@@ -45,7 +45,7 @@ export function CustomersFilters({ value, onChange }: CustomersFiltersProps) {
   };
 
   return (
-    <div className="rounded-2xl border border-border-subtle bg-card p-4 shadow-card transition-all sm:p-5">
+    <div className="toolbar-surface p-4 transition-all sm:p-5">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <div className="min-w-0 flex-1">
@@ -108,7 +108,7 @@ export function CustomersFilters({ value, onChange }: CustomersFiltersProps) {
                   <option value="Todos">Todos os canais</option>
                   <option value="Mercado Livre">Mercado Livre</option>
                   <option value="Shopee">Shopee</option>
-                  <option value="E-commerce">E-commerce</option>
+                  <option value="Nuvemshop">Nuvemshop</option>
                   <option value="App Próprio">App Próprio</option>
                   <option value="Shein">Shein</option>
                 </select>

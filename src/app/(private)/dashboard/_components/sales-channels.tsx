@@ -1,9 +1,7 @@
 "use client";
 
-import { Smartphone, Store, TrendingUp } from "lucide-react";
-import { SiShopee } from "react-icons/si";
-import { MercadoLivreIcon } from "@/components/mercado-livre-icon";
-import { SheinIcon } from "@/components/shein-icon";
+import { Smartphone, TrendingUp } from "lucide-react";
+import { PlatformLogo, type PlatformLogoKey } from "@/components/platform-logo";
 
 // ============================================================================
 // DADOS DOS CANAIS DE VENDA
@@ -17,7 +15,8 @@ interface SalesChannel {
   orders: number;
   percentage: number;
   color: string;
-  icon: React.ElementType;
+  icon?: React.ElementType;
+  logo?: PlatformLogoKey;
 }
 
 const salesChannels: SalesChannel[] = [
@@ -29,17 +28,17 @@ const salesChannels: SalesChannel[] = [
     orders: 1240,
     percentage: 38,
     color: "#FFE600",
-    icon: MercadoLivreIcon,
+    logo: "mercadolivre",
   },
   {
     id: "site",
-    name: "E-commerce Próprio",
+    name: "Nuvemshop",
     type: "Direto",
     revenue: "R$ 48.600,00",
     orders: 890,
     percentage: 27,
     color: "#111111",
-    icon: Store,
+    logo: "nuvemshop",
   },
   {
     id: "shopee",
@@ -49,7 +48,7 @@ const salesChannels: SalesChannel[] = [
     orders: 620,
     percentage: 16,
     color: "#EE4D2D",
-    icon: SiShopee,
+    logo: "shopee",
   },
   {
     id: "app",
@@ -69,13 +68,13 @@ const salesChannels: SalesChannel[] = [
     orders: 280,
     percentage: 7,
     color: "#D4AF37",
-    icon: SheinIcon,
+    logo: "shein",
   },
 ];
 
 export function SalesChannelsChart() {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-border-subtle bg-card p-5 shadow-card sm:p-6">
+    <div className="card-surface flex flex-col justify-between p-5 sm:p-6">
       {/* Topo do Card */}
       <div>
         <div className="flex items-center justify-between">
@@ -97,8 +96,7 @@ export function SalesChannelsChart() {
       {/* Lista com Barras de Progresso */}
       <div className="mt-6 flex flex-col gap-3.5">
         {salesChannels.map((channel) => {
-          const Icon = channel.icon;
-          const isDarkIcon = channel.color === "#FFE600"; // Ajuste de contraste para o texto do ícone no amarelo
+              const Icon = channel.icon;
 
           return (
             <div
@@ -108,14 +106,7 @@ export function SalesChannelsChart() {
               {/* Linha Superior: Ícone, Nome, Pedidos e Valor */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-bold shadow-xs transition-transform group-hover:scale-105 ${
-                      isDarkIcon ? "text-[#111111]" : "text-white"
-                    }`}
-                    style={{ backgroundColor: channel.color }}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </div>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-card shadow-sm transition-transform group-hover:scale-105">{channel.logo ? <PlatformLogo platform={channel.logo} size="xs" framed={false} /> : Icon ? <Icon className="h-4 w-4 text-muted-foreground" /> : null}</div>
 
                   <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-2">

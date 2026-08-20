@@ -6,8 +6,8 @@ import {
   CheckSquare, 
   FilterX, 
   MoreHorizontal, 
-  Smartphone, 
-  Square, 
+  Smartphone,
+  Square,
   Store,
   Mail,
   Tag,
@@ -15,10 +15,8 @@ import {
   Trash2,
   X
 } from "lucide-react";
-import { SiShopee } from "react-icons/si";
 import { Button } from "@/components/ui/button";
-import { MercadoLivreIcon } from "@/components/mercado-livre-icon";
-import { SheinIcon } from "@/components/shein-icon";
+import { PlatformLogo, type PlatformLogoKey } from "@/components/platform-logo";
 import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
 import { CustomerDetailsSheet } from "./customer-details-sheet";
 import { CustomersHeader } from "./customers-header";
@@ -40,8 +38,8 @@ export interface Customer {
   phone: string;
   cpf: string;
   channel: string;
-  channelIcon: React.ElementType;
-  channelColor: string;
+  channelLogo?: PlatformLogoKey;
+  channelIcon?: React.ElementType;
   ltv: string;
   averageTicket: string;
   orders: number;
@@ -62,8 +60,7 @@ const initialCustomers: Customer[] = [
     phone: "+55 (11) 99845-1020",
     cpf: "***.***.***-42",
     channel: "Mercado Livre",
-    channelIcon: MercadoLivreIcon,
-    channelColor: "text-[#FFE600]",
+    channelLogo: "mercadolivre",
     ltv: "R$ 12.480,00",
     averageTicket: "R$ 624,00",
     orders: 20,
@@ -85,8 +82,7 @@ const initialCustomers: Customer[] = [
     phone: "+55 (21) 98722-4410",
     cpf: "***.***.***-18",
     channel: "Shopee",
-    channelIcon: SiShopee,
-    channelColor: "text-[#EE4D2D]",
+    channelLogo: "shopee",
     ltv: "R$ 8.920,00",
     averageTicket: "R$ 446,00",
     orders: 20,
@@ -106,9 +102,8 @@ const initialCustomers: Customer[] = [
     email: "camila.lima@email.com",
     phone: "+55 (31) 99182-7704",
     cpf: "***.***.***-67",
-    channel: "E-commerce",
-    channelIcon: Store,
-    channelColor: "text-accent",
+    channel: "Nuvemshop",
+    channelLogo: "nuvemshop",
     ltv: "R$ 2.340,00",
     averageTicket: "R$ 780,00",
     orders: 3,
@@ -118,7 +113,7 @@ const initialCustomers: Customer[] = [
     status: "NOVO",
     tags: ["primeira compra", "Belo Horizonte"],
     history: [
-      { title: "Pedido #4031", detail: "E-commerce · Kit skincare", value: "R$ 780,00", date: "14 ago 2026" },
+      { title: "Pedido #4031", detail: "Nuvemshop · Kit skincare", value: "R$ 780,00", date: "14 ago 2026" },
     ],
   },
   {
@@ -130,7 +125,6 @@ const initialCustomers: Customer[] = [
     cpf: "***.***.***-09",
     channel: "App Próprio",
     channelIcon: Smartphone,
-    channelColor: "text-blue-600",
     ltv: "R$ 5.760,00",
     averageTicket: "R$ 480,00",
     orders: 12,
@@ -150,9 +144,8 @@ const initialCustomers: Customer[] = [
     email: "marina.barbosa@email.com",
     phone: "+55 (51) 99871-2205",
     cpf: "***.***.***-81",
-    channel: "Shein",
-    channelIcon: SheinIcon,
-    channelColor: "text-foreground",
+    channel: "SHEIN",
+    channelLogo: "shein",
     ltv: "R$ 18.200,00",
     averageTicket: "R$ 910,00",
     orders: 20,
@@ -162,7 +155,7 @@ const initialCustomers: Customer[] = [
     status: "VIP",
     tags: ["alto valor", "moda", "Porto Alegre"],
     history: [
-      { title: "Pedido #4038", detail: "Shein · Coleção inverno", value: "R$ 1.240,00", date: "18 ago 2026" },
+      { title: "Pedido #4038", detail: "SHEIN · Coleção inverno", value: "R$ 1.240,00", date: "18 ago 2026" },
     ],
   },
 ];
@@ -358,11 +351,7 @@ export function CustomersContent() {
 
                         <td className="px-4 py-3.5">
                           <div className="flex items-center gap-1.5 font-medium text-foreground">
-                            {ChannelIcon ? (
-                              <ChannelIcon className={`h-4 w-4 ${customer.channelColor}`} />
-                            ) : (
-                              <div className="h-4 w-4 rounded-full bg-muted" />
-                            )}
+                            {customer.channelLogo ? <PlatformLogo platform={customer.channelLogo} size="xs" framed={false} /> : ChannelIcon ? <ChannelIcon className="h-4 w-4 text-muted-foreground" /> : <div className="h-4 w-4 rounded-full bg-muted" />}
                             <span>{customer.channel}</span>
                           </div>
                         </td>
