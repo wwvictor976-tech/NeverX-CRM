@@ -35,3 +35,9 @@ O CTA Nova campanha abre o mesmo fluxo partilhado com Clientes, com público de 
 ## Detalhe de Pedido
 
 O pedido #NX-4029 abriu correctamente em modal, mostrando cliente Ana Souza, origem Mercado Livre, pagamento, transportadora, tracking e os dois itens do pedido. O fluxo não depende de uma página adicional e mantém o contexto operacional.
+
+## Sincronização da instância
+
+O repositório está na branch `main` em `1d812c7`, com as quatro rotas novas presentes em disco. O processo antigo de desenvolvimento foi encerrado, a cache `.next` foi removida e o servidor foi reiniciado. Após o reinício, Relatórios e Campanhas aparecem na Sidebar e renderizam integralmente no navegador.
+
+Após o reinício, Pedidos e Conversas foram confirmados no navegador. Pedidos renderiza os seis registos com filtros e detalhe; Conversas renderiza a inbox mini Zendesk com Ana Souza, WhatsApp, pedido associado e contexto 360º.
