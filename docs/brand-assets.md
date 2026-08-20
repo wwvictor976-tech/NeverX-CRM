@@ -11,3 +11,9 @@ No Dashboard, Mercado Livre, Nuvemshop, Shopee e SHEIN aparecem com assets locai
 Clientes agora mostra Mercado Livre, Shopee, Nuvemshop e SHEIN com logos compactas no eixo da tabela; App Próprio mantém iconografia neutra. Pedidos usa os mesmos logos na origem da tabela, na lista mobile e no cartão de detalhe, e os filtros passaram a usar Nuvemshop e SHEIN com a nomenclatura consistente.
 
 Campanhas usa a logo WhatsApp no card e na linha do canal. Conversas usa a mesma logo na fila, no selector de resposta e no compositor; E-mail e Outro canal permanecem com iconografia funcional neutra. O tratamento visual permanece alinhado aos frames e superfícies do Dashboard.
+
+Mockups finais 1440×900 revistos: Dashboard mantém sidebar/header fixos, conteúdo alinhado e cards de canais abaixo da dobra; Integrações mostra catálogo em grelha 3×2 com logos compactas e botões de conexão consistentes. Não foi detectado defeito visual bloqueante nestas capturas.
+
+Mockups adicionais 1440×900 revistos: Clientes mantém tabela horizontalmente contida, filtros alinhados e logos de Mercado Livre, Shopee e Nuvemshop com escala adequada; Conversas mantém layout de três painéis, fila de tickets, contexto 360º e selector WhatsApp sem overflow horizontal visível.
+
+Mockups finais de Campanhas e Pedidos revistos: Campanhas mantém estados Activa/Agendada/Concluída/Rascunho, métricas e logo WhatsApp; Pedidos mantém origem, cliente, status, total, data, tracking/detalhe e logos de marketplace em linhas compactas.
