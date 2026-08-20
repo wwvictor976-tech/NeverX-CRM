@@ -11,11 +11,11 @@ const navItems: NavItem[] = [
   { href: "/clientes", label: "Clientes", icon: Users, available: true },
   { href: "/conversas", label: "Conversas", icon: MessageSquare, available: true },
   { href: "/jornadas", label: "Jornadas", icon: Route, available: false },
-  { href: "/pedidos", label: "Pedidos", icon: ShoppingBag, available: false },
+  { href: "/pedidos", label: "Pedidos", icon: ShoppingBag, available: true },
   { href: "/automacoes", label: "Automações", icon: CircleDashed, available: false },
-  { href: "/campanhas", label: "Campanhas", icon: Sparkles, available: false },
+  { href: "/campanhas", label: "Campanhas", icon: Sparkles, available: true },
   { href: "/integracoes", label: "Integrações", icon: BriefcaseBusiness, available: true },
-  { href: "/relatorios", label: "Relatórios", icon: BarChart3, available: false },
+  { href: "/relatorios", label: "Relatórios", icon: BarChart3, available: true },
   { href: "/configuracoes", label: "Configurações", icon: Settings, available: false },
 ];
 
