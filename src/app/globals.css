@@ -1,139 +1,89 @@
 @import "tailwindcss";
 
 @theme {
-  /* =========================================
-     CORES BASE (Styleguide Oficial NeverX)
-     ========================================= */
   --color-background: #ECEEF2;
-  --color-foreground: #111111;
-
-  --color-card: #FCFCFD;
-  --color-card-foreground: #111111;
-
-  /* Botão principal (Entrar / Criar conta / Ações Primárias) */
-  --color-primary: #111111;
-  --color-primary-hover: #222222;
-  --color-primary-active: #000000;
+  --color-foreground: #141619;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #141619;
+  --color-primary: #141619;
+  --color-primary-hover: #25292E;
+  --color-primary-active: #0A0B0D;
   --color-primary-foreground: #FFFFFF;
-
-  /* Destaques e Links em Dourado NeverX */
-  --color-accent: #D4AF37;
-  --color-accent-hover: #B89428;
+  --color-accent: #C09B32;
+  --color-accent-hover: #A98425;
   --color-accent-foreground: #FFFFFF;
-
-  /* Textos secundários e elementos suaves */
-  --color-muted: #E7E9EE;
-  --color-muted-foreground: #5F636B;
-
-  /* Bordas e Inputs */
-  --color-border: #D5D9E0;
-  --color-border-subtle: #E1E4E9;
-  --color-input: #D2D7DF;
-  --color-ring: #D4AF37;
-
-  /* Status */
-  --color-success: #22C55E;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
-
-  /* =========================================
-     TIPOGRAFIA
-     ========================================= */
+  --color-muted: #E6E9ED;
+  --color-muted-foreground: #62676F;
+  --color-border: #D4D9E0;
+  --color-border-subtle: #E4E7EB;
+  --color-input: #CDD3DA;
+  --color-ring: #C09B32;
+  --color-success: #198754;
+  --color-warning: #B7791F;
+  --color-danger: #C2413B;
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  /* =========================================
-     SOMBRAS (Elevation Tokens)
-     ========================================= */
-  --shadow-auth: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 15px rgba(0, 0, 0, 0.02);
-  --shadow-card: 0 8px 24px -10px rgba(17, 17, 17, 0.18), 0 2px 6px rgba(17, 17, 17, 0.04);
+  --shadow-auth: 0 24px 56px -24px rgba(20, 22, 25, 0.18), 0 2px 8px rgba(20, 22, 25, 0.04);
+  --shadow-card: 0 1px 2px rgba(20, 22, 25, 0.04), 0 10px 28px -20px rgba(20, 22, 25, 0.24);
+  --shadow-popover: 0 20px 48px -18px rgba(20, 22, 25, 0.28), 0 2px 8px rgba(20, 22, 25, 0.08);
 }
 
-/* =========================================
-   BASE E RESETS
-   ========================================= */
-html {
-  scroll-behavior: smooth;
-  -webkit-tap-highlight-color: transparent;
-}
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
 
 body {
   min-height: 100vh;
   font-family: var(--font-sans);
   background-color: var(--color-background);
   color: var(--color-foreground);
-
-  /* Imagem de Fundo Global Fixo */
   background-image: url("/bg.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
-
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
-  background: rgba(212, 175, 55, 0.2); /* Dourado com opacidade */
-  color: var(--color-foreground);
-}
+::selection { background: rgba(192, 155, 50, 0.2); color: var(--color-foreground); }
 
 @layer base {
-  * {
-    @apply border-border-subtle;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-ring);
-    outline-offset: 2px;
-  }
-
-  /* Reset para o preenchimento automático (Autofill) dos navegadores Webkit */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--color-foreground);
-    -webkit-box-shadow: 0 0 0px 1000px var(--color-card) inset;
-    transition: background-color 5000s ease-in-out 0s;
-  }
+  * { @apply border-border-subtle; }
+  :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+  input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus { -webkit-text-fill-color: var(--color-foreground); -webkit-box-shadow: 0 0 0 1000px var(--color-card) inset; transition: background-color 5000s ease-in-out 0s; }
 }
 
-/* =========================================
-   COMPONENTES REUTILIZÁVEIS
-   ========================================= */
 @layer components {
-  /* Card do Auth (Modais de Login/Register com sombra destacada) */
-  .auth-card {
-    @apply rounded-2xl border border-black/[0.04] bg-card shadow-auth transition-all duration-200;
+  .auth-card { @apply rounded-[18px] border border-border bg-card shadow-auth transition-shadow duration-200; }
+
+  .card-surface {
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-card);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
-  /* Superfície padrão de Cards e Widgets no Dashboard */
-  .card-surface {
-    @apply rounded-2xl border border-border bg-card shadow-card transition-all duration-200;
+  .card-surface:hover { border-color: color-mix(in srgb, var(--color-foreground) 15%, transparent); }
+
+  .data-surface {
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-card);
   }
 
   .popover-surface {
-    @apply rounded-2xl border border-border bg-card shadow-[0_18px_48px_rgba(17,17,17,0.14)];
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-popover);
   }
 
-  /* Inputs arredondados */
-  .auth-input {
-    @apply flex h-11 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 disabled:cursor-not-allowed disabled:opacity-50;
-  }
+  .page-kicker { color: var(--color-muted-foreground); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; line-height: 1.2; text-transform: uppercase; }
+  .section-heading { color: var(--color-foreground); font-size: 14px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35; }
 
-  /* Botão escuro de submissão */
-  .auth-button-primary {
-    @apply flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover active:bg-primary-active disabled:opacity-50;
-  }
-
-  /* Botões sociais (Google / Apple) */
-  .auth-button-social {
-    @apply flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted active:bg-border-subtle;
-  }
-
-  /* Links dourados de destaque */
-  .auth-link {
-    @apply text-sm font-medium text-accent transition-colors hover:text-accent-hover;
-  }
+  .auth-input { @apply flex h-11 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 disabled:cursor-not-allowed disabled:opacity-50; }
+  .auth-button-primary { @apply flex h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover active:bg-primary-active disabled:opacity-50; }
+  .auth-button-social { @apply flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted active:bg-border-subtle; }
+  .auth-link { @apply text-sm font-medium text-accent transition-colors hover:text-accent-hover; }
 }

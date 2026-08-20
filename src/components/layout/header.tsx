@@ -84,13 +84,13 @@ export function Header({
   };
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/95 px-4 py-3.5 shadow-[0_1px_0_rgba(17,17,17,0.03)] backdrop-blur-md transition-all sm:px-6">
-      <div className="flex min-w-0 flex-col pr-3">
-        <h1 className="truncate text-lg font-bold tracking-tight text-foreground sm:text-xl">{title}</h1>
+    <header ref={headerRef} className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/95 px-3 py-3 shadow-[0_1px_0_rgba(17,17,17,0.03)] backdrop-blur-md transition-all sm:px-6 sm:py-3.5">
+      <div className="flex min-w-0 max-w-[105px] flex-1 flex-col pr-2 sm:max-w-none sm:pr-3">
+        <h1 className="truncate text-base font-extrabold tracking-[-0.03em] text-foreground sm:text-xl">{title}</h1>
         {subtitle ? <p className="mt-1 hidden truncate text-xs leading-none text-muted-foreground sm:block">{subtitle}</p> : null}
       </div>
 
-      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+      <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
         <div className="relative flex items-center">
           <Search className="pointer-events-none absolute left-3 h-3.5 w-3.5 text-muted-foreground" />
           <input
@@ -101,13 +101,13 @@ export function Header({
               setActivePopover("search");
             }}
             onFocus={() => setActivePopover("search")}
-            placeholder="Buscar na plataforma..."
+            placeholder="Buscar..."
             aria-label="Buscar na plataforma"
             role="combobox"
             aria-autocomplete="list"
             aria-expanded={activePopover === "search"}
             aria-controls="header-search-results"
-            className="h-9 w-36 rounded-xl border border-border bg-background pl-8 pr-8 text-xs text-foreground placeholder:text-muted-foreground transition-all duration-200 hover:border-foreground/20 focus:w-52 focus:border-accent focus:bg-card focus:outline-none focus:ring-2 focus:ring-accent/15 sm:w-48 sm:pl-9 sm:focus:w-64"
+            className="h-9 w-28 rounded-xl border border-border bg-background pl-8 pr-8 text-xs text-foreground placeholder:text-muted-foreground transition-all duration-200 hover:border-foreground/20 focus:w-40 focus:border-accent focus:bg-card focus:outline-none focus:ring-2 focus:ring-accent/15 sm:w-48 sm:pl-9 sm:focus:w-64"
           />
           {searchQuery ? (
             <button type="button" onClick={() => setSearchQuery("")} aria-label="Limpar busca" className="absolute right-2 rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground">
@@ -186,7 +186,7 @@ export function Header({
           <button
             type="button"
             onClick={() => togglePopover("profile")}
-            className={`flex items-center gap-2 rounded-xl border bg-background p-1 pr-2.5 transition-all duration-150 hover:border-foreground/20 hover:bg-muted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 ${activePopover === "profile" ? "border-accent/50 bg-accent/5" : "border-border"}`}
+            className={`flex items-center gap-2 rounded-xl border bg-background p-1 pr-1.5 transition-all duration-150 hover:border-foreground/20 hover:bg-muted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 sm:pr-2.5 ${activePopover === "profile" ? "border-accent/50 bg-accent/5" : "border-border"}`}
             aria-label="Menu do usuário"
             aria-expanded={activePopover === "profile"}
             aria-controls="header-profile"

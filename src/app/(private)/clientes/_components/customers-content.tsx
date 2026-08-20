@@ -245,8 +245,8 @@ export function CustomersContent() {
   );
 
   return (
-    <div className="relative space-y-6 pb-12">
-      <CustomersHeader onAction={setActiveAction} />
+    <div className="relative space-y-7 pb-12">
+      <CustomersHeader onAction={setActiveAction} hasSelection={selectedIds.size > 0} />
 
       <section aria-label="Métricas de Relacionamento">
         <CustomersKpis />
@@ -290,7 +290,7 @@ export function CustomersContent() {
         </div>
 
         {/* Tabela de Clientes */}
-        <div className="overflow-hidden rounded-2xl border border-border-subtle bg-card shadow-card">
+        <div className="data-surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>

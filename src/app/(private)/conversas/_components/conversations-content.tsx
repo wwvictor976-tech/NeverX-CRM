@@ -129,17 +129,17 @@ export function ConversationsContent() {
   };
 
   return (
-    <div className="space-y-5 pb-12">
+    <div className="space-y-6 pb-12">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <div className="mb-2 inline-flex items-center gap-2 text-[11px] font-medium text-muted-foreground"><span className="h-2 w-2 rounded-full bg-success" /> Inbox contextual do CRM</div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Atendimento e relacionamento</h2>
+          <div className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold text-muted-foreground"><span className="h-1.5 w-1.5 rounded-full bg-success" /> Atendimento unificado</div>
+          <h2 className="text-[1.85rem] font-extrabold tracking-[-0.04em] text-foreground sm:text-3xl">Atendimento e relacionamento</h2>
           <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">Selecione um cliente para continuar a conversa no canal escolhido.</p>
         </div>
-        <div className="flex items-center gap-2 rounded-xl border border-border-subtle bg-card px-3 py-2 text-xs font-semibold text-muted-foreground"><span className="h-2 w-2 rounded-full bg-success" /> {conversations.length} conversas no protótipo</div>
+        <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground shadow-sm"><span className="h-1.5 w-1.5 rounded-full bg-success" /> {conversations.length} conversas em acompanhamento</div>
       </div>
 
-      <div className="grid min-h-[620px] overflow-hidden rounded-2xl border border-border-subtle bg-card shadow-card lg:grid-cols-[300px_minmax(0,1fr)]">
+      <div className="data-surface grid min-h-[620px] overflow-hidden lg:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="flex min-h-0 flex-col border-b border-border-subtle lg:border-b-0 lg:border-r">
           <div className="border-b border-border-subtle p-4">
             <div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar conversa..." className="auth-input h-9 pl-9 text-xs" /></div>
@@ -182,7 +182,7 @@ export function ConversationsContent() {
           <div className="border-t border-border-subtle bg-card p-4 sm:p-5">
             <div className="mb-2 flex items-center justify-between"><div className="flex items-center gap-2 text-[11px] font-semibold text-muted-foreground"><ActiveChannelIcon className="h-3.5 w-3.5 text-accent" /> Responder via {channelOptions.find((channel) => channel.id === activeChannel)?.label}</div><button type="button" className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground">Mensagem padrão <ChevronDown className="h-3 w-3" /></button></div>
             <div className="flex items-end gap-2"><button type="button" aria-label="Anexar ficheiro" className="mb-1 rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground"><Paperclip className="h-4 w-4" /></button><textarea value={composer} onChange={(event) => setComposer(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); handleSend(); } }} placeholder="Escreva uma resposta..." className="auth-input min-h-11 flex-1 resize-none py-3" rows={1} /><Button variant="accent" size="icon" aria-label="Enviar mensagem" onClick={handleSend}><Send className="h-4 w-4" /></Button></div>
-            <p className="mt-2 text-[10px] text-muted-foreground">Enter para enviar · Shift + Enter para nova linha · envio local no protótipo</p>
+            <p className="mt-2 text-[10px] text-muted-foreground">Enter para enviar · Shift + Enter para nova linha · mensagens guardadas nesta sessão</p>
           </div>
         </section>
       </div>

@@ -8,49 +8,27 @@ import { RelationshipFeed } from "./_components/relationship-feed";
 
 export default function DashboardPage() {
   return (
-    <PrivateLayout
-      title="Dashboard"
-      subtitle="Visão geral do relacionamento com seus clientes."
-    >
-      <div className="space-y-8">
-        {/* NÍVEL 1: Cabeçalho com ações e período selecionado */}
+    <PrivateLayout title="Dashboard" subtitle="Visão geral do relacionamento com seus clientes.">
+      <div className="space-y-7">
         <DashboardHeader />
 
-        {/* NÍVEL 2: Métricas Rápidas / Saúde do Negócio */}
-        <section className="space-y-3">
+        <section aria-labelledby="dashboard-health" className="space-y-3">
+          <div className="flex items-end justify-between gap-3"><div><p className="page-kicker">Leitura executiva</p><h2 id="dashboard-health" className="section-heading mt-1">Saúde do relacionamento</h2></div><span className="hidden text-[11px] font-medium text-muted-foreground sm:block">Visão consolidada da operação</span></div>
           <KpiGrid />
         </section>
 
-        {/* NÍVEL 3: Análise Macro de Faturamento */}
-        <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Desempenho Financeiro
-            </h2>
-          </div>
+        <section aria-labelledby="dashboard-revenue" className="space-y-3">
+          <div><p className="page-kicker">Performance financeira</p><h2 id="dashboard-revenue" className="section-heading mt-1">Receita ao longo do tempo</h2></div>
           <RevenueChart />
         </section>
 
-        {/* NÍVEL 4: Distribuição por Canais (Vendas vs. Atendimento) */}
-        <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Performance por Canal
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 items-start">
-            <SalesChannelsChart />
-            <ChannelsChart />
-          </div>
+        <section aria-labelledby="dashboard-channels" className="space-y-3">
+          <div><p className="page-kicker">Origem e resposta</p><h2 id="dashboard-channels" className="section-heading mt-1">Performance por canal</h2></div>
+          <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-2"><SalesChannelsChart /><ChannelsChart /></div>
         </section>
 
-        {/* NÍVEL 5: Operacional e Atividades Recentes */}
-        <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Atividade do Funil & Relacionamento
-            </h2>
-          </div>
+        <section aria-labelledby="dashboard-activity" className="space-y-3">
+          <div><p className="page-kicker">Operação diária</p><h2 id="dashboard-activity" className="section-heading mt-1">Atividade do relacionamento</h2></div>
           <RelationshipFeed />
         </section>
       </div>

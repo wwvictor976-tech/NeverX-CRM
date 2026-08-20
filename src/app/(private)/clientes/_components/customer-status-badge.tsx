@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock3, ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
+import { Clock3, ShieldCheck, TriangleAlert, UserRound } from "lucide-react";
 
 export type CustomerStatus = "VIP" | "RECOMPRA_PENDENTE" | "EM_RISCO" | "NOVO";
 
@@ -14,13 +14,13 @@ const statusConfig: Record<CustomerStatus, StatusDetails> = {
   VIP: {
     label: "VIP",
     className:
-      "bg-accent/15 text-accent border border-accent/30 shadow-2xs",
+      "bg-accent/10 text-accent border border-accent/25",
     icon: ShieldCheck,
   },
   RECOMPRA_PENDENTE: {
     label: "Recompra Pendente",
     className:
-      "bg-success/15 text-success border border-success/30",
+      "bg-amber-500/10 text-amber-700 border border-amber-500/20",
     icon: Clock3,
   },
   EM_RISCO: {
@@ -33,7 +33,7 @@ const statusConfig: Record<CustomerStatus, StatusDetails> = {
     label: "Novo",
     className:
       "bg-muted/80 text-muted-foreground border border-border-subtle",
-    icon: Sparkles,
+    icon: UserRound,
   },
 };
 
@@ -43,7 +43,7 @@ export function CustomerStatusBadge({ status }: { status: CustomerStatus }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider transition-all duration-150 select-none ${config.className}`}
+      className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] transition-all duration-150 select-none ${config.className}`}
     >
       <Icon className="h-3 w-3 shrink-0" />
       <span>{config.label}</span>

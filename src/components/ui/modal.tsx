@@ -62,7 +62,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby="modal-title"
         aria-describedby={description ? "modal-description" : undefined}
-        className={`relative z-10 flex max-h-[min(720px,calc(100vh-2rem))] w-full flex-col overflow-hidden rounded-2xl border border-border-subtle bg-card shadow-2xl animate-in fade-in zoom-in-95 duration-200 ${widthClasses[maxWidth]}`}
+        className={`relative z-10 flex max-h-[min(720px,calc(100vh-2rem))] w-full flex-col overflow-hidden rounded-[18px] border border-border bg-card shadow-[0_24px_64px_-24px_rgba(20,22,25,0.32)] animate-in fade-in zoom-in-95 duration-200 ${widthClasses[maxWidth]}`}
       >
         <header className="flex items-start justify-between gap-4 border-b border-border-subtle px-5 py-4 sm:px-6">
           <div className="min-w-0">
