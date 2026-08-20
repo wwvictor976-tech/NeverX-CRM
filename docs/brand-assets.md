@@ -35,3 +35,11 @@ Mockups finais revistos: o Dashboard ficou mais sóbrio com fundo plano, KPIs ce
 As capturas mobile de Clientes e Pedidos mostram CTAs agrupados sem cortar texto, KPIs empilhados, cabeçalhos legíveis e adaptação para cartões/listas a partir da largura reduzida. A rolagem fica reservada ao conteúdo principal, enquanto a barra superior permanece no topo.
 
 Validação interactiva do Header concluída: o sino abre um resumo de notificações ancorado ao próprio botão e o perfil abre o menu de conta no mesmo ponto de origem. Nenhum dos dois fluxos usa modal central.
+
+## Correcção de scroll e autenticação
+
+A feature Conversas foi validada em desktop com a página contida no viewport: a fila, o histórico do chat e o contexto do ticket ficam em painéis internos, sem scroll global da página. A autenticação voltou a usar `public/bg.jpeg` como fundo, com uma camada clara de contraste para preservar a leitura do card de Login.
+
+A captura mobile de Conversas confirma que o viewport não expande para além da página; fila, histórico e contexto ficam contidos no módulo. A captura mobile de Login confirma que o fundo permanece visível nas margens e que o formulário e os diferenciais continuam responsivos.
+
+A versão final de Conversas foi recapturada: no mobile a fila fica limitada a uma faixa com scroll próprio, o chat ocupa o espaço restante e o contexto é ocultado para não empurrar o histórico; no desktop a grelha mantém fila, chat e contexto lado a lado, com o histórico central como área de scroll.

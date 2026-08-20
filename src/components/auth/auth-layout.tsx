@@ -34,9 +34,10 @@ const features = [
 
 export function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-between px-4 py-3 sm:py-5 lg:h-screen lg:overflow-hidden">
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden bg-background bg-[url('/bg.jpeg')] bg-cover bg-center bg-no-repeat px-4 py-3 sm:py-5 lg:h-screen">
+      <div className="pointer-events-none absolute inset-0 bg-background/75" aria-hidden="true" />
       {/* Header Oficial */}
-      <header className="flex flex-col items-center justify-center text-center shrink-0 pt-1">
+      <header className="relative z-10 flex shrink-0 flex-col items-center justify-center pt-1 text-center">
         <div className="flex items-center text-2xl font-extrabold tracking-tight text-foreground">
           Never<span className="text-accent">X</span>
         </div>
@@ -50,7 +51,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="my-auto w-full max-w-[400px] py-2"
+        className="relative z-10 my-auto w-full max-w-[400px] py-2"
       >
         <div className="auth-card p-5 sm:p-6">
           {children}
@@ -58,7 +59,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       </motion.div>
 
       {/* Rodapé de Diferenciais */}
-      <footer className="w-full max-w-5xl border-t border-border-subtle pt-3 shrink-0 pb-1">
+      <footer className="relative z-10 w-full max-w-5xl shrink-0 border-t border-border-subtle pt-3 pb-1">
         <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
           {features.map((feature) => (
             <div key={feature.title} className="flex items-start gap-2">

@@ -9,10 +9,14 @@ export function PrivateLayout({
   children,
   title = "Dashboard",
   subtitle = "Visão geral do relacionamento com seus clientes.",
+  mainClassName = "",
+  contentClassName = "",
 }: {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
+  mainClassName?: string;
+  contentClassName?: string;
 }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -36,7 +40,7 @@ export function PrivateLayout({
         <Sidebar />
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <Header title={title} subtitle={subtitle} />
-          <main className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8"><div className="mx-auto w-full max-w-[1600px]">{children}</div></main>
+          <main className={`min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-4 py-5 sm:px-6 sm:py-7 lg:px-8 lg:py-8 ${mainClassName}`}><div className={`mx-auto w-full max-w-[1600px] ${contentClassName}`}>{children}</div></main>
         </div>
       </div>
     </div>
