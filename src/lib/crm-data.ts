@@ -24,7 +24,7 @@ export const orders: OrderRecord[] = [
   { id: "#NX-4028", customerId: "rafael-mendes", customerName: "Rafael Mendes", customerInitials: "RM", customerEmail: "rafael.mendes@email.com", source: "shopee", sourceLabel: "Shopee", sourceType: "Marketplace", createdAt: "Hoje, 09:18", status: "Entregue", total: 299.9, items: 1, payment: "Pix", shipping: "Shopee Entrega", tracking: "SPX-771204", products: [{ name: "Cafeteira compacta", quantity: 1, price: 299.9 }] },
   { id: "#NX-4027", customerId: "camila-lima", customerName: "Camila Lima", customerInitials: "CL", customerEmail: "camila.lima@email.com", source: "nuvemshop", sourceLabel: "Nuvemshop", sourceType: "Loja própria", createdAt: "Ontem, 16:22", status: "Processando", total: 234.0, items: 3, payment: "Pix", shipping: "Jadlog", tracking: "NX-234901", products: [{ name: "Organizador de cabos", quantity: 2, price: 98 }, { name: "Etiqueta térmica", quantity: 1, price: 136 }] },
   { id: "#NX-4026", customerId: "joao-teixeira", customerName: "João Teixeira", customerInitials: "JT", customerEmail: "joao.teixeira@email.com", source: "app", sourceLabel: "Aplicativo próprio", sourceType: "Aplicativo", createdAt: "12 ago, 14:05", status: "Cancelado", total: 576.0, items: 4, payment: "Cartão de crédito", shipping: "Retirada no PDV", tracking: "PDV-1184", products: [{ name: "Kit home office", quantity: 1, price: 576 }] },
-  { id: "#NX-4025", customerId: "marina-barbosa", customerName: "Marina Barbosa", customerInitials: "MB", customerEmail: "marina.barbosa@email.com", source: "shein", sourceLabel: "SHEIN", sourceType: "Marketplace", createdAt: "18 ago, 11:40", status: "Entregue", total: 899.0, items: 5, payment: "Pix", shipping: "Shein Logistics", tracking: "SHE-553190", products: [{ name: "Linha home premium", quantity: 5, price: 899 }] },
+  { id: "#NX-4025", customerId: "marina-barbosa", customerName: "Marina Barbosa", customerInitials: "MB", customerEmail: "marina.barbosa@email.com", source: "shein", sourceLabel: "SHEIN", sourceType: "Marketplace", createdAt: "18 ago, 11:40", status: "Entregue", total: 899.0, items: 5, payment: "Pix", shipping: "SHEIN Logistics", tracking: "SHE-553190", products: [{ name: "Linha home premium", quantity: 5, price: 899 }] },
   { id: "#NX-4024", customerId: "juliana-santos", customerName: "Juliana Santos", customerInitials: "JS", customerEmail: "juliana.santos@email.com", source: "nuvemshop", sourceLabel: "Nuvemshop", sourceType: "Loja própria", createdAt: "16 ago, 13:20", status: "Entregue", total: 459.9, items: 2, payment: "Cartão de crédito", shipping: "Correios", tracking: "NX-221480", products: [{ name: "Kit organização premium", quantity: 1, price: 459.9 }] },
 ];
 
@@ -33,7 +33,7 @@ export type CampaignRecord = {
   name: string;
   channel: "E-mail" | "WhatsApp" | "Outro canal";
   audience: string;
-  status: "Activa" | "Rascunho" | "Agendada" | "Concluída";
+  status: "Ativa" | "Rascunho" | "Agendada" | "Concluída";
   updatedAt: string;
   sent: number;
   openRate: string;
@@ -42,7 +42,7 @@ export type CampaignRecord = {
 };
 
 export const campaigns: CampaignRecord[] = [
-  { id: "cmp-recompra-agosto", name: "Recompra de agosto", channel: "WhatsApp", audience: "386 clientes prontos", status: "Activa", updatedAt: "Actualizada hoje", sent: 386, openRate: "78,4%", clickRate: "22,8%", revenue: 18420 },
+  { id: "cmp-recompra-agosto", name: "Recompra de agosto", channel: "WhatsApp", audience: "386 clientes prontos", status: "Ativa", updatedAt: "Atualizada hoje", sent: 386, openRate: "78,4%", clickRate: "22,8%", revenue: 18420 },
   { id: "cmp-vip-lancamento", name: "Lançamento linha premium", channel: "E-mail", audience: "124 clientes VIP", status: "Agendada", updatedAt: "18 ago 2026", sent: 124, openRate: "—", clickRate: "—", revenue: 0 },
   { id: "cmp-inativos", name: "Reativação de inativos", channel: "E-mail", audience: "72 clientes em risco", status: "Concluída", updatedAt: "15 ago 2026", sent: 72, openRate: "64,2%", clickRate: "12,5%", revenue: 7260 },
   { id: "cmp-primeira-compra", name: "Boas-vindas primeira compra", channel: "Outro canal", audience: "48 novos clientes", status: "Rascunho", updatedAt: "Editada há 2 dias", sent: 0, openRate: "—", clickRate: "—", revenue: 0 },

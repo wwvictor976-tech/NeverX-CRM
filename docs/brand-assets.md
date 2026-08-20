@@ -1,8 +1,6 @@
 # Fontes de logos
 
-Os logos locais de WhatsApp, Shopee, Shopify e Instagram foram obtidos a partir do CDN Simple Icons: `https://cdn.simpleicons.org/whatsapp`, `https://cdn.simpleicons.org/shopee`, `https://cdn.simpleicons.org/shopify` e `https://cdn.simpleicons.org/instagram`.
-
-Mercado Livre e SHEIN já existiam como SVGs locais no projecto (`public/mercado-livre.svg` e `public/shein.svg`). O asset Nuvemshop foi obtido da página de referência `https://seeklogo.com/vector-logo/445979/nuvemshop`, usando a imagem `https://images.seeklogo.com/logo-png/63/3/nuvemshop-logo-png_seeklogo-638640.png` e guardado localmente em `public/brands/nuvemshop.png`.
+Os logos locais de WhatsApp, Shopee, Shopify e Instagram usam referências SVG compactas já armazenadas no projecto. Mercado Livre mantém o SVG local existente e a SHEIN usa o wordmark vectorial local em `public/shein.svg`. O asset Nuvemshop foi actualizado a partir do PNG actualmente servido pelo CDN oficial da marca, `https://app-insti-cdn.nuvemshop.com.br/site/dist/images/Nuvemshop.png?v=0cb7f09`, e está guardado em `public/brands/nuvemshop.png`.
 
 ## Validação visual
 
@@ -17,3 +15,23 @@ Mockups finais 1440×900 revistos: Dashboard mantém sidebar/header fixos, conte
 Mockups adicionais 1440×900 revistos: Clientes mantém tabela horizontalmente contida, filtros alinhados e logos de Mercado Livre, Shopee e Nuvemshop com escala adequada; Conversas mantém layout de três painéis, fila de tickets, contexto 360º e selector WhatsApp sem overflow horizontal visível.
 
 Mockups finais de Campanhas e Pedidos revistos: Campanhas mantém estados Activa/Agendada/Concluída/Rascunho, métricas e logo WhatsApp; Pedidos mantém origem, cliente, status, total, data, tracking/detalhe e logos de marketplace em linhas compactas.
+
+## Auditoria de identidade e linguagem — Agosto de 2026
+
+A documentação oficial do DevHub Nuvemshop recomenda títulos claros e contextuais, preferência por uma única frase sem ponto final e chamadas para acção auto-explicativas. Fonte: https://dev.nuvemshop.com.br/en/docs/design-guidelines/ux-writing-usage
+
+A página institucional do SHEIN Group mantém a marca SHEIN em wordmark preto, com navegação e referências oficiais no domínio sheingroup.com. Fonte: https://www.sheingroup.com/
+
+A homepage oficial actual da Nuvemshop apresenta o wordmark branco “nuvemshop” acompanhado do símbolo de nuvem entrelaçada sobre fundo azul forte, em https://www.nuvemshop.com.br/. A referência institucional SHEIN observada em https://www.sheingroup.com/ apresenta o wordmark preto “SHEIN” em caixa alta com espaçamento amplo. Estes tratamentos serão usados como referência oficial de marca, mantendo o uso compacto nos contextos densos do CRM.
+
+## Validação intermédia da responsividade
+
+A captura mobile de Campanhas mostrou o novo PageIntro, CTA e cartões KPI empilhados sem overflow visível. A primeira captura headless mobile de Conversas ficou no estado transitório “A carregar conversas…”, mas a navegação interactiva carregou correctamente a inbox completa; a refactorização de breakpoints foi mantida e será revalidada com espera de hidratação antes da captura final.
+
+A captura mobile carregada de Conversas confirma a inbox completa em largura 390px: pesquisa, filtros, fila e início do contexto do ticket ficam contidos sem overflow horizontal. A captura desktop de Integrações confirma a nova Nuvemshop oficial em formato wordmark e a SHEIN em wordmark preto, ambas legíveis nos cards sem distorção.
+
+Mockups finais revistos: o Dashboard ficou mais sóbrio com fundo plano, KPIs centralizados e hierarquia preservada; Integrações apresenta grelha responsiva em coluna no mobile, pesquisa contida e ações de conexão legíveis. Os wordmarks oficiais não provocam overflow nos frames disponíveis.
+
+As capturas mobile de Clientes e Pedidos mostram CTAs agrupados sem cortar texto, KPIs empilhados, cabeçalhos legíveis e adaptação para cartões/listas a partir da largura reduzida. A rolagem fica reservada ao conteúdo principal, enquanto a barra superior permanece no topo.
+
+Validação interactiva do Header concluída: o sino abre um resumo de notificações ancorado ao próprio botão e o perfil abre o menu de conta no mesmo ponto de origem. Nenhum dos dois fluxos usa modal central.

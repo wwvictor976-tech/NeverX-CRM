@@ -41,9 +41,9 @@ export function CustomerActionModals({ action, selectedCount, onClose }: Custome
         <div className="space-y-4">
           <div className="grid gap-2 sm:grid-cols-2">
             <div className="rounded-xl border border-accent/30 bg-accent/5 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Escopo seleccionado</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Escopo selecionado</p>
               <p className="mt-1 text-lg font-black text-foreground">{selectedCount || "Todos"}</p>
-              <p className="text-[11px] text-muted-foreground">{selectedCount ? "clientes seleccionados" : "clientes filtrados"}</p>
+              <p className="text-[11px] text-muted-foreground">{selectedCount ? "clientes selecionados" : "clientes filtrados"}</p>
             </div>
             <div className="rounded-xl border border-border-subtle bg-muted/20 p-3">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Formato</p>
@@ -58,7 +58,7 @@ export function CustomerActionModals({ action, selectedCount, onClose }: Custome
         </div>
       </Modal>
 
-      <CampaignModal open={action === "campaign"} onClose={handleClose} audience={{ count: selectedCount, label: "clientes seleccionados" }} />
+      <CampaignModal open={action === "campaign"} onClose={handleClose} audience={{ count: selectedCount, label: "clientes selecionados" }} />
 
       <Modal
         open={action === "new"}
@@ -89,7 +89,7 @@ export function CustomerActionModals({ action, selectedCount, onClose }: Custome
           </label>
           <label className="space-y-1.5 text-xs font-semibold text-foreground">
             Canal de origem
-            <select className="auth-input"><option>E-commerce próprio</option><option>Mercado Livre</option><option>Shein</option><option>Shopee</option><option>PDV</option></select>
+            <select className="auth-input"><option>E-commerce próprio</option><option>Mercado Livre</option><option>SHEIN</option><option>Shopee</option><option>PDV</option></select>
           </label>
           <label className="space-y-1.5 text-xs font-semibold text-foreground">
             Segmento inicial

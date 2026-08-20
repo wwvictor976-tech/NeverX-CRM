@@ -110,7 +110,7 @@ export function CustomersFilters({ value, onChange }: CustomersFiltersProps) {
                   <option value="Shopee">Shopee</option>
                   <option value="Nuvemshop">Nuvemshop</option>
                   <option value="App Próprio">App Próprio</option>
-                  <option value="Shein">Shein</option>
+                  <option value="SHEIN">SHEIN</option>
                 </select>
                 <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               </div>

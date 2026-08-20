@@ -5,6 +5,7 @@ import { ArrowUpRight, CheckCircle2, ChevronRight, Clock3, CreditCard, ExternalL
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { PlatformLogo, type PlatformLogoKey } from "@/components/platform-logo";
+import { PageIntro } from "@/components/layout/page-structure";
 import { formatCurrency, orders, type OrderRecord, type OrderStatus } from "@/lib/crm-data";
 
 const statusOptions: ("Todos" | OrderStatus)[] = ["Todos", "Entregue", "Em trânsito", "Processando", "Cancelado"];
@@ -24,8 +25,8 @@ export function OrdersContent() {
   const transitCount = orders.filter((order) => order.status === "Em trânsito" || order.status === "Processando").length;
 
   return (
-    <div className="space-y-7 pb-12">
-      <div className="flex flex-col gap-5 border-b border-border-subtle pb-6 lg:flex-row lg:items-end lg:justify-between"><div><div className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold text-muted-foreground"><Package className="h-3.5 w-3.5 text-accent" /> Operação e fulfilment</div><h2 className="text-[1.85rem] font-extrabold tracking-[-0.04em] text-foreground sm:text-3xl">Pedidos</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground sm:text-sm">Acompanhe origem, cliente, pagamento e entrega de cada pedido identificado pelo CRM.</p></div><Button variant="outline" size="sm" className="h-9 self-start text-xs font-semibold sm:self-auto"><ExternalLink className="h-3.5 w-3.5" /> Exportar pedidos</Button></div>
+    <div className="page-frame">
+      <PageIntro eyebrow="Operação e logística" title="Pedidos" description="Acompanhe origem, cliente, pagamento e entrega de cada pedido identificado pelo CRM." action={<Button variant="outline" size="sm" className="h-9 text-xs font-semibold"><ExternalLink className="h-3.5 w-3.5" /> Exportar pedidos</Button>} />
 
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"><article className="card-surface border-l-2 border-l-accent p-4 sm:p-5"><p className="page-kicker">Pedidos no período</p><p className="mt-4 text-2xl font-extrabold tracking-[-0.04em]">3.440</p><p className="mt-2 text-[11px] font-bold text-success"><ArrowUpRight className="mr-0.5 inline h-3 w-3" />9,8% <span className="font-medium text-muted-foreground">vs período anterior</span></p></article><article className="card-surface p-4 sm:p-5"><p className="page-kicker">Receita identificada</p><p className="mt-4 text-2xl font-extrabold tracking-[-0.04em]">{formatCurrency(totalRevenue)}</p><p className="mt-2 text-[11px] font-bold text-success">+12,5% <span className="font-medium text-muted-foreground">no período</span></p></article><article className="card-surface p-4 sm:p-5"><p className="page-kicker">Ticket médio</p><p className="mt-4 text-2xl font-extrabold tracking-[-0.04em]">{formatCurrency(avgTicket)}</p><p className="mt-2 text-[11px] font-medium text-muted-foreground">por pedido identificado</p></article><article className="card-surface border-l-2 border-l-blue-400 p-4 sm:p-5"><p className="page-kicker">Em acompanhamento</p><p className="mt-4 text-2xl font-extrabold tracking-[-0.04em]">{transitCount}</p><p className="mt-2 text-[11px] font-medium text-muted-foreground">processando ou em trânsito</p></article></section>
 

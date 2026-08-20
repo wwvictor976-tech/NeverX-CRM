@@ -34,11 +34,6 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-background);
   color: var(--color-foreground);
-  background-image: url("/bg.jpeg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -64,6 +59,11 @@ body {
   }
 
   .card-surface:hover { border-color: color-mix(in srgb, var(--color-foreground) 15%, transparent); }
+
+  .page-frame { @apply space-y-7 pb-12; }
+  .page-actions { @apply flex flex-wrap items-center gap-2; }
+  .mobile-scroll-row { @apply -mx-1 flex max-w-full gap-1 overflow-x-auto px-1 pb-1; scrollbar-width: none; }
+  .mobile-scroll-row::-webkit-scrollbar { display: none; }
 
   .data-surface {
     border: 1px solid var(--color-border);

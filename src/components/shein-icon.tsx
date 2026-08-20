@@ -1,13 +1,13 @@
 import Image from "next/image";
 
-interface SheinIconProps {
+interface SHEINIconProps {
   className?: string;
 }
 
 /**
- * Logótipo SHEIN em SVG, com origem identificada como Shein.com.
+ * Logótipo SHEIN em SVG, com origem identificada como SHEIN.com.
  */
-export function SheinIcon({ className }: SheinIconProps) {
+export function SHEINIcon({ className }: SHEINIconProps) {
   return (
     <Image
       src="/shein.svg"

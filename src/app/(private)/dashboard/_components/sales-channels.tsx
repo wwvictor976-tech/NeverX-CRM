@@ -62,7 +62,7 @@ const salesChannels: SalesChannel[] = [
   },
   {
     id: "shein",
-    name: "Shein",
+    name: "SHEIN",
     type: "Marketplace",
     revenue: "R$ 12.600,00",
     orders: 280,

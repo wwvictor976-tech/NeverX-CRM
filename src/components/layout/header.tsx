@@ -84,9 +84,9 @@ export function Header({
   };
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-30 border-b border-border bg-card/95 shadow-[0_1px_0_rgba(17,17,17,0.03)] backdrop-blur-md">
-      <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between px-3 py-3 sm:px-6 sm:py-3.5 lg:px-8">
-        <div className="flex min-w-0 max-w-[105px] flex-1 flex-col pr-2 sm:max-w-none sm:pr-3">
+    <header ref={headerRef} className="sticky top-0 z-30 border-b border-border bg-card shadow-[0_1px_0_rgba(17,17,17,0.03)]">
+      <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-2 px-3 py-3 sm:px-6 sm:py-3.5 lg:px-8">
+        <div className="flex min-w-0 flex-1 flex-col pr-1 sm:pr-3">
         <h1 className="truncate text-base font-extrabold tracking-[-0.03em] text-foreground sm:text-xl">{title}</h1>
         {subtitle ? <p className="mt-1 hidden truncate text-xs leading-none text-muted-foreground sm:block">{subtitle}</p> : null}
       </div>
@@ -108,7 +108,7 @@ export function Header({
             aria-autocomplete="list"
             aria-expanded={activePopover === "search"}
             aria-controls="header-search-results"
-            className="h-9 w-28 rounded-xl border border-border bg-background pl-8 pr-8 text-xs text-foreground placeholder:text-muted-foreground transition-all duration-200 hover:border-foreground/20 focus:w-40 focus:border-accent focus:bg-card focus:outline-none focus:ring-2 focus:ring-accent/15 sm:w-48 sm:pl-9 sm:focus:w-64"
+            className="h-9 w-9 rounded-xl border border-border bg-background pl-8 pr-2 text-xs text-foreground placeholder:text-transparent transition-all duration-200 hover:border-foreground/20 focus:w-40 focus:border-accent focus:bg-card focus:outline-none focus:ring-2 focus:ring-accent/15 focus:placeholder:text-muted-foreground sm:w-48 sm:pl-9 sm:pr-8 sm:placeholder:text-muted-foreground sm:focus:w-64"
           />
           {searchQuery ? (
             <button type="button" onClick={() => setSearchQuery("")} aria-label="Limpar busca" className="absolute right-2 rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground">
@@ -117,7 +117,7 @@ export function Header({
           ) : null}
 
           {activePopover === "search" ? (
-            <div id="header-search-results" className="popover-surface absolute right-0 top-full mt-3 w-[min(360px,calc(100vw-2rem))] overflow-hidden p-2" role="listbox" aria-label="Resultados da busca">
+            <div id="header-search-results" className="popover-surface absolute right-0 top-full mt-2 w-[min(360px,calc(100vw-2rem))] overflow-hidden p-2" role="listbox" aria-label="Resultados da busca">
               <div className="flex items-center justify-between px-2.5 py-2">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">{searchQuery ? "Resultados" : "Acesso rápido"}</p>
                 <span className="text-[10px] font-semibold text-muted-foreground">{filteredSearchItems.length}</span>
@@ -163,7 +163,7 @@ export function Header({
           </button>
 
           {activePopover === "notifications" ? (
-            <div id="header-notifications" className="popover-surface absolute right-0 top-full mt-3 w-[min(360px,calc(100vw-2rem))] overflow-hidden" role="dialog" aria-label="Notificações">
+            <div id="header-notifications" className="popover-surface absolute right-0 top-full mt-2 w-[min(360px,calc(100vw-2rem))] overflow-hidden" role="dialog" aria-label="Notificações">
               <div className="flex items-start justify-between gap-3 border-b border-border-subtle px-4 py-3.5">
                 <div><p className="text-sm font-bold text-foreground">Notificações</p><p className="mt-0.5 text-[11px] text-muted-foreground">O que precisa da sua atenção.</p></div>
                 {!notificationsRead ? <span className="rounded-full bg-accent/10 px-2 py-1 text-[10px] font-bold text-accent">3 novas</span> : null}
@@ -198,7 +198,7 @@ export function Header({
           </button>
 
           {activePopover === "profile" ? (
-            <div id="header-profile" className="popover-surface absolute right-0 top-full mt-3 w-64 overflow-hidden p-2" role="menu" aria-label="Menu do usuário">
+            <div id="header-profile" className="popover-surface absolute right-0 top-full mt-2 w-64 overflow-hidden p-2" role="menu" aria-label="Menu do usuário">
               <div className="flex items-center gap-3 rounded-xl bg-muted/60 px-3 py-3"><div className="flex h-9 w-9 items-center justify-center rounded-full border border-accent/25 bg-accent/15 text-xs font-bold text-accent">{user.initials}</div><div className="min-w-0"><p className="truncate text-xs font-bold text-foreground">{user.name}</p><p className="truncate text-[10px] text-muted-foreground">{user.role}</p></div></div>
               <div className="mt-2 space-y-1"><Link href="/configuracoes" onClick={() => setActivePopover(null)} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold text-foreground transition-colors hover:bg-muted" role="menuitem"><Settings className="h-4 w-4 text-muted-foreground" /> Configurações da conta</Link><button type="button" onClick={() => setActivePopover(null)} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-danger transition-colors hover:bg-danger/5" role="menuitem"><LogOut className="h-4 w-4" /> Encerrar sessão</button></div>
             </div>
