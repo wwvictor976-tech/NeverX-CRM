@@ -1,88 +1,53 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
-import type { CustomerProfile } from "@/lib/crm-domain";
-import { customerProfiles } from "@/lib/crm-data";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { 
-  CheckSquare, 
-  FilterX, 
-  MoreHorizontal, 
-  Smartphone,
-  Square,
-  Mail,
-  Tag,
-  Download,
-  Trash2,
-  X
-} from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { FilterX, Mail, Tag, Trash2, X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { PlatformLogo } from "@/components/platform-logo";
-import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
-import { CustomerDetailsSheet } from "./customer-details-sheet";
-import { CustomersHeader } from "./customers-header";
+import type { CustomerProfile } from "@/lib/crm-domain";
+import { useCrmWorkspace } from "@/components/crm/crm-workspace-context";
+import { parseMockDate } from "@/lib/crm-selectors";
 import { CustomerActionModals, type CustomerAction } from "./customer-action-modals";
+import { CustomerDetailsSheet } from "./customer-details-sheet";
+import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
+import { CustomersHeader } from "./customers-header";
 import { CustomersKpis } from "./customers-kpis";
+import { CustomersTable } from "./customers-table";
 
 export type Customer = CustomerProfile;
 
-const initialCustomers = customerProfiles;
-
-const defaultFilters: CustomerFiltersValue = {
-  search: "",
-  channel: "Todos",
-  segment: "Todos",
-  sort: "recent",
-};
-
-const statusStyles: Record<string, { label: string; className: string }> = {
-  VIP: { label: "VIP", className: "bg-purple-500/10 text-purple-600 border-purple-500/20" },
-  RECOMPRA_PENDENTE: { label: "Recompra Pendente", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
-  NOVO: { label: "Novo Cliente", className: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
-  EM_RISCO: { label: "Em Risco", className: "bg-rose-500/10 text-rose-600 border-rose-500/20" },
-};
+const defaultFilters: CustomerFiltersValue = { search: "", channel: "Todos", segment: "Todos", sort: "recent" };
 
 export function CustomersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedCustomer = searchParams.get("cliente");
-  const initialSelectedCustomer = initialCustomers.find((item) => item.id === requestedCustomer || item.slug === requestedCustomer) ?? null;
-  const [customers, setCustomers] = useState(initialCustomers);
+  const { customers, campaigns: campaignRecords, addCustomer, updateCustomer: updateWorkspaceCustomer, removeCustomers, addCampaign } = useCrmWorkspace();
   const [filters, setFilters] = useState<CustomerFiltersValue>(defaultFilters);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(initialSelectedCustomer);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerProfile | null>(() => customers.find((customer) => customer.id === requestedCustomer || customer.slug === requestedCustomer) ?? null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [activeAction, setActiveAction] = useState<CustomerAction>(null);
 
-
   const filteredCustomers = useMemo(() => {
+    const query = filters.search.toLowerCase().trim();
     return customers
       .filter((customer) => {
-        const query = filters.search.toLowerCase().trim();
-        const matchesSearch =
-          !query ||
-          [customer.name, customer.email, customer.phone, customer.cpf].some((field) =>
-            field.toLowerCase().includes(query)
-          );
-        const matchesChannel =
-          filters.channel === "Todos" || customer.channel === filters.channel;
-        const matchesSegment =
-          filters.segment === "Todos" || customer.status === filters.segment;
-
-        return matchesSearch && matchesChannel && matchesSegment;
+        const searchable = [customer.id, customer.name, customer.email, customer.phone, customer.cpf, customer.sourceLabel, ...customer.tags, ...customer.segments].join(" ").toLowerCase();
+        return (!query || searchable.includes(query)) && (filters.channel === "Todos" || customer.channel === filters.channel) && (filters.segment === "Todos" || customer.status === filters.segment);
       })
       .sort((first, second) => {
-        if (filters.sort === "ltv") {
-          return Number(second.ltv.replace(/[^0-9]/g, "")) - Number(first.ltv.replace(/[^0-9]/g, ""));
-        }
+        if (filters.sort === "ltv") return second.totalSpent - first.totalSpent;
         if (filters.sort === "orders") return second.orders - first.orders;
-        return 0;
+        return (parseMockDate(second.lastPurchase) ?? "").localeCompare(parseMockDate(first.lastPurchase) ?? "");
       });
   }, [customers, filters]);
 
+  const selectedCustomers = useMemo(() => customers.filter((customer) => selectedIds.has(customer.id)), [customers, selectedIds]);
+  const hasActiveFilters = filters.search !== "" || filters.channel !== "Todos" || filters.segment !== "Todos" || filters.sort !== "recent";
+
   const handleToggleSelect = useCallback((id: string) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
+    setSelectedIds((current) => {
+      const next = new Set(current);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
@@ -90,233 +55,69 @@ export function CustomersContent() {
   }, []);
 
   const handleSelectAll = useCallback(() => {
-    if (selectedIds.size === filteredCustomers.length) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(filteredCustomers.map((c) => c.id)));
-    }
-  }, [filteredCustomers, selectedIds.size]);
+    const allVisibleSelected = filteredCustomers.length > 0 && filteredCustomers.every((customer) => selectedIds.has(customer.id));
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      filteredCustomers.forEach((customer) => { if (allVisibleSelected) next.delete(customer.id); else next.add(customer.id); });
+      return next;
+    });
+  }, [filteredCustomers, selectedIds]);
 
-  const hasActiveFilters =
-    filters.search !== "" ||
-    filters.channel !== "Todos" ||
-    filters.segment !== "Todos" ||
-    filters.sort !== "recent";
+  const handleStartConversation = useCallback((channel: "email" | "whatsapp" | "outro") => {
+    if (!selectedCustomer) return;
+    router.push(`/conversas?cliente=${encodeURIComponent(selectedCustomer.id)}&canal=${channel}`);
+  }, [router, selectedCustomer]);
 
-  const handleStartConversation = useCallback(
-    (channel: "email" | "whatsapp" | "outro") => {
-      if (!selectedCustomer) return;
-      router.push(`/conversas?cliente=${encodeURIComponent(selectedCustomer.id)}&canal=${channel}`);
-    },
-    [router, selectedCustomer]
-  );
+  const updateCustomer = (customerId: string, updater: (customer: CustomerProfile) => CustomerProfile) => {
+    updateWorkspaceCustomer(customerId, updater);
+    setSelectedCustomer((current) => current?.id === customerId ? updater(current) : current);
+  };
+
+  const handleTagSaved = (tag: string) => {
+    selectedCustomers.forEach((customer) => updateWorkspaceCustomer(customer.id, (current) => current.tags.includes(tag) ? current : { ...current, tags: [...current.tags, tag] }));
+    setSelectedCustomer((current) => current && selectedIds.has(current.id) && !current.tags.includes(tag) ? { ...current, tags: [...current.tags, tag] } : current);
+    setActiveAction(null);
+  };
+
+  const handleTagAdded = (customerId: string, tag: string) => {
+    updateCustomer(customerId, (customer) => customer.tags.includes(tag) ? customer : { ...customer, tags: [...customer.tags, tag] });
+  };
+
+  const handleCustomersDeleted = () => {
+    removeCustomers(Array.from(selectedIds));
+    setSelectedIds(new Set());
+    setActiveAction(null);
+    setSelectedCustomer(null);
+  };
+
+  const handleCustomerCreated = (customer: CustomerProfile) => {
+    addCustomer(customer);
+    setSelectedCustomer(customer);
+    setActiveAction(null);
+  };
 
   return (
     <div className="relative space-y-7 pb-12">
-      <CustomersHeader onAction={setActiveAction} hasSelection={selectedIds.size > 0} />
+      <CustomersHeader onAction={setActiveAction} hasSelection={selectedIds.size > 0} selectedCount={selectedIds.size} />
 
-      <section aria-label="Métricas de Relacionamento">
-        <CustomersKpis />
+      <section aria-labelledby="customers-kpis" className="space-y-3">
+        <div className="flex items-end justify-between gap-3"><div><p className="page-kicker">Leitura da base</p><h2 id="customers-kpis" className="section-heading mt-1">Saúde dos clientes</h2></div><span className="hidden text-[11px] font-medium text-muted-foreground sm:block">Valor, recorrência e risco em uma única visão</span></div>
+        <CustomersKpis customers={customers} />
       </section>
 
-      <section className="space-y-3">
+      <section aria-labelledby="customers-list" className="space-y-3">
+        <div className="flex items-end justify-between gap-3"><div><p className="page-kicker">Base operacional</p><h2 id="customers-list" className="section-heading mt-1">Todos os clientes</h2></div><span className="hidden text-[11px] font-medium text-muted-foreground sm:block">Use a busca por ID, nome, contato, canal ou segmento</span></div>
         <CustomersFilters value={filters} onChange={setFilters} />
 
-        <div className="flex items-center justify-between px-1 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <p>
-              Exibindo <span className="font-bold text-foreground">{filteredCustomers.length}</span> de{" "}
-              <span className="font-bold text-foreground">{customers.length}</span> clientes
-            </p>
-            {hasActiveFilters && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => setFilters(defaultFilters)}
-                className="h-6 gap-1 px-2 text-[11px] font-semibold text-accent hover:bg-accent/10"
-              >
-                <FilterX className="h-3 w-3" />
-                <span>Limpar filtros</span>
-              </Button>
-            )}
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-muted-foreground"><div className="flex items-center gap-2"><p>Exibindo <span className="font-bold text-foreground">{filteredCustomers.length}</span> de <span className="font-bold text-foreground">{customers.length}</span> {customers.length === 1 ? "cliente" : "clientes"}</p>{hasActiveFilters ? <Button type="button" variant="ghost" size="sm" onClick={() => setFilters(defaultFilters)} className="h-6 gap-1 px-2 text-[11px] font-semibold text-accent hover:bg-accent/10"><FilterX className="h-3 w-3" />Limpar filtros</Button> : null}</div><span className="font-medium">{selectedIds.size ? `${selectedIds.size} selecionado${selectedIds.size === 1 ? "" : "s"}` : "Nenhum cliente selecionado"}</span></div>
 
-          <button
-            type="button"
-            onClick={handleSelectAll}
-            className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
-          >
-            {selectedIds.size > 0 && selectedIds.size === filteredCustomers.length ? (
-              <CheckSquare className="h-3.5 w-3.5 text-accent" />
-            ) : (
-              <Square className="h-3.5 w-3.5" />
-            )}
-            <span>Selecionar todos</span>
-          </button>
-        </div>
-
-        {/* Tabela de Clientes */}
-        <div className="data-surface overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left">
-              <thead>
-                <tr className="border-b border-border-subtle bg-muted/30 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                  <th className="w-10 px-4 py-3 text-center">#</th>
-                  <th className="px-4 py-3">Cliente</th>
-                  <th className="px-4 py-3">Canal</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">LTV</th>
-                  <th className="px-4 py-3">Última Compra</th>
-                  <th className="w-10 px-4 py-3 text-right">Ação</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border-subtle">
-                {filteredCustomers.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="p-12 text-center text-xs text-muted-foreground">
-                      Nenhum cliente encontrado com os filtros selecionados.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredCustomers.map((customer) => {
-                    const isSelected = selectedIds.has(customer.id);
-                    const ChannelIcon = customer.sourcePlatform === "pdv" ? Smartphone : null;
-                    const statusConfig = statusStyles[customer.status] || {
-                      label: customer.status,
-                      className: "bg-muted text-muted-foreground border-border",
-                    };
-
-                    return (
-                      <tr
-                        key={customer.id}
-                        onClick={() => setSelectedCustomer(customer)}
-                        className={`group cursor-pointer text-xs transition-colors duration-150 ${
-                          isSelected ? "bg-accent/5 hover:bg-accent/10" : "hover:bg-muted/30 active:bg-muted/50"
-                        }`}
-                      >
-                        <td
-                          className="px-4 py-3.5 text-center"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleToggleSelect(customer.id);
-                          }}
-                        >
-                          <button type="button" className="text-muted-foreground hover:text-foreground">
-                            {isSelected ? (
-                              <CheckSquare className="h-4 w-4 text-accent" />
-                            ) : (
-                              <Square className="h-4 w-4" />
-                            )}
-                          </button>
-                        </td>
-
-                        <td className="px-4 py-3.5">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">
-                              {customer.initials}
-                            </div>
-                            <div>
-                              <p className="font-bold text-foreground">{customer.name}</p>
-                              <p className="mt-0.5 text-[10px] font-semibold text-accent">{customer.id}</p>
-                              <p className="text-[11px] text-muted-foreground">{customer.email}</p>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td className="px-4 py-3.5">
-                          <div className="flex items-center gap-1.5 font-medium text-foreground">
-                            {customer.channelLogo ? <PlatformLogo platform={customer.channelLogo} size="xs" framed={false} /> : ChannelIcon ? <ChannelIcon className="h-4 w-4 text-muted-foreground" /> : <div className="h-4 w-4 rounded-full bg-muted" />}
-                            <span>{customer.channel}</span>
-                          </div>
-                        </td>
-
-                        <td className="px-4 py-3.5">
-                          <span
-                            className={`inline-flex rounded-md border px-2 py-0.5 text-[10px] font-bold ${statusConfig.className}`}
-                          >
-                            {statusConfig.label}
-                          </span>
-                        </td>
-
-                        <td className="px-4 py-3.5 font-bold text-foreground">
-                          {customer.ltv}
-                        </td>
-
-                        <td className="px-4 py-3.5 text-muted-foreground">
-                          <p className="font-medium text-foreground">{customer.lastPurchase}</p>
-                          <p className="text-[10px]">{customer.daysSincePurchase}</p>
-                        </td>
-
-                        <td className="px-4 py-3.5 text-right" onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <CustomersTable customers={filteredCustomers} selectedIds={selectedIds} onToggleSelect={handleToggleSelect} onSelectAll={handleSelectAll} onSelect={setSelectedCustomer} />
       </section>
 
-      {/* Floating Bulk Action Bar */}
-      {selectedIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-border/80 bg-background/95 px-4 py-2.5 shadow-2xl backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
-          <div className="flex items-center gap-2 border-r border-border pr-3">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
-              {selectedIds.size}
-            </span>
-            <span className="text-xs font-semibold text-foreground hidden sm:inline">
-              selecionados
-            </span>
-          </div>
+      {selectedIds.size > 0 ? <div className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-2 overflow-x-auto rounded-2xl border border-border/80 bg-background/95 px-3 py-2.5 shadow-2xl backdrop-blur-md sm:bottom-6 sm:gap-3 sm:px-4"><div className="flex shrink-0 items-center gap-2 border-r border-border pr-2 sm:pr-3"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">{selectedIds.size}</span><span className="hidden text-xs font-semibold text-foreground sm:inline">selecionados</span></div><div className="flex shrink-0 items-center gap-1.5"><Button size="sm" variant="outline" onClick={() => setActiveAction("tag")} className="h-8 gap-1.5 rounded-xl text-xs font-semibold"><Tag className="h-3.5 w-3.5 text-muted-foreground" /><span className="hidden sm:inline">Adicionar tag</span></Button><Button size="sm" variant="outline" onClick={() => setActiveAction("export")} className="h-8 gap-1.5 rounded-xl text-xs font-semibold"><Mail className="h-3.5 w-3.5 text-muted-foreground" /><span className="hidden sm:inline">Exportar seleção</span></Button><Button size="sm" variant="ghost" onClick={() => setActiveAction("delete")} className="h-8 w-8 rounded-xl p-0 text-danger hover:bg-danger/10" aria-label="Remover clientes selecionados"><Trash2 className="h-3.5 w-3.5" /></Button></div><button type="button" onClick={() => setSelectedIds(new Set())} className="ml-1 shrink-0 rounded-lg p-1 text-muted-foreground hover:bg-muted" aria-label="Limpar seleção"><X className="h-4 w-4" /></button></div> : null}
 
-          <div className="flex items-center gap-1.5">
-            <Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-xl text-xs font-semibold">
-              <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Enviar Email</span>
-            </Button>
-            <Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-xl text-xs font-semibold">
-              <Tag className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Adicionar Tag</span>
-            </Button>
-            <Button size="sm" variant="outline" className="h-8 gap-1.5 rounded-xl text-xs font-semibold">
-              <Download className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="hidden sm:inline">Exportar</span>
-            </Button>
-            <Button size="sm" variant="ghost" className="h-8 w-8 rounded-xl p-0 text-danger hover:bg-danger/10">
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setSelectedIds(new Set())}
-            className="ml-1 rounded-lg p-1 text-muted-foreground hover:bg-muted"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
-
-      {/* 360° Customer Profile Sheet Workspace */}
-      <CustomerDetailsSheet
-        customer={selectedCustomer}
-        isOpen={!!selectedCustomer}
-        onClose={() => setSelectedCustomer(null)}
-        onStartConversation={handleStartConversation}
-      />
-
-      <CustomerActionModals
-        action={activeAction}
-        selectedCount={selectedIds.size}
-        onClose={() => setActiveAction(null)}
-        onCustomerCreated={(customer) => { setCustomers((current) => [customer, ...current]); setSelectedCustomer(customer); setActiveAction(null); }}
-      />
+      <CustomerDetailsSheet key={selectedCustomer?.id ?? "empty"} customer={selectedCustomer} isOpen={!!selectedCustomer} onClose={() => setSelectedCustomer(null)} onStartConversation={handleStartConversation} additionalCampaigns={campaignRecords} onTagAdded={handleTagAdded} />
+      <CustomerActionModals action={activeAction} selectedCustomers={selectedCustomers} visibleCustomers={filteredCustomers} onClose={() => setActiveAction(null)} onCustomerCreated={handleCustomerCreated} onTagSaved={handleTagSaved} onCustomersDeleted={handleCustomersDeleted} onCampaignSaved={(campaign) => { addCampaign(campaign); setActiveAction(null); }} />
     </div>
   );
 }

@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useCrmWorkspace } from "@/components/crm/crm-workspace-context";
 import { CheckCircle2, Clock3, Copy, Filter, Mail, Megaphone, MoreHorizontal, Plus, Send, Tag, Users } from "lucide-react";
 import { PlatformLogo } from "@/components/platform-logo";
 import { PageIntro, MetricCard, SectionIntro, StatusPill } from "@/components/layout/page-structure";
 import { Button } from "@/components/ui/button";
 import { CampaignModal } from "@/components/campaigns/campaign-modal";
-import { campaigns as initialCampaigns, type CampaignRecord, formatCurrency } from "@/lib/crm-data";
+import { type CampaignRecord, formatCurrency } from "@/lib/crm-data";
 
 type CampaignFilter = "Todas" | CampaignRecord["status"];
 
@@ -26,7 +27,7 @@ const statusStyles: Record<CampaignRecord["status"], string> = {
 };
 
 export function CampaignsContent() {
-  const [campaigns, setCampaigns] = useState(initialCampaigns);
+  const { campaigns, addCampaign } = useCrmWorkspace();
   const [activeStatus, setActiveStatus] = useState<CampaignFilter>("Todas");
   const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -40,8 +41,8 @@ export function CampaignsContent() {
   const activeCount = campaigns.filter((campaign) => campaign.status === "Ativa").length;
   const revenue = campaigns.reduce((total, campaign) => total + campaign.revenue, 0);
 
-  const addCampaign = (campaign: CampaignRecord) => {
-    setCampaigns((current) => [campaign, ...current]);
+  const handleCampaignSaved = (campaign: CampaignRecord) => {
+    addCampaign(campaign);
     setModalOpen(false);
   };
 
@@ -108,7 +109,7 @@ export function CampaignsContent() {
         <aside className="data-surface p-4 sm:p-5"><div className="flex items-start gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent"><Clock3 className="h-4 w-4" /></div><div><p className="text-xs font-bold text-foreground">Operação recomendada</p><p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">Revise o rascunho de boas-vindas antes de ativar o canal de E-mail.</p></div></div><Button variant="outline" size="sm" onClick={() => setModalOpen(true)} className="mt-4 h-9 w-full text-xs font-semibold"><Copy className="h-3.5 w-3.5" /> Criar a partir deste modelo</Button></aside>
       </section>
 
-      <CampaignModal open={modalOpen} onClose={() => setModalOpen(false)} audience={{ count: 386, label: "clientes selecionados" }} onSaved={addCampaign} />
+      <CampaignModal open={modalOpen} onClose={() => setModalOpen(false)} audience={{ count: 386, label: "clientes selecionados" }} onSaved={handleCampaignSaved} />
     </div>
   );
 }

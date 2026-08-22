@@ -62,3 +62,29 @@ A ação de atualização reprocessa o snapshot em memória, apresenta estado `S
 A validação interativa do Dashboard confirmou que o botão de atualização apresenta `Sincronizando`, recalcula a interface e termina com timestamp da sessão. O preset Hoje reduziu os indicadores ao conjunto do dia, e o intervalo personalizado de 14/08/2026 a 18/08/2026 atualizou receita, pedidos, canais e feed para os registros correspondentes. A série de receita também foi agrupada por dia para evitar rótulos duplicados.
 
 A exportação CSV foi testada no intervalo personalizado e apresentou confirmação no modal após gerar o arquivo no navegador. O mockup desktop atualizado demonstra o estado final com o resumo operacional, período personalizado, receita agregada por dia e canais filtrados.
+
+## Clientes — auditoria e conexões
+
+A feature Clientes foi reorganizada com uma tabela controlada por estado, seleção em massa, busca por ID/nome/contato/canal/tag, ordenação por recência/LTV/pedidos, métricas derivadas e ações por perfil. O deep-link `/clientes?cliente=CUS-000184` continua abrindo o perfil 360º de Ana Souza.
+
+A seleção de cinco clientes ativa a barra de ações e o botão de campanha com a audiência correta. O modal de campanha recebe os `customerIds` selecionados. O perfil 360º foi validado nas relações: conversa `#TCK-10429`, campanha `CMP-RECOMPRA-AGO` e lançamento financeiro aparecem ligados ao customerId oficial; o pedido fica acessível pela aba correspondente. O modal de tags foi preparado para adicionar etiquetas tanto em lote como no perfil individual.
+
+O teste do modal individual de tags foi concluído: a tag `alto potencial` foi aplicada a Ana Souza e apareceu imediatamente no bloco de segmentação do perfil, sem fechar a página principal. A aplicação confirma que o estado da listagem e o objeto selecionado são atualizados em conjunto.
+
+O fluxo de cadastro manual foi validado com nome, e-mail, telefone e tags. O formulário apresenta origem e segmento inicial, valida e-mail, gera `CUS-*` e está preparado para abrir o perfil recém-criado com as relações vazias prontas para sincronização.
+
+O cadastro manual foi concluído no navegador com o cliente Carolina Freitas. A base passou de 5 para 6 perfis, o ID `CUS-C69E750B` foi criado, o perfil abriu automaticamente no drawer 360º com origem, tags, campos vazios e estados de sem compra, e o botão de rodapé fechou o drawer sem bloquear a listagem.
+
+A validação visual final incluiu o estado limpo desktop e um viewport mobile de 390×844. No mobile, o header, ações, indicadores e toolbar empilham corretamente; a tabela permanece navegável por rolagem horizontal sem forçar a largura da página. Os mockups finais foram atualizados em `mockups/final-v2/desktop/clientes.png` e `mockups/final-v2/mobile/clientes.png`.
+
+O modal de exportação foi validado com cinco perfis visíveis: o download CSV foi executado e mostrou confirmação `5 perfis exportados com IDs oficiais.`. O arquivo inclui customerId, nome, contatos, origem, status, LTV, pedidos e última compra.
+
+A criação de campanha a partir da seleção foi testada com cinco clientes. O modal exibiu a audiência correta e aceitou nome, canal e mensagem; ao salvar, o rascunho foi entregue ao contexto de workspace para permanecer disponível entre as rotas privadas.
+
+Durante a validação, foi identificado que o primeiro teste de campanha navegou antes do effect de persistência escrever o estado no sessionStorage. O contexto foi corrigido para persistir imediatamente em cada mutação (`addCustomer`, `updateCustomer`, `removeCustomers` e `addCampaign`), mantendo também a sincronização posterior por effect.
+
+O segundo teste foi repetido após a correção: cinco clientes foram selecionados e o modal recebeu nome e mensagem de campanha. A próxima etapa de validação é confirmar o novo registro em Campanhas após o salvamento imediato.
+
+A persistência entre rotas foi confirmada: após salvar `Campanha VIP da base` em Clientes, a rota `/campanhas` exibiu o rascunho no topo com `5 clientes selecionados · Editada agora`. O contexto compartilhado também mantém os customerIds nos perfis associados.
+
+A validação final do perfil Ana Souza confirmou duas campanhas relacionadas: a campanha base e `Campanha VIP da base`, além da conversa e do movimento financeiro. O novo rascunho aparece via link `/campanhas?campanha=CMP-*`, demonstrando a ligação por customerId e a persistência do workspace entre rotas.
