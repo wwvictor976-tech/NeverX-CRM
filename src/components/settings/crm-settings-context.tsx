@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { IntegrationId } from "@/lib/integration-registry";
 
 export type WorkspaceSettings = {
@@ -12,6 +12,7 @@ export type WorkspaceSettings = {
   customerMerge: boolean;
   slaAlerts: boolean;
   weeklyDigest: boolean;
+  everEnabled: boolean;
 };
 
 type CrmSettingsContextValue = {
@@ -32,6 +33,7 @@ const defaultSettings: WorkspaceSettings = {
   customerMerge: true,
   slaAlerts: true,
   weeklyDigest: false,
+  everEnabled: true,
 };
 
 const defaultConnectedIntegrations: IntegrationId[] = ["nuvemshop", "mercadolivre", "whatsapp", "email"];
@@ -40,6 +42,32 @@ const CrmSettingsContext = createContext<CrmSettingsContextValue | null>(null);
 export function CrmSettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<WorkspaceSettings>(defaultSettings);
   const [connectedIntegrations, setConnectedIntegrations] = useState<IntegrationId[]>(defaultConnectedIntegrations);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      try {
+        const storedSettings = window.sessionStorage.getItem("neverx.crm.settings");
+        const storedIntegrations = window.sessionStorage.getItem("neverx.crm.integrations");
+        if (storedSettings) setSettings({ ...defaultSettings, ...JSON.parse(storedSettings) as Partial<WorkspaceSettings> });
+        if (storedIntegrations) setConnectedIntegrations(JSON.parse(storedIntegrations) as IntegrationId[]);
+      } catch {
+        // O workspace continua funcional em memória quando o storage não está disponível.
+      }
+      setHydrated(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.sessionStorage.setItem("neverx.crm.settings", JSON.stringify(settings));
+      window.sessionStorage.setItem("neverx.crm.integrations", JSON.stringify(connectedIntegrations));
+    } catch {
+      // A persistência é uma melhoria de sessão, não uma dependência da interface.
+    }
+  }, [connectedIntegrations, hydrated, settings]);
 
   const value = useMemo<CrmSettingsContextValue>(() => ({
     settings,

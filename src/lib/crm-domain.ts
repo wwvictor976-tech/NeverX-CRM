@@ -7,7 +7,7 @@ export type ChannelId = "email" | "whatsapp" | "outro";
 
 export type CustomerStatus = "VIP" | "RECOMPRA_PENDENTE" | "NOVO" | "EM_RISCO";
 export type OrderStatus = "Entregue" | "Em trânsito" | "Processando" | "Cancelado";
-export type CampaignStatus = "Ativa" | "Rascunho" | "Agendada" | "Concluída";
+export type CampaignStatus = "Ativa" | "Pausada" | "Rascunho" | "Agendada" | "Concluída";
 export type ConversationStatus = "aguardando" | "atendimento" | "resolvida";
 export type ConversationPriority = "Alta" | "Normal" | "Baixa";
 

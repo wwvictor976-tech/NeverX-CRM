@@ -11,6 +11,7 @@ type CrmWorkspaceContextValue = {
   updateCustomer: (customerId: string, updater: (customer: CustomerProfile) => CustomerProfile) => void;
   removeCustomers: (customerIds: string[]) => void;
   addCampaign: (campaign: CampaignRecord) => void;
+  updateCampaign: (campaignId: string, updater: (campaign: CampaignRecord) => CampaignRecord) => void;
 };
 
 const CrmWorkspaceContext = createContext<CrmWorkspaceContextValue | null>(null);
@@ -77,6 +78,11 @@ export function CrmWorkspaceProvider({ children }: { children: React.ReactNode }
       setCampaigns(nextCampaigns);
       setCustomers(nextCustomers);
       persistSession(nextCustomers, nextCampaigns);
+    },
+    updateCampaign: (campaignId, updater) => {
+      const nextCampaigns = campaigns.map((campaign) => campaign.id === campaignId ? updater(campaign) : campaign);
+      setCampaigns(nextCampaigns);
+      persistSession(customers, nextCampaigns);
     },
   }), [campaigns, customers]);
 

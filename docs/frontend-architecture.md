@@ -98,3 +98,23 @@ O painel de contexto 360º pode ser ocultado no desktop para expandir o atendime
 A validação visual final da inbox confirmou o shell de tela cheia, fila de tickets, filtros, atendimento e contexto. O painel 360º pode ser ocultado e reaberto pelo botão `Contexto`; o atendimento central expande sem deslocar a página. O estado inicial voltou a 5 tickets, 1 não lido, 3 em atendimento e 1 resolvido.
 
 O mockup mobile final de Conversas foi inspecionado em 390×844. A toolbar reduz ações para ícones acessíveis, a fila ocupa a faixa superior com rolagem horizontal dos filtros, o ticket selecionado e o compositor permanecem abaixo, e o contexto 360º está preparado para abrir como painel sobreposto. Não foi identificado overflow visual da página.
+
+O assistente Ever foi integrado ao Header global como ação persistente do workspace. A validação no Dashboard confirmou o painel lateral responsivo, estado Online, mensagem inicial contextual, sugestões operacionais, links para Dashboard/Conversas e composer com Enter/Shift+Enter. A experiência informa que o contexto atual é usado para sugerir próximos passos e que a conexão generativa segura deverá entrar pela camada de serviço/API.
+
+A validação do Ever confirmou a resposta contextual para a pergunta `Quais tickets devo priorizar?`, com contagem de tickets abertos, prioridade alta, SLA e links para abrir a inbox ou atender Ana Souza. Jornadas foi elevada com KPIs calculados, filtros com contagem, criação de rascunho e modal de detalhe com estado, inscritos, conversão, gatilho e controle de pausa/ativação.
+
+Configurações passou a incluir a seção `Ever, seu copiloto de operação`. A validação confirmou que o toggle `Exibir o Ever no Header` usa o provider global e controla a disponibilidade do assistente em todas as rotas privadas, com persistência de sessão preparada.
+
+O toggle do Ever em Configurações foi testado em ambos os sentidos: ao desativar, a ação desaparece do Header global; ao reativar, volta imediatamente em todas as rotas. O estado padrão foi restaurado para ativo antes da validação final.
+
+A inspeção visual confirmou que Jornadas mantém a hierarquia global em desktop, com cards de lifecycle legíveis e detalhe centralizado. O modal mostrou estado, público, inscritos, conversão, gatilho e controles de pausa/ativação. Em Configurações, o Ever pode ser desativado e reativado pelo toggle, refletindo imediatamente no Header.
+
+Relatórios foi validado com o recorte `Este ano`: receita, período exibido, série e sinais operacionais permaneceram sincronizados com os selectors. O novo painel apresenta exportação CSV configurável por tipo de relatório e período, além de estados vazios sem canais fictícios.
+
+Financeiro foi validado com o período `Últimos 90 dias`: a toolbar altera o recorte exibido, os movimentos e os KPIs permanecem relacionados a pedidos e clientes, e a receita bruta/líquida fica explicitamente separada dos reembolsos. A página agora exporta CSV real dos movimentos filtrados.
+
+Integrações foi validada com a Shopify: o catálogo mantém logos e estados conectados, o modal abre a origem correta e uma tentativa de conectar sem domínio/token não altera o estado, exibindo quais campos precisam ser preenchidos. O fluxo continua preparado para OAuth/API real sem expor credenciais no frontend.
+
+A captura final do Ever em estado aberto foi validada no Dashboard: overlay lateral, backdrop, sugestões de perguntas, resposta contextual e composer ficam isolados sem deslocar o layout principal. O assistente está disponível globalmente quando habilitado em Configurações.
+
+A revisão visual dos mockups confirmou a adaptação mobile de Campanhas sem overflow da toolbar: o botão de nova campanha permanece acessível e os indicadores empilham com leitura vertical. Em desktop, Relatórios mantém uma composição premium e legível, com filtros no topo, quatro KPIs, série de receita, sinal do período e blocos operacionais.

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { EverPanel } from "@/components/crm/ever-panel";
+import { useCrmSettings } from "@/components/settings/crm-settings-context";
 import {
   ArrowUpRight,
   Bell,
@@ -11,6 +13,7 @@ import {
   Plug,
   Search,
   Settings,
+  Sparkles,
   Users,
   X,
 } from "lucide-react";
@@ -35,16 +38,16 @@ type SearchItem = {
 };
 
 const searchItems: SearchItem[] = [
-  { type: "Cliente", label: "Ana Souza", detail: "Mercado Livre · Cliente VIP", href: "/clientes" },
-  { type: "Cliente", label: "Camila Lima", detail: "E-commerce · Novo cliente", href: "/clientes" },
-  { type: "Conversa", label: "Rafael Mendes", detail: "WhatsApp · aguardando resposta", href: "/conversas?cliente=rafael-mendes&canal=whatsapp" },
-  { type: "Integração", label: "Mercado Livre", detail: "Canal de venda", href: "/integracoes" },
+  { type: "Cliente", label: "Ana Souza", detail: "Mercado Livre · Cliente VIP", href: "/clientes?cliente=CUS-000184" },
+  { type: "Cliente", label: "Camila Lima", detail: "E-commerce · Novo cliente", href: "/clientes?cliente=CUS-000231" },
+  { type: "Conversa", label: "Rafael Mendes", detail: "WhatsApp · aguardando resposta", href: "/conversas?cliente=CUS-000208&canal=whatsapp" },
+  { type: "Integração", label: "Mercado Livre", detail: "Canal de venda", href: "/integracoes?integration=mercadolivre" },
 ];
 
 const notifications = [
-  { title: "Nova conversa aguardando atendimento", detail: "Rafael Mendes · WhatsApp", time: "há 12 min", tone: "bg-accent" },
-  { title: "Integração pronta para conectar", detail: "Shopify · Canal de vendas", time: "há 1 h", tone: "bg-blue-500" },
-  { title: "Cliente em risco identificado", detail: "João Teixeira · Recompra em atraso", time: "há 3 h", tone: "bg-rose-500" },
+  { title: "Nova conversa aguardando atendimento", detail: "Rafael Mendes · WhatsApp", time: "há 12 min", tone: "bg-accent", href: "/conversas?cliente=CUS-000208&canal=whatsapp" },
+  { title: "Integração pronta para conectar", detail: "Shopify · Canal de vendas", time: "há 1 h", tone: "bg-blue-500", href: "/integracoes?integration=shopify" },
+  { title: "Cliente em risco identificado", detail: "João Teixeira · Recompra em atraso", time: "há 3 h", tone: "bg-rose-500", href: "/clientes?cliente=CUS-000252" },
 ];
 
 export function Header({
@@ -52,9 +55,11 @@ export function Header({
   subtitle,
   user = { name: "Victor Nunes", role: "Administrador", initials: "VN" },
 }: HeaderProps) {
+  const { settings } = useCrmSettings();
   const [activePopover, setActivePopover] = useState<HeaderPopover>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [notificationsRead, setNotificationsRead] = useState(false);
+  const [everOpen, setEverOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
   const filteredSearchItems = useMemo(() => {
@@ -84,7 +89,8 @@ export function Header({
   };
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-30 border-b border-border bg-card shadow-[0_1px_0_rgba(17,17,17,0.03)]">
+    <>
+      <header ref={headerRef} className="sticky top-0 z-30 border-b border-border bg-card shadow-[0_1px_0_rgba(17,17,17,0.03)]">
       <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-2 px-3 py-3 sm:px-6 sm:py-3.5 lg:px-8">
         <div className="flex min-w-0 flex-1 flex-col pr-1 sm:pr-3">
         <h1 className="truncate text-base font-extrabold tracking-[-0.03em] text-foreground sm:text-xl">{title}</h1>
@@ -92,6 +98,7 @@ export function Header({
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
+        {settings.everEnabled ? <button type="button" onClick={() => setEverOpen(true)} className="group inline-flex h-9 items-center gap-2 rounded-xl border border-accent/25 bg-accent/5 px-2.5 text-accent transition-all hover:border-accent/50 hover:bg-accent/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 sm:px-3" aria-label="Abrir Ever, copiloto de operação"><Sparkles className="h-3.5 w-3.5 transition-transform group-hover:rotate-12" /><span className="hidden text-[10px] font-extrabold sm:inline">Ever</span></button> : null}
         <div className="relative flex items-center">
           <Search className="pointer-events-none absolute left-3 h-3.5 w-3.5 text-muted-foreground" />
           <input
@@ -170,10 +177,10 @@ export function Header({
               </div>
               <div className="space-y-1 p-2">
                 {notifications.map((notification) => (
-                  <div key={notification.title} className="flex gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-muted">
+                  <Link key={notification.title} href={notification.href} onClick={() => setActivePopover(null)} className="flex gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-muted">
                     <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${notification.tone}`} />
-                    <div className="min-w-0"><p className="text-xs font-bold leading-snug text-foreground">{notification.title}</p><p className="mt-0.5 text-[11px] text-muted-foreground">{notification.detail}</p><p className="mt-1 text-[10px] font-medium text-muted-foreground/80">{notification.time}</p></div>
-                  </div>
+                    <div className="min-w-0"><p className="text-xs font-bold leading-snug text-foreground">{notification.title}</p><p className="mt-0.5 text-[11px] text-muted-foreground">{notification.detail}</p><p className="mt-1 text-[10px] font-medium text-muted-foreground/80">{notification.time}</p></div><ArrowUpRight className="mt-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  </Link>
                 ))}
               </div>
               <div className="flex items-center justify-between border-t border-border-subtle bg-muted/20 px-4 py-2.5"><button type="button" onClick={() => setNotificationsRead(true)} className="text-[11px] font-bold text-muted-foreground transition-colors hover:text-foreground">Marcar como lidas</button><Link href="/conversas" onClick={() => setActivePopover(null)} className="inline-flex items-center gap-1 text-[11px] font-bold text-accent hover:text-accent-hover">Ver conversas <ArrowUpRight className="h-3 w-3" /></Link></div>
@@ -207,6 +214,8 @@ export function Header({
       </div>
     </div>
     </header>
+      <EverPanel open={everOpen} onClose={() => setEverOpen(false)} />
+    </>
   );
 }
 
