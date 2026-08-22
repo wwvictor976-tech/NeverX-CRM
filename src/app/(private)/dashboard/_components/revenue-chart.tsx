@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Calendar, TrendingUp, Check, X } from "lucide-react";
+import { formatCurrency } from "@/lib/crm-data";
+import { getRevenueTrend } from "@/lib/crm-selectors";
 
 type Period = "7d" | "30d" | "90d" | "custom";
 
@@ -47,51 +49,21 @@ function getBezierPath(points: Point[]): string {
   return d;
 }
 
+const revenueTrend = getRevenueTrend();
+const revenueTotal = revenueTrend.reduce((sum, point) => sum + point.value, 0);
+const revenueMax = Math.max(...revenueTrend.map((point) => point.value), 1);
+const revenueMin = Math.min(...revenueTrend.map((point) => point.value), 0);
+const revenuePoints: Point[] = revenueTrend.map((point, index) => ({
+  id: point.id,
+  label: point.label,
+  value: formatCurrency(point.value),
+  x: revenueTrend.length === 1 ? 50 : (index / (revenueTrend.length - 1)) * 100,
+  y: revenueMax === revenueMin ? 48 : 84 - ((point.value - revenueMin) / (revenueMax - revenueMin)) * 64,
+}));
 const chartData: Record<Exclude<Period, "custom">, PeriodData> = {
-  "7d": {
-    title: "Últimos 7 dias",
-    subtitle: "25/05 a 31/05",
-    totalRevenue: "R$ 34.210,00",
-    growth: "+15,4%",
-    xLabels: ["25 Mai", "26 Mai", "27 Mai", "28 Mai", "29 Mai", "30 Mai", "31 Mai"],
-    points: [
-      { id: "p0", label: "25 Mai", value: "R$ 3.800,00", x: 0, y: 75 },
-      { id: "p1", label: "26 Mai", value: "R$ 4.500,00", x: 16.6, y: 68 },
-      { id: "p2", label: "27 Mai", value: "R$ 6.200,00", x: 33.3, y: 50 },
-      { id: "p3", label: "28 Mai", value: "R$ 4.800,00", x: 50, y: 58 },
-      { id: "p4", label: "29 Mai", value: "R$ 7.100,00", x: 66.6, y: 38 },
-      { id: "p5", label: "30 Mai", value: "R$ 8.200,00", x: 83.3, y: 25 },
-      { id: "p6", label: "31 Mai", value: "R$ 8.900,00", x: 100, y: 18 },
-    ],
-  },
-  "30d": {
-    title: "Últimos 30 dias",
-    subtitle: "01/05 a 31/05",
-    totalRevenue: "R$ 128.560,00",
-    growth: "+12,5%",
-    xLabels: ["01 Mai", "08 Mai", "15 Mai", "22 Mai", "29 Mai", "31 Mai"],
-    points: [
-      { id: "p0", label: "01 Mai", value: "R$ 18.200,00", x: 0, y: 78 },
-      { id: "p1", label: "08 Mai", value: "R$ 28.400,00", x: 20, y: 55 },
-      { id: "p2", label: "15 Mai", value: "R$ 31.200,00", x: 40, y: 48 },
-      { id: "p3", label: "22 Mai", value: "R$ 42.100,00", x: 60, y: 28 },
-      { id: "p4", label: "29 Mai", value: "R$ 35.800,00", x: 80, y: 36 },
-      { id: "p5", label: "31 Mai", value: "R$ 26.860,00", x: 100, y: 20 },
-    ],
-  },
-  "90d": {
-    title: "Últimos 90 dias",
-    subtitle: "Março a Maio",
-    totalRevenue: "R$ 362.800,00",
-    growth: "+22,1%",
-    xLabels: ["01 Mar", "31 Mar", "30 Abr", "31 Mai"],
-    points: [
-      { id: "p0", label: "01 Mar", value: "R$ 78.000,00", x: 0, y: 80 },
-      { id: "p1", label: "31 Mar", value: "R$ 98.000,00", x: 33.3, y: 52 },
-      { id: "p2", label: "30 Abr", value: "R$ 124.000,00", x: 66.6, y: 30 },
-      { id: "p3", label: "31 Mai", value: "R$ 140.800,00", x: 100, y: 18 },
-    ],
-  },
+  "7d": { title: "Últimos 7 dias", subtitle: "Pedidos identificados no workspace", totalRevenue: formatCurrency(revenueTotal), growth: "+12,5%", xLabels: revenuePoints.map((point) => point.label), points: revenuePoints },
+  "30d": { title: "Últimos 30 dias", subtitle: "Pedidos identificados no workspace", totalRevenue: formatCurrency(revenueTotal), growth: "+12,5%", xLabels: revenuePoints.map((point) => point.label), points: revenuePoints },
+  "90d": { title: "Últimos 90 dias", subtitle: "Pedidos identificados no workspace", totalRevenue: formatCurrency(revenueTotal), growth: "+12,5%", xLabels: revenuePoints.map((point) => point.label), points: revenuePoints },
 };
 
 export function RevenueChart() {
@@ -106,7 +78,7 @@ export function RevenueChart() {
       ? {
           title: "Período Personalizado",
           subtitle: `${startDate.split("-").reverse().join("/")} a ${endDate.split("-").reverse().join("/")}`,
-          totalRevenue: "R$ 68.450,00",
+          totalRevenue: formatCurrency(revenueTotal * 0.55),
           growth: "+9,8%",
           xLabels: [
             startDate.split("-").slice(1).reverse().join("/"),
@@ -114,9 +86,9 @@ export function RevenueChart() {
             endDate.split("-").slice(1).reverse().join("/"),
           ],
           points: [
-            { id: "cp0", label: "Início", value: "R$ 18.200,00", x: 0, y: 75 },
-            { id: "cp1", label: "Pico", value: "R$ 28.150,00", x: 50, y: 35 },
-            { id: "cp2", label: "Final", value: "R$ 22.100,00", x: 100, y: 20 },
+            { id: "cp0", label: "Início", value: formatCurrency(revenueTotal * 0.25), x: 0, y: 75 },
+            { id: "cp1", label: "Pico", value: formatCurrency(revenueTotal * 0.45), x: 50, y: 35 },
+            { id: "cp2", label: "Final", value: formatCurrency(revenueTotal * 0.3), x: 100, y: 20 },
           ],
         }
       : chartData[period];

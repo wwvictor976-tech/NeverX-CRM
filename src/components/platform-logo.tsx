@@ -30,10 +30,10 @@ const frameClasses = {
 } as const;
 
 const imageClasses = { xs: "h-4 w-4", sm: "h-5 w-5", md: "h-6 w-6", lg: "h-7 w-7" } as const;
-const wordmarkImageClasses = { xs: "h-3.5 w-7", sm: "h-4 w-9", md: "h-5 w-12", lg: "h-6 w-14" } as const;
+const wordmarkImageClasses = { xs: "h-3.5 w-8", sm: "h-4 w-11", md: "h-5 w-14", lg: "h-6 w-16" } as const;
 
 export function PlatformLogo({ platform, size = "md", framed = true, className = "", ...props }: { platform: PlatformLogoKey; size?: keyof typeof frameClasses; framed?: boolean; className?: string } & Omit<ImageProps, "src" | "alt" | "width" | "height">) {
-  const image = <Image src={logoSources[platform]} alt={`${logoLabels[platform]} logo`} width={44} height={44} className={`${framed ? "h-full w-full" : platform === "nuvemshop" || platform === "shein" ? wordmarkImageClasses[size] : imageClasses[size]} object-contain ${className}`} {...props} />;
+  const image = <Image src={logoSources[platform]} alt={`${logoLabels[platform]} logo`} width={44} height={44} className={`${framed ? "h-full w-full" : platform === "nuvemshop" || platform === "shein" || platform === "shopify" ? wordmarkImageClasses[size] : imageClasses[size]} object-contain ${className}`} {...props} />;
   if (!framed) return image;
   return <span className={`inline-flex shrink-0 items-center justify-center border border-border-subtle bg-card shadow-sm ${frameClasses[size]}`} aria-label={logoLabels[platform]}>{image}</span>;
 }

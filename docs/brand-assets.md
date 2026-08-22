@@ -55,3 +55,21 @@ A nova página Configurações foi validada em desktop com métricas de workspac
 As capturas mobile confirmam que Configurações empilha as métricas sem overflow e mantém a navegação de preferências acessível abaixo do primeiro viewport; Pedidos mantém os indicadores operacionais e o CTA de exportação legíveis no mesmo shell responsivo.
 
 Validação interactiva concluída: `/clientes?cliente=ana-souza` abre automaticamente o sheet 360º de Ana Souza com ações de WhatsApp, E-mail e Outro canal; `/integracoes?integration=nuvemshop` abre o modal de gestão da Nuvemshop, exibindo a conta como conectada e a ação Desconectar conta.
+
+## Auditoria oficial de logos — Agosto de 2026
+
+Foram consultadas as referências oficiais da [Shopify](https://www.shopify.com/brand-assets) e do [WhatsApp/Meta](https://www.meta.com/brand/resources/whatsapp/whatsapp-brand/). A Shopify disponibiliza o primary logo e o shopping bag em SVG, indicando que o wordmark principal deve ser usado quando possível e que o símbolo isolado fica reservado a espaços muito reduzidos. A Meta indica que devem ser usados apenas os WhatsApp Brand Resources oficiais, sem modificar cores, desenho ou proporções. O catálogo do CRM deve manter os logos sem recriação artificial, com enquadramento responsivo e sem sugerir endosso das plataformas.
+
+## Validação da arquitectura relacional — Agosto de 2026
+
+A inbox Conversas foi validada com cinco tickets, um por cliente do conjunto demonstrativo, mantendo fila, histórico, pedido relacionado, perfil 360º e compositor dentro do viewport. O Dashboard foi validado com links directos para os customerIds oficiais, feed alimentado pelos mesmos clientes/conversas e KPIs derivados da camada financeira e de pedidos. A captura confirmou que as logos Mercado Livre, Nuvemshop, Shopee e SHEIN continuam enquadradas sem overflow; a Shopify usa agora o primary logo SVG oficial do brand center.
+
+A revisão dos mockups da versão final confirmou a nova Conversas em desktop com três painéis legíveis, fila de cinco clientes, pedido relacionado, SLA, estado e compositor. O mockup mobile de Clientes confirmou a presença do customerId nos perfis, KPIs derivados e CTAs empilhados sem overflow horizontal.
+
+A matriz final confirmou Financeiro em desktop com métricas de receita líquida, ticket médio, valores pendentes, reembolsos, movimentos e origem da receita. Conversas em mobile mantém busca, filtros, fila e início do ticket dentro do viewport; o histórico e o compositor continuam protegidos por scroll interno.
+
+A revisão visual confirmou Configurações desktop como centro de controlo com métricas, preferências e navegação lateral coerentes. Automações mobile mostra CTA, indicadores e regras em cards empilhados sem overflow, preservando a leitura do produto em largura reduzida.
+
+A validação interactiva confirmou que `/clientes?cliente=CUS-000184` abre directamente o perfil 360º da Ana Souza com ID, contacto, métricas, tags, timeline e pedido. `/pedidos?pedido=%23NX-4029` abre directamente o detalhe do pedido, mostra cliente, origem Mercado Livre, pagamento, tracking, itens e link para gerir a integração.
+
+A revisão final confirmou Jornadas desktop com métricas, filtros e cartões ligados a segmentos/campanhas, e Financeiro mobile com filtros, ações e indicadores empilhados sem overflow. A matriz completa foi recapturada em `mockups/final-v2/desktop` e `mockups/final-v2/mobile`.

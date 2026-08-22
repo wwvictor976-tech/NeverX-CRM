@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
+import type { CustomerProfile } from "@/lib/crm-domain";
+import { customerProfiles } from "@/lib/crm-data";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { 
@@ -9,7 +11,6 @@ import {
   MoreHorizontal, 
   Smartphone,
   Square,
-  Store,
   Mail,
   Tag,
   Download,
@@ -17,149 +18,16 @@ import {
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PlatformLogo, type PlatformLogoKey } from "@/components/platform-logo";
+import { PlatformLogo } from "@/components/platform-logo";
 import { CustomersFilters, type CustomerFiltersValue } from "./customers-filters";
 import { CustomerDetailsSheet } from "./customer-details-sheet";
 import { CustomersHeader } from "./customers-header";
 import { CustomerActionModals, type CustomerAction } from "./customer-action-modals";
 import { CustomersKpis } from "./customers-kpis";
 
-export interface CustomerHistoryItem {
-  title: string;
-  detail: string;
-  value: string;
-  date?: string;
-}
+export type Customer = CustomerProfile;
 
-export interface Customer {
-  id: string;
-  initials: string;
-  name: string;
-  email: string;
-  phone: string;
-  cpf: string;
-  channel: string;
-  channelLogo?: PlatformLogoKey;
-  channelIcon?: React.ElementType;
-  ltv: string;
-  averageTicket: string;
-  orders: number;
-  lastPurchase: string;
-  daysSincePurchase: string;
-  repurchaseDate: string;
-  status: "VIP" | "RECOMPRA_PENDENTE" | "NOVO" | "EM_RISCO";
-  tags: string[];
-  history: CustomerHistoryItem[];
-}
-
-const initialCustomers: Customer[] = [
-  {
-    id: "ana-souza",
-    initials: "AS",
-    name: "Ana Souza",
-    email: "ana.souza@email.com",
-    phone: "+55 (11) 99845-1020",
-    cpf: "***.***.***-42",
-    channel: "Mercado Livre",
-    channelLogo: "mercadolivre",
-    ltv: "R$ 12.480,00",
-    averageTicket: "R$ 624,00",
-    orders: 20,
-    lastPurchase: "16 ago 2026",
-    daysSincePurchase: "há 3 dias",
-    repurchaseDate: "04 set 2026",
-    status: "VIP",
-    tags: ["alto valor", "frequente", "São Paulo"],
-    history: [
-      { title: "Pedido #4029", detail: "Mercado Livre · Air fryer digital", value: "R$ 240,00", date: "16 ago 2026" },
-      { title: "Pedido #3968", detail: "E-commerce · Kit organizador", value: "R$ 680,00", date: "02 jul 2026" },
-    ],
-  },
-  {
-    id: "rafael-mendes",
-    initials: "RM",
-    name: "Rafael Mendes",
-    email: "rafael.mendes@email.com",
-    phone: "+55 (21) 98722-4410",
-    cpf: "***.***.***-18",
-    channel: "Shopee",
-    channelLogo: "shopee",
-    ltv: "R$ 8.920,00",
-    averageTicket: "R$ 446,00",
-    orders: 20,
-    lastPurchase: "12 ago 2026",
-    daysSincePurchase: "há 7 dias",
-    repurchaseDate: "28 ago 2026",
-    status: "RECOMPRA_PENDENTE",
-    tags: ["casa", "recorrente"],
-    history: [
-      { title: "Pedido #4012", detail: "Shopee · Cafeteira compacta", value: "R$ 389,00", date: "12 ago 2026" },
-    ],
-  },
-  {
-    id: "camila-lima",
-    initials: "CL",
-    name: "Camila Lima",
-    email: "camila.lima@email.com",
-    phone: "+55 (31) 99182-7704",
-    cpf: "***.***.***-67",
-    channel: "Nuvemshop",
-    channelLogo: "nuvemshop",
-    ltv: "R$ 2.340,00",
-    averageTicket: "R$ 780,00",
-    orders: 3,
-    lastPurchase: "14 ago 2026",
-    daysSincePurchase: "há 5 dias",
-    repurchaseDate: "21 set 2026",
-    status: "NOVO",
-    tags: ["primeira compra", "Belo Horizonte"],
-    history: [
-      { title: "Pedido #4031", detail: "Nuvemshop · Kit skincare", value: "R$ 780,00", date: "14 ago 2026" },
-    ],
-  },
-  {
-    id: "joao-teixeira",
-    initials: "JT",
-    name: "João Teixeira",
-    email: "joao.teixeira@email.com",
-    phone: "+55 (41) 99671-3250",
-    cpf: "***.***.***-09",
-    channel: "App Próprio",
-    channelIcon: Smartphone,
-    ltv: "R$ 5.760,00",
-    averageTicket: "R$ 480,00",
-    orders: 12,
-    lastPurchase: "08 mai 2026",
-    daysSincePurchase: "há 103 dias",
-    repurchaseDate: "em atraso",
-    status: "EM_RISCO",
-    tags: ["reativação", "Curitiba"],
-    history: [
-      { title: "Pedido #3661", detail: "App Próprio · Fone bluetooth", value: "R$ 480,00", date: "08 mai 2026" },
-    ],
-  },
-  {
-    id: "marina-barbosa",
-    initials: "MB",
-    name: "Marina Barbosa",
-    email: "marina.barbosa@email.com",
-    phone: "+55 (51) 99871-2205",
-    cpf: "***.***.***-81",
-    channel: "SHEIN",
-    channelLogo: "shein",
-    ltv: "R$ 18.200,00",
-    averageTicket: "R$ 910,00",
-    orders: 20,
-    lastPurchase: "18 ago 2026",
-    daysSincePurchase: "ontem",
-    repurchaseDate: "02 set 2026",
-    status: "VIP",
-    tags: ["alto valor", "moda", "Porto Alegre"],
-    history: [
-      { title: "Pedido #4038", detail: "SHEIN · Coleção inverno", value: "R$ 1.240,00", date: "18 ago 2026" },
-    ],
-  },
-];
+const initialCustomers = customerProfiles;
 
 const defaultFilters: CustomerFiltersValue = {
   search: "",
@@ -179,7 +47,8 @@ export function CustomersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedCustomer = searchParams.get("cliente");
-  const initialSelectedCustomer = initialCustomers.find((item) => item.id === requestedCustomer) ?? null;
+  const initialSelectedCustomer = initialCustomers.find((item) => item.id === requestedCustomer || item.slug === requestedCustomer) ?? null;
+  const [customers, setCustomers] = useState(initialCustomers);
   const [filters, setFilters] = useState<CustomerFiltersValue>(defaultFilters);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(initialSelectedCustomer);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -187,7 +56,7 @@ export function CustomersContent() {
 
 
   const filteredCustomers = useMemo(() => {
-    return initialCustomers
+    return customers
       .filter((customer) => {
         const query = filters.search.toLowerCase().trim();
         const matchesSearch =
@@ -209,7 +78,7 @@ export function CustomersContent() {
         if (filters.sort === "orders") return second.orders - first.orders;
         return 0;
       });
-  }, [filters]);
+  }, [customers, filters]);
 
   const handleToggleSelect = useCallback((id: string) => {
     setSelectedIds((prev) => {
@@ -257,7 +126,7 @@ export function CustomersContent() {
           <div className="flex items-center gap-2">
             <p>
               Exibindo <span className="font-bold text-foreground">{filteredCustomers.length}</span> de{" "}
-              <span className="font-bold text-foreground">{initialCustomers.length}</span> clientes
+              <span className="font-bold text-foreground">{customers.length}</span> clientes
             </p>
             {hasActiveFilters && (
               <Button
@@ -312,7 +181,7 @@ export function CustomersContent() {
                 ) : (
                   filteredCustomers.map((customer) => {
                     const isSelected = selectedIds.has(customer.id);
-                    const ChannelIcon = customer.channelIcon;
+                    const ChannelIcon = customer.sourcePlatform === "pdv" ? Smartphone : null;
                     const statusConfig = statusStyles[customer.status] || {
                       label: customer.status,
                       className: "bg-muted text-muted-foreground border-border",
@@ -349,6 +218,7 @@ export function CustomersContent() {
                             </div>
                             <div>
                               <p className="font-bold text-foreground">{customer.name}</p>
+                              <p className="mt-0.5 text-[10px] font-semibold text-accent">{customer.id}</p>
                               <p className="text-[11px] text-muted-foreground">{customer.email}</p>
                             </div>
                           </div>
@@ -445,6 +315,7 @@ export function CustomersContent() {
         action={activeAction}
         selectedCount={selectedIds.size}
         onClose={() => setActiveAction(null)}
+        onCustomerCreated={(customer) => { setCustomers((current) => [customer, ...current]); setSelectedCustomer(customer); setActiveAction(null); }}
       />
     </div>
   );

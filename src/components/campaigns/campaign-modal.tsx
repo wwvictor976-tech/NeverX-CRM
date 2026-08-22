@@ -29,7 +29,7 @@ export function CampaignModal({
 
   const handleClose = () => { setFeedback(null); setName(""); setMessage(""); onClose(); };
   const handleSave = () => {
-    const campaign: CampaignRecord = { id: `cmp-${Date.now()}`, name: name.trim() || "Nova campanha", channel, audience: `${audience.count || 0} ${audience.label}`, status: "Rascunho", updatedAt: "Editada agora", sent: 0, openRate: "—", clickRate: "—", revenue: 0 };
+    const campaign: CampaignRecord = { recordType: "campaign", id: `CMP-${Date.now()}`, name: name.trim() || "Nova campanha", channel, audience: `${audience.count || 0} ${audience.label}`, status: "Rascunho", updatedAt: "Editada agora", sent: 0, openRate: "—", clickRate: "—", revenue: 0, customerIds: [] };
     onSaved?.(campaign);
     setFeedback("Campanha guardada como rascunho. Pode continuar a editar antes de ativar.");
   };

@@ -1,59 +1,65 @@
-export type OrderStatus = "Entregue" | "Em trânsito" | "Processando" | "Cancelado";
+import type {
+  CampaignRecord,
+  ChannelReport,
+  ConversationRecord,
+  CustomerProfile,
+  FinancialEntry,
+  OrderRecord,
+  OrderStatus,
+} from "./crm-domain";
 
-export type OrderRecord = {
-  id: string;
-  customerId: string;
-  customerName: string;
-  customerInitials: string;
-  customerEmail: string;
-  source: "mercado-livre" | "shopee" | "nuvemshop" | "ecommerce" | "shein" | "app";
-  sourceLabel: string;
-  sourceType: "Marketplace" | "Loja própria" | "Aplicativo";
-  createdAt: string;
-  status: OrderStatus;
-  total: number;
-  items: number;
-  payment: string;
-  shipping: string;
-  tracking: string;
-  products: { name: string; quantity: number; price: number }[];
-};
+export type { CampaignStatus, ConversationPriority, ConversationStatus, CustomerId, CustomerStatus, OrderStatus } from "./crm-domain";
+
+export const customerProfiles: CustomerProfile[] = [
+  {
+    recordType: "customer", id: "CUS-000184", slug: "ana-souza", initials: "AS", name: "Ana Souza", email: "ana.souza@email.com", phone: "+55 (11) 99845-1020", cpf: "***.***.***-42", channel: "Mercado Livre", sourcePlatform: "mercadolivre", sourceLabel: "Mercado Livre", channelLogo: "mercadolivre", ltv: "R$ 12.480,00", averageTicket: "R$ 624,00", orders: 20, totalSpent: 12480, lastPurchase: "16 ago 2026", lastInteraction: "Hoje, 10:42", daysSincePurchase: "há 3 dias", repurchaseDate: "04 set 2026", createdAt: "18 jan 2024", status: "VIP", tags: ["alto valor", "frequente", "São Paulo"], segments: ["VIP", "Prontos para recompra"], assignedTo: "Victor Nunes", notes: "Cliente recorrente. Prefere contacto rápido pelo WhatsApp quando há actualizações de entrega.", address: { street: "Av. Paulista", number: "1578", neighborhood: "Bela Vista", city: "São Paulo", state: "SP", country: "Brasil", postalCode: "01310-200" }, financial: { totalSpent: 12480, orderCount: 20, averageTicket: 624, refunds: 0, currency: "BRL" }, history: [{ title: "Pedido #NX-4029", detail: "Mercado Livre · Kit organização premium", value: "R$ 459,90", date: "16 ago 2026" }, { title: "Pedido #NX-3968", detail: "Nuvemshop · Kit organizador", value: "R$ 680,00", date: "02 jul 2026" }], conversationIds: ["CON-10429"], campaignIds: ["CMP-RECOMPRA-AGO"], activities: [{ id: "ACT-0001", type: "conversa", title: "Conversa iniciada", detail: "Ticket sobre a entrega do pedido #NX-4029.", occurredAt: "Hoje, 10:42" }, { id: "ACT-0002", type: "pedido", title: "Pedido em trânsito", detail: "Mercado Livre · tracking MLB-9084421.", occurredAt: "Hoje, 10:40" }, { id: "ACT-0003", type: "campanha", title: "Campanha recebida", detail: "Recompra de agosto via WhatsApp.", occurredAt: "há 2 dias" }],
+  },
+  {
+    recordType: "customer", id: "CUS-000208", slug: "rafael-mendes", initials: "RM", name: "Rafael Mendes", email: "rafael.mendes@email.com", phone: "+55 (21) 98722-4410", cpf: "***.***.***-18", channel: "Shopee", sourcePlatform: "shopee", sourceLabel: "Shopee", channelLogo: "shopee", ltv: "R$ 8.920,00", averageTicket: "R$ 446,00", orders: 20, totalSpent: 8920, lastPurchase: "12 ago 2026", lastInteraction: "Hoje, 09:18", daysSincePurchase: "há 7 dias", repurchaseDate: "28 ago 2026", createdAt: "06 mar 2024", status: "RECOMPRA_PENDENTE", tags: ["casa", "recorrente"], segments: ["Prontos para recompra"], assignedTo: "Victor Nunes", notes: "Responde melhor a recomendações relacionadas com casa e organização.", address: { street: "Rua Visconde de Pirajá", number: "414", neighborhood: "Ipanema", city: "Rio de Janeiro", state: "RJ", country: "Brasil", postalCode: "22410-002" }, financial: { totalSpent: 8920, orderCount: 20, averageTicket: 446, refunds: 0, currency: "BRL" }, history: [{ title: "Pedido #NX-4028", detail: "Shopee · Cafeteira compacta", value: "R$ 299,90", date: "12 ago 2026" }], conversationIds: ["CON-10428"], campaignIds: [], activities: [{ id: "ACT-0004", type: "pedido", title: "Pedido entregue", detail: "Shopee · Cafeteira compacta.", occurredAt: "Hoje, 09:18" }],
+  },
+  {
+    recordType: "customer", id: "CUS-000231", slug: "camila-lima", initials: "CL", name: "Camila Lima", email: "camila.lima@email.com", phone: "+55 (31) 99182-7704", cpf: "***.***.***-67", channel: "Nuvemshop", sourcePlatform: "nuvemshop", sourceLabel: "Nuvemshop", channelLogo: "nuvemshop", ltv: "R$ 2.340,00", averageTicket: "R$ 780,00", orders: 3, totalSpent: 2340, lastPurchase: "14 ago 2026", lastInteraction: "Ontem, 16:22", daysSincePurchase: "há 5 dias", repurchaseDate: "21 set 2026", createdAt: "14 ago 2026", status: "NOVO", tags: ["primeira compra", "Belo Horizonte"], segments: ["Novos clientes"], assignedTo: "Marina Alves", notes: "Primeira compra identificada na Nuvemshop. Acompanhar a experiência pós-compra.", address: { street: "Av. do Contorno", number: "4456", neighborhood: "Funcionários", city: "Belo Horizonte", state: "MG", country: "Brasil", postalCode: "30110-028" }, financial: { totalSpent: 2340, orderCount: 3, averageTicket: 780, refunds: 0, currency: "BRL" }, history: [{ title: "Pedido #NX-4027", detail: "Nuvemshop · Organizador de cabos", value: "R$ 234,00", date: "14 ago 2026" }], conversationIds: ["CON-10427"], campaignIds: [], activities: [{ id: "ACT-0005", type: "pedido", title: "Pedido processando", detail: "Nuvemshop · aguardando expedição.", occurredAt: "Ontem, 16:22" }],
+  },
+  {
+    recordType: "customer", id: "CUS-000252", slug: "joao-teixeira", initials: "JT", name: "João Teixeira", email: "joao.teixeira@email.com", phone: "+55 (41) 99671-3250", cpf: "***.***.***-09", channel: "App Próprio", sourcePlatform: "pdv", sourceLabel: "Aplicativo próprio", ltv: "R$ 5.760,00", averageTicket: "R$ 480,00", orders: 12, totalSpent: 5760, lastPurchase: "08 mai 2026", lastInteraction: "12 ago 2026", daysSincePurchase: "há 103 dias", repurchaseDate: "em atraso", createdAt: "22 jun 2024", status: "EM_RISCO", tags: ["reativação", "Curitiba"], segments: ["Em risco"], assignedTo: "Equipe de loja", notes: "Sem compra há mais de 90 dias. Priorizar campanha de reativação.", address: { street: "Rua XV de Novembro", number: "890", neighborhood: "Centro", city: "Curitiba", state: "PR", country: "Brasil", postalCode: "80020-310" }, financial: { totalSpent: 5760, orderCount: 12, averageTicket: 480, refunds: 120, currency: "BRL" }, history: [{ title: "Pedido #NX-4026", detail: "Aplicativo próprio · Kit home office", value: "R$ 576,00", date: "08 mai 2026" }], conversationIds: ["CON-10426"], campaignIds: ["CMP-REATIVACAO"], activities: [{ id: "ACT-0006", type: "campanha", title: "Cliente em risco identificado", detail: "Sem compra há 90+ dias.", occurredAt: "12 ago 2026" }],
+  },
+  {
+    recordType: "customer", id: "CUS-000277", slug: "marina-barbosa", initials: "MB", name: "Marina Barbosa", email: "marina.barbosa@email.com", phone: "+55 (51) 99871-2205", cpf: "***.***.***-81", channel: "SHEIN", sourcePlatform: "shein", sourceLabel: "SHEIN", channelLogo: "shein", ltv: "R$ 18.200,00", averageTicket: "R$ 910,00", orders: 20, totalSpent: 18200, lastPurchase: "18 ago 2026", lastInteraction: "18 ago 2026", daysSincePurchase: "ontem", repurchaseDate: "02 set 2026", createdAt: "09 nov 2023", status: "VIP", tags: ["alto valor", "moda", "Porto Alegre"], segments: ["VIP"], assignedTo: "Victor Nunes", notes: "Cliente VIP de alto valor com histórico forte em linhas premium.", address: { street: "Rua Padre Chagas", number: "79", neighborhood: "Moinhos de Vento", city: "Porto Alegre", state: "RS", country: "Brasil", postalCode: "90570-080" }, financial: { totalSpent: 18200, orderCount: 20, averageTicket: 910, refunds: 0, currency: "BRL" }, history: [{ title: "Pedido #NX-4025", detail: "SHEIN · Linha home premium", value: "R$ 899,00", date: "18 ago 2026" }], conversationIds: ["CON-10425"], campaignIds: ["CMP-LANCAMENTO-VIP"], activities: [{ id: "ACT-0007", type: "pedido", title: "Pedido entregue", detail: "SHEIN · Linha home premium.", occurredAt: "18 ago 2026" }],
+  },
+];
 
 export const orders: OrderRecord[] = [
-  { id: "#NX-4029", customerId: "ana-souza", customerName: "Ana Souza", customerInitials: "AS", customerEmail: "ana.souza@email.com", source: "mercado-livre", sourceLabel: "Mercado Livre", sourceType: "Marketplace", createdAt: "Hoje, 10:40", status: "Em trânsito", total: 459.9, items: 2, payment: "Cartão de crédito", shipping: "Mercado Envios", tracking: "MLB-9084421", products: [{ name: "Kit organização premium", quantity: 1, price: 319.9 }, { name: "Refil organizador", quantity: 1, price: 140 }] },
-  { id: "#NX-4028", customerId: "rafael-mendes", customerName: "Rafael Mendes", customerInitials: "RM", customerEmail: "rafael.mendes@email.com", source: "shopee", sourceLabel: "Shopee", sourceType: "Marketplace", createdAt: "Hoje, 09:18", status: "Entregue", total: 299.9, items: 1, payment: "Pix", shipping: "Shopee Entrega", tracking: "SPX-771204", products: [{ name: "Cafeteira compacta", quantity: 1, price: 299.9 }] },
-  { id: "#NX-4027", customerId: "camila-lima", customerName: "Camila Lima", customerInitials: "CL", customerEmail: "camila.lima@email.com", source: "nuvemshop", sourceLabel: "Nuvemshop", sourceType: "Loja própria", createdAt: "Ontem, 16:22", status: "Processando", total: 234.0, items: 3, payment: "Pix", shipping: "Jadlog", tracking: "NX-234901", products: [{ name: "Organizador de cabos", quantity: 2, price: 98 }, { name: "Etiqueta térmica", quantity: 1, price: 136 }] },
-  { id: "#NX-4026", customerId: "joao-teixeira", customerName: "João Teixeira", customerInitials: "JT", customerEmail: "joao.teixeira@email.com", source: "app", sourceLabel: "Aplicativo próprio", sourceType: "Aplicativo", createdAt: "12 ago, 14:05", status: "Cancelado", total: 576.0, items: 4, payment: "Cartão de crédito", shipping: "Retirada no PDV", tracking: "PDV-1184", products: [{ name: "Kit home office", quantity: 1, price: 576 }] },
-  { id: "#NX-4025", customerId: "marina-barbosa", customerName: "Marina Barbosa", customerInitials: "MB", customerEmail: "marina.barbosa@email.com", source: "shein", sourceLabel: "SHEIN", sourceType: "Marketplace", createdAt: "18 ago, 11:40", status: "Entregue", total: 899.0, items: 5, payment: "Pix", shipping: "SHEIN Logistics", tracking: "SHE-553190", products: [{ name: "Linha home premium", quantity: 5, price: 899 }] },
-  { id: "#NX-4024", customerId: "juliana-santos", customerName: "Juliana Santos", customerInitials: "JS", customerEmail: "juliana.santos@email.com", source: "nuvemshop", sourceLabel: "Nuvemshop", sourceType: "Loja própria", createdAt: "16 ago, 13:20", status: "Entregue", total: 459.9, items: 2, payment: "Cartão de crédito", shipping: "Correios", tracking: "NX-221480", products: [{ name: "Kit organização premium", quantity: 1, price: 459.9 }] },
+  { recordType: "order", id: "#NX-4029", platformOrderId: "ML-4029", customerId: "CUS-000184", customerName: "Ana Souza", customerInitials: "AS", customerEmail: "ana.souza@email.com", source: "mercado-livre", sourceIntegrationId: "mercadolivre", sourceLabel: "Mercado Livre", sourceType: "Marketplace", createdAt: "Hoje, 10:40", status: "Em trânsito", total: 459.9, items: 2, payment: "Cartão de crédito", shipping: "Mercado Envios", tracking: "MLB-9084421", products: [{ name: "Kit organização premium", quantity: 1, price: 319.9 }, { name: "Refil organizador", quantity: 1, price: 140 }] },
+  { recordType: "order", id: "#NX-4028", platformOrderId: "SPX-4028", customerId: "CUS-000208", customerName: "Rafael Mendes", customerInitials: "RM", customerEmail: "rafael.mendes@email.com", source: "shopee", sourceIntegrationId: "shopee", sourceLabel: "Shopee", sourceType: "Marketplace", createdAt: "Hoje, 09:18", status: "Entregue", total: 299.9, items: 1, payment: "Pix", shipping: "Shopee Entrega", tracking: "SPX-771204", products: [{ name: "Cafeteira compacta", quantity: 1, price: 299.9 }] },
+  { recordType: "order", id: "#NX-4027", platformOrderId: "NS-4027", customerId: "CUS-000231", customerName: "Camila Lima", customerInitials: "CL", customerEmail: "camila.lima@email.com", source: "nuvemshop", sourceIntegrationId: "nuvemshop", sourceLabel: "Nuvemshop", sourceType: "Loja própria", createdAt: "Ontem, 16:22", status: "Processando", total: 234, items: 3, payment: "Pix", shipping: "Jadlog", tracking: "NX-234901", products: [{ name: "Organizador de cabos", quantity: 2, price: 98 }, { name: "Etiqueta térmica", quantity: 1, price: 136 }] },
+  { recordType: "order", id: "#NX-4026", platformOrderId: "APP-4026", customerId: "CUS-000252", customerName: "João Teixeira", customerInitials: "JT", customerEmail: "joao.teixeira@email.com", source: "app", sourceIntegrationId: "pdv", sourceLabel: "Aplicativo próprio", sourceType: "Aplicativo", createdAt: "12 ago, 14:05", status: "Cancelado", total: 576, items: 4, payment: "Cartão de crédito", shipping: "Retirada no PDV", tracking: "PDV-1184", products: [{ name: "Kit home office", quantity: 1, price: 576 }] },
+  { recordType: "order", id: "#NX-4025", platformOrderId: "SHE-4025", customerId: "CUS-000277", customerName: "Marina Barbosa", customerInitials: "MB", customerEmail: "marina.barbosa@email.com", source: "shein", sourceIntegrationId: "shein", sourceLabel: "SHEIN", sourceType: "Marketplace", createdAt: "18 ago, 11:40", status: "Entregue", total: 899, items: 5, payment: "Pix", shipping: "SHEIN Logistics", tracking: "SHE-553190", products: [{ name: "Linha home premium", quantity: 5, price: 899 }] },
+  { recordType: "order", id: "#NX-4024", platformOrderId: "NS-4024", customerId: "CUS-000277", customerName: "Marina Barbosa", customerInitials: "MB", customerEmail: "marina.barbosa@email.com", source: "nuvemshop", sourceIntegrationId: "nuvemshop", sourceLabel: "Nuvemshop", sourceType: "Loja própria", createdAt: "16 ago, 13:20", status: "Entregue", total: 459.9, items: 2, payment: "Cartão de crédito", shipping: "Correios", tracking: "NX-221480", products: [{ name: "Kit organização premium", quantity: 1, price: 459.9 }] },
 ];
 
-export type CampaignRecord = {
-  id: string;
-  name: string;
-  channel: "E-mail" | "WhatsApp" | "Outro canal";
-  audience: string;
-  status: "Ativa" | "Rascunho" | "Agendada" | "Concluída";
-  updatedAt: string;
-  sent: number;
-  openRate: string;
-  clickRate: string;
-  revenue: number;
-};
+export const conversations: ConversationRecord[] = [
+  { recordType: "conversation", id: "CON-10429", ticket: "#TCK-10429", customerId: "CUS-000184", name: "Ana Souza", initials: "AS", email: "ana.souza@email.com", phone: "+55 (11) 99845-1020", channel: "whatsapp", channelLabel: "WhatsApp", preview: "Olá! Gostaria de acompanhar a entrega do meu pedido.", time: "10:42", status: "aguardando", priority: "Alta", tags: ["VIP", "Mercado Livre"], assignedTo: "Victor Nunes", sla: "Responder em 18 min", messages: [{ id: 1, author: "cliente", text: "Olá! Gostaria de acompanhar a entrega do meu pedido #NX-4029.", time: "10:40" }, { id: 2, author: "lojista", text: "Olá, Ana. Vou verificar a atualização para você.", time: "10:41" }, { id: 3, author: "cliente", text: "Obrigada! Fico no aguardo.", time: "10:42" }], createdAt: "Hoje, 10:40", lastMessageAt: "Hoje, 10:42" },
+  { recordType: "conversation", id: "CON-10428", ticket: "#TCK-10428", customerId: "CUS-000208", name: "Rafael Mendes", initials: "RM", email: "rafael.mendes@email.com", phone: "+55 (21) 98722-4410", channel: "whatsapp", channelLabel: "WhatsApp", preview: "A cafeteira chegou direitinho, obrigado pelo atendimento.", time: "09:18", status: "atendimento", priority: "Normal", tags: ["Recorrente", "Shopee"], assignedTo: "Victor Nunes", sla: "Dentro do SLA", messages: [{ id: 1, author: "lojista", text: "Olá, Rafael. Como podemos ajudar hoje?", time: "09:10" }, { id: 2, author: "cliente", text: "A cafeteira chegou direitinho, obrigado pelo atendimento.", time: "09:18" }], createdAt: "Hoje, 09:10", lastMessageAt: "Hoje, 09:18" },
+  { recordType: "conversation", id: "CON-10427", ticket: "#TCK-10427", customerId: "CUS-000231", name: "Camila Lima", initials: "CL", email: "camila.lima@email.com", phone: "+55 (31) 99182-7704", channel: "email", channelLabel: "E-mail", preview: "Tenho uma dúvida sobre os produtos do meu pedido.", time: "Ontem", status: "atendimento", priority: "Normal", tags: ["Novo cliente", "Nuvemshop"], assignedTo: "Marina Alves", sla: "Responder hoje", messages: [{ id: 1, author: "cliente", text: "Tenho uma dúvida sobre os produtos do meu pedido #NX-4027.", time: "Ontem, 16:22" }], createdAt: "Ontem, 16:22", lastMessageAt: "Ontem, 16:22" },
+  { recordType: "conversation", id: "CON-10426", ticket: "#TCK-10426", customerId: "CUS-000252", name: "João Teixeira", initials: "JT", email: "joao.teixeira@email.com", phone: "+55 (41) 99671-3250", channel: "outro", channelLabel: "Outro canal", preview: "Interação recebida através do PDV.", time: "12 ago", status: "resolvida", priority: "Baixa", tags: ["Em risco", "PDV"], assignedTo: "Equipe de loja", sla: "Resolvido", messages: [{ id: 1, author: "cliente", text: "Interação recebida através do PDV.", time: "12 ago" }, { id: 2, author: "lojista", text: "Registo recebido. Vamos manter o histórico associado ao seu perfil.", time: "12 ago" }], createdAt: "12 ago", lastMessageAt: "12 ago" },
+  { recordType: "conversation", id: "CON-10425", ticket: "#TCK-10425", customerId: "CUS-000277", name: "Marina Barbosa", initials: "MB", email: "marina.barbosa@email.com", phone: "+55 (51) 99871-2205", channel: "email", channelLabel: "E-mail", preview: "Gostaria de receber novidades da linha premium.", time: "18 ago", status: "atendimento", priority: "Normal", tags: ["VIP", "SHEIN"], assignedTo: "Victor Nunes", sla: "Responder hoje", messages: [{ id: 1, author: "cliente", text: "Gostaria de receber novidades da linha premium.", time: "18 ago" }], createdAt: "18 ago", lastMessageAt: "18 ago" },
+];
 
 export const campaigns: CampaignRecord[] = [
-  { id: "cmp-recompra-agosto", name: "Recompra de agosto", channel: "WhatsApp", audience: "386 clientes prontos", status: "Ativa", updatedAt: "Atualizada hoje", sent: 386, openRate: "78,4%", clickRate: "22,8%", revenue: 18420 },
-  { id: "cmp-vip-lancamento", name: "Lançamento linha premium", channel: "E-mail", audience: "124 clientes VIP", status: "Agendada", updatedAt: "18 ago 2026", sent: 124, openRate: "—", clickRate: "—", revenue: 0 },
-  { id: "cmp-inativos", name: "Reativação de inativos", channel: "E-mail", audience: "72 clientes em risco", status: "Concluída", updatedAt: "15 ago 2026", sent: 72, openRate: "64,2%", clickRate: "12,5%", revenue: 7260 },
-  { id: "cmp-primeira-compra", name: "Boas-vindas primeira compra", channel: "Outro canal", audience: "48 novos clientes", status: "Rascunho", updatedAt: "Editada há 2 dias", sent: 0, openRate: "—", clickRate: "—", revenue: 0 },
+  { recordType: "campaign", id: "CMP-RECOMPRA-AGO", name: "Recompra de agosto", channel: "WhatsApp", audience: "386 clientes prontos", status: "Ativa", updatedAt: "Atualizada hoje", sent: 386, openRate: "78,4%", clickRate: "22,8%", revenue: 18420, customerIds: ["CUS-000184", "CUS-000208"] },
+  { recordType: "campaign", id: "CMP-LANCAMENTO-VIP", name: "Lançamento linha premium", channel: "E-mail", audience: "124 clientes VIP", status: "Agendada", updatedAt: "18 ago 2026", sent: 124, openRate: "—", clickRate: "—", revenue: 0, customerIds: ["CUS-000277"] },
+  { recordType: "campaign", id: "CMP-REATIVACAO", name: "Reativação de inativos", channel: "E-mail", audience: "72 clientes em risco", status: "Concluída", updatedAt: "15 ago 2026", sent: 72, openRate: "64,2%", clickRate: "12,5%", revenue: 7260, customerIds: ["CUS-000252"] },
+  { recordType: "campaign", id: "CMP-PRIMEIRA-COMPRA", name: "Boas-vindas primeira compra", channel: "Outro canal", audience: "48 novos clientes", status: "Rascunho", updatedAt: "Editada há 2 dias", sent: 0, openRate: "—", clickRate: "—", revenue: 0, customerIds: ["CUS-000231"] },
 ];
 
-export const reportChannels = [
-  { label: "Mercado Livre", logo: "mercadolivre" as const, orders: 1240, revenue: 68450, share: "38%", color: "bg-amber-500" },
-  { label: "Nuvemshop", logo: "nuvemshop" as const, orders: 890, revenue: 48600, share: "27%", color: "bg-foreground" },
-  { label: "Shopee", logo: "shopee" as const, orders: 620, revenue: 28800, share: "16%", color: "bg-orange-500" },
+export const financialEntries: FinancialEntry[] = orders.map((order) => ({ recordType: "financial-entry", id: `FIN-${order.id.replace(/[^0-9]/g, "")}`, customerId: order.customerId, orderId: order.id, type: order.status === "Cancelado" ? "refund" : "revenue", amount: order.total, currency: "BRL", status: order.status === "Processando" ? "pending" : order.status === "Cancelado" ? "cancelled" : "confirmed", occurredAt: order.createdAt }));
+
+export const reportChannels: ChannelReport[] = [
+  { label: "Mercado Livre", logo: "mercadolivre", orders: 1240, revenue: 68450, share: "38%", color: "bg-amber-500" },
+  { label: "Nuvemshop", logo: "nuvemshop", orders: 890, revenue: 48600, share: "27%", color: "bg-foreground" },
+  { label: "Shopee", logo: "shopee", orders: 620, revenue: 28800, share: "16%", color: "bg-orange-500" },
   { label: "Aplicativo próprio", orders: 410, revenue: 21600, share: "12%", color: "bg-blue-500" },
-  { label: "SHEIN", logo: "shein" as const, orders: 280, revenue: 12600, share: "7%", color: "bg-pink-500" },
+  { label: "SHEIN", logo: "shein", orders: 280, revenue: 12600, share: "7%", color: "bg-pink-500" },
 ];
 
 export const reportSegments = [
@@ -63,4 +69,27 @@ export const reportSegments = [
   { label: "Em risco", customers: 72, revenue: 6840, conversion: "6,4%", trend: "-4,1%" },
 ];
 
-export const formatCurrency = (value: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+export const formatCurrency = (value: number, currency: "BRL" | "USD" | "EUR" = "BRL") => new Intl.NumberFormat("pt-BR", { style: "currency", currency }).format(value);
+export const findCustomer = (reference: string | null | undefined) => customerProfiles.find((customer) => customer.id === reference || customer.slug === reference);
+export const findCustomerById = (id: string) => customerProfiles.find((customer) => customer.id === id);
+export const findOrderById = (id: string) => orders.find((order) => order.id === id);
+export const findConversationById = (id: string) => conversations.find((conversation) => conversation.id === id);
+export const getConfirmedRevenue = () => financialEntries.filter((entry) => entry.type === "revenue" && entry.status === "confirmed").reduce((total, entry) => total + entry.amount, 0);
+export const getCustomerCount = () => customerProfiles.length;
+export const getOpenConversationCount = () => conversations.filter((conversation) => conversation.status !== "resolvida").length;
+export const getAverageOrderValue = () => orders.length ? orders.reduce((total, order) => total + order.total, 0) / orders.length : 0;
+
+export type { CampaignRecord, ChannelReport, ConversationRecord, CustomerProfile, FinancialEntry, OrderRecord } from "./crm-domain";
+
+
+export const journeys = [
+  { recordType: "journey" as const, id: "JRN-RECOMPRA-001", name: "Recompra inteligente", description: "Acompanha clientes no momento mais provável de nova compra.", status: "Ativa" as const, audience: "Prontos para recompra", enrolled: 386, conversion: "34,6%", lastUpdated: "Actualizada hoje", trigger: "21 dias após a última compra", steps: 4 },
+  { recordType: "journey" as const, id: "JRN-BOAS-VINDAS-002", name: "Primeira compra", description: "Orienta novos clientes desde a confirmação até ao pós-venda.", status: "Ativa" as const, audience: "Novos clientes", enrolled: 742, conversion: "18,2%", lastUpdated: "Actualizada ontem", trigger: "Pedido confirmado", steps: 5 },
+  { recordType: "journey" as const, id: "JRN-RISCO-003", name: "Recuperação de clientes em risco", description: "Cria uma sequência de reactivação antes da perda de relação.", status: "Pausada" as const, audience: "Clientes em risco", enrolled: 72, conversion: "6,4%", lastUpdated: "Pausada há 3 dias", trigger: "90 dias sem compra", steps: 3 },
+] satisfies import("./crm-domain").JourneyRecord[];
+
+export const automations = [
+  { recordType: "automation" as const, id: "AUT-SLA-001", name: "Alerta de SLA", description: "Avisa o responsável quando um ticket se aproxima do prazo.", status: "Ativa" as const, trigger: "SLA abaixo de 30 minutos", channel: "Interno" as const, runs: 124, lastRun: "Hoje, 10:38", owner: "Equipa de atendimento" },
+  { recordType: "automation" as const, id: "AUT-PEDIDO-002", name: "Actualização de pedido", description: "Informa o cliente quando o pedido muda de estado logístico.", status: "Ativa" as const, trigger: "Estado do pedido actualizado", channel: "WhatsApp" as const, runs: 890, lastRun: "Hoje, 10:40", owner: "Operações" },
+  { recordType: "automation" as const, id: "AUT-VIP-003", name: "Alerta de cliente VIP", description: "Cria uma tarefa quando um cliente de alto valor inicia uma conversa.", status: "Rascunho" as const, trigger: "Ticket aberto por cliente VIP", channel: "Interno" as const, runs: 0, lastRun: "Ainda não executada", owner: "Victor Nunes" },
+] satisfies import("./crm-domain").AutomationRecord[];
