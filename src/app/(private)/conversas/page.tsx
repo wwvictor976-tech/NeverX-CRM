@@ -5,12 +5,12 @@ import { ConversationsContent } from "./_components/conversations-content";
 export default function ConversationsPage() {
   return (
     <PrivateLayout
-      title="Conversas"
-      subtitle="Centralize o atendimento e mantenha o histórico de relacionamento por cliente."
-      mainClassName="overflow-hidden"
-      contentClassName="h-full min-h-0"
+      title="Inbox"
+      subtitle="Atendimento omnicanal e contexto do cliente em um só lugar."
+      mainClassName="overflow-hidden !px-0 !py-0"
+      contentClassName="h-full min-h-0 !max-w-none"
     >
-      <Suspense fallback={<div className="card-surface flex min-h-[420px] items-center justify-center text-xs text-muted-foreground">A carregar conversas...</div>}>
+      <Suspense fallback={<div className="flex h-full min-h-[420px] items-center justify-center bg-background text-xs text-muted-foreground">Carregando inbox...</div>}>
         <ConversationsContent />
       </Suspense>
     </PrivateLayout>

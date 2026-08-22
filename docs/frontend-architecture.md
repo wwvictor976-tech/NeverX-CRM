@@ -88,3 +88,13 @@ O segundo teste foi repetido após a correção: cinco clientes foram selecionad
 A persistência entre rotas foi confirmada: após salvar `Campanha VIP da base` em Clientes, a rota `/campanhas` exibiu o rascunho no topo com `5 clientes selecionados · Editada agora`. O contexto compartilhado também mantém os customerIds nos perfis associados.
 
 A validação final do perfil Ana Souza confirmou duas campanhas relacionadas: a campanha base e `Campanha VIP da base`, além da conversa e do movimento financeiro. O novo rascunho aparece via link `/campanhas?campanha=CMP-*`, demonstrando a ligação por customerId e a persistência do workspace entre rotas.
+
+A inbox de Conversas foi redesenhada sem o PageIntro externo: a nova estrutura ocupa toda a área útil entre o header e a navegação fixa. A validação no navegador confirmou a fila operacional, filtros Todos/Não lidos/Minha fila/Aguardando/Em atendimento/Resolvidas, filtros avançados por canal e prioridade, e a redução correta para 2 tickets ao aplicar WhatsApp. O compositor aceita resposta pública e mantém a ligação com o cliente e o pedido.
+
+A validação funcional da nova inbox confirmou o filtro avançado por WhatsApp, a resposta pública enviada via WhatsApp, a inclusão imediata da mensagem no histórico, o feedback `Mensagem enviada via WhatsApp`, a alteração para `Em atendimento` e a resolução posterior do ticket, com contadores e painel 360º atualizados.
+
+O painel de contexto 360º pode ser ocultado no desktop para expandir o atendimento central. Após ocultá-lo, o botão `Contexto` reaparece na toolbar e reabre o painel sem alterar o ticket selecionado, mantendo a inbox inteira operacional.
+
+A validação visual final da inbox confirmou o shell de tela cheia, fila de tickets, filtros, atendimento e contexto. O painel 360º pode ser ocultado e reaberto pelo botão `Contexto`; o atendimento central expande sem deslocar a página. O estado inicial voltou a 5 tickets, 1 não lido, 3 em atendimento e 1 resolvido.
+
+O mockup mobile final de Conversas foi inspecionado em 390×844. A toolbar reduz ações para ícones acessíveis, a fila ocupa a faixa superior com rolagem horizontal dos filtros, o ticket selecionado e o compositor permanecem abaixo, e o contexto 360º está preparado para abrir como painel sobreposto. Não foi identificado overflow visual da página.
