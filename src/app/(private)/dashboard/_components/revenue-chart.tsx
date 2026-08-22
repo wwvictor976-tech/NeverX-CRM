@@ -1,291 +1,89 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, TrendingUp, Check, X } from "lucide-react";
+import { Calendar, Check, TrendingUp, X } from "lucide-react";
 import { formatCurrency } from "@/lib/crm-data";
 import { getRevenueTrend } from "@/lib/crm-selectors";
+import { useDashboard } from "./dashboard-context";
 
-type Period = "7d" | "30d" | "90d" | "custom";
+type Point = { id: string; label: string; value: string; x: number; y: number };
 
-interface Point {
-  id: string;
-  label: string;
-  value: string;
-  x: number; // Porcentagem de 0 a 100 no Eixo X
-  y: number; // Porcentagem de 0 a 100 no Eixo Y (0 = topo, 100 = base)
-}
-
-interface PeriodData {
-  title: string;
-  subtitle: string;
-  totalRevenue: string;
-  growth: string;
-  points: Point[];
-  xLabels: string[];
-}
-
-// Algoritmo Catmull-Rom para curva Bezier suave no espaço 0..100
 function getBezierPath(points: Point[]): string {
-  if (!points || points.length === 0) return "";
+  if (!points.length) return "";
   if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
-
-  let d = `M ${points[0].x} ${points[0].y}`;
-
-  for (let i = 0; i < points.length - 1; i++) {
-    const p0 = i === 0 ? points[0] : points[i - 1];
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    const p3 = i + 2 < points.length ? points[i + 2] : p2;
-
+  let path = `M ${points[0].x} ${points[0].y}`;
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const p0 = index === 0 ? points[0] : points[index - 1];
+    const p1 = points[index];
+    const p2 = points[index + 1];
+    const p3 = index + 2 < points.length ? points[index + 2] : p2;
     const cp1x = p1.x + (p2.x - p0.x) / 6;
     const cp1y = p1.y + (p2.y - p0.y) / 6;
-
     const cp2x = p2.x - (p3.x - p1.x) / 6;
     const cp2y = p2.y - (p3.y - p1.y) / 6;
-
-    d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x} ${p2.y}`;
+    path += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x} ${p2.y}`;
   }
-
-  return d;
+  return path;
 }
 
-const revenueTrend = getRevenueTrend();
-const revenueTotal = revenueTrend.reduce((sum, point) => sum + point.value, 0);
-const revenueMax = Math.max(...revenueTrend.map((point) => point.value), 1);
-const revenueMin = Math.min(...revenueTrend.map((point) => point.value), 0);
-const revenuePoints: Point[] = revenueTrend.map((point, index) => ({
-  id: point.id,
-  label: point.label,
-  value: formatCurrency(point.value),
-  x: revenueTrend.length === 1 ? 50 : (index / (revenueTrend.length - 1)) * 100,
-  y: revenueMax === revenueMin ? 48 : 84 - ((point.value - revenueMin) / (revenueMax - revenueMin)) * 64,
-}));
-const chartData: Record<Exclude<Period, "custom">, PeriodData> = {
-  "7d": { title: "Últimos 7 dias", subtitle: "Pedidos identificados no workspace", totalRevenue: formatCurrency(revenueTotal), growth: "+12,5%", xLabels: revenuePoints.map((point) => point.label), points: revenuePoints },
-  "30d": { title: "Últimos 30 dias", subtitle: "Pedidos identificados no workspace", totalRevenue: formatCurrency(revenueTotal), growth: "+12,5%", xLabels: revenuePoints.map((point) => point.label), points: revenuePoints },
-  "90d": { title: "Últimos 90 dias", subtitle: "Pedidos identificados no workspace", totalRevenue: formatCurrency(revenueTotal), growth: "+12,5%", xLabels: revenuePoints.map((point) => point.label), points: revenuePoints },
-};
-
 export function RevenueChart() {
-  const [period, setPeriod] = useState<Period>("7d");
+  const { range, periodKey, customStartDate, customEndDate, applyPreset, applyCustomRange, isRefreshing } = useDashboard();
   const [showPicker, setShowPicker] = useState(false);
-  const [startDate, setStartDate] = useState("2025-05-10");
-  const [endDate, setEndDate] = useState("2025-05-25");
+  const [startDate, setStartDate] = useState(customStartDate);
+  const [endDate, setEndDate] = useState(customEndDate);
+  const [dateError, setDateError] = useState<string | null>(null);
   const [hoveredPointId, setHoveredPointId] = useState<string | null>(null);
 
-  const current: PeriodData =
-    period === "custom"
-      ? {
-          title: "Período Personalizado",
-          subtitle: `${startDate.split("-").reverse().join("/")} a ${endDate.split("-").reverse().join("/")}`,
-          totalRevenue: formatCurrency(revenueTotal * 0.55),
-          growth: "+9,8%",
-          xLabels: [
-            startDate.split("-").slice(1).reverse().join("/"),
-            "Meio do Período",
-            endDate.split("-").slice(1).reverse().join("/"),
-          ],
-          points: [
-            { id: "cp0", label: "Início", value: formatCurrency(revenueTotal * 0.25), x: 0, y: 75 },
-            { id: "cp1", label: "Pico", value: formatCurrency(revenueTotal * 0.45), x: 50, y: 35 },
-            { id: "cp2", label: "Final", value: formatCurrency(revenueTotal * 0.3), x: 100, y: 20 },
-          ],
-        }
-      : chartData[period];
 
-  const pathD = getBezierPath(current.points);
-  const gradientD = `${pathD} L 100 100 L 0 100 Z`;
+  const revenueTrend = getRevenueTrend(range);
+  const revenueTotal = revenueTrend.reduce((sum, point) => sum + point.value, 0);
+  const revenueMax = Math.max(...revenueTrend.map((point) => point.value), 1);
+  const revenueMin = Math.min(...revenueTrend.map((point) => point.value), 0);
+  const points: Point[] = revenueTrend.map((point, index) => ({
+    id: point.id,
+    label: point.label,
+    value: formatCurrency(point.value),
+    x: revenueTrend.length === 1 ? 50 : (index / (revenueTrend.length - 1)) * 100,
+    y: revenueMax === revenueMin ? 48 : 84 - ((point.value - revenueMin) / (revenueMax - revenueMin)) * 64,
+  }));
+  const pathD = getBezierPath(points);
+  const gradientD = pathD ? `${pathD} L 100 100 L 0 100 Z` : "";
+  const displayPeriod = periodKey === "custom" ? "Personalizado" : range.label.replace("Últimos ", "");
+
+  const handleCustomRange = () => {
+    if (!startDate || !endDate) {
+      setDateError("Escolha as duas datas para continuar.");
+      return;
+    }
+    if (startDate > endDate) {
+      setDateError("A data inicial deve ser anterior à data final.");
+      return;
+    }
+    applyCustomRange(startDate, endDate);
+    setDateError(null);
+    setShowPicker(false);
+  };
 
   return (
-    <div className="relative flex flex-col justify-between rounded-2xl border border-border-subtle bg-card p-5 shadow-card sm:p-6">
-      {/* Header */}
+    <div className={`relative flex flex-col justify-between rounded-2xl border border-border-subtle bg-card p-5 shadow-card transition-opacity duration-200 sm:p-6 ${isRefreshing ? "opacity-60" : "opacity-100"}`} aria-busy={isRefreshing}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-foreground">
-              Receita ao longo do tempo
-            </h3>
-            <span className="flex items-center gap-1 rounded-md bg-success/10 px-2 py-0.5 text-[11px] font-bold text-success">
-              <TrendingUp className="h-3 w-3" />
-              {current.growth}
-            </span>
-          </div>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
-              {current.totalRevenue}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              ({current.subtitle})
-            </span>
-          </div>
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2"><h3 className="text-sm font-bold text-foreground">Receita ao longo do tempo</h3><span className="flex items-center gap-1 rounded-md bg-success/10 px-2 py-0.5 text-[11px] font-bold text-success"><TrendingUp className="h-3 w-3" />Dados confirmados</span></div>
+          <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1"><span className="text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">{formatCurrency(revenueTotal)}</span><span className="text-xs text-muted-foreground">Receita confirmada · {range.label.toLowerCase()}</span></div>
         </div>
-
-        {/* Filtros */}
-        <div className="flex items-center gap-1 rounded-xl border border-border-subtle bg-background p-1 self-start sm:self-auto">
-          {(["7d", "30d", "90d"] as const).map((p) => (
-            <button
-              key={p}
-              type="button"
-              onClick={() => {
-                setPeriod(p);
-                setShowPicker(false);
-              }}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                period === p
-                  ? "bg-card text-foreground shadow-xs border border-border-subtle"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {p === "7d" ? "7 dias" : p === "30d" ? "30 dias" : "90 dias"}
-            </button>
-          ))}
-
-          <button
-            type="button"
-            onClick={() => setShowPicker(!showPicker)}
-            className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-              period === "custom"
-                ? "bg-accent text-accent-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Calendar className="h-3 w-3" />
-            <span>Customizar</span>
-          </button>
+        <div className="flex max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-border-subtle bg-background p-1 self-start sm:self-auto">
+          {(["7d", "30d", "90d"] as const).map((preset) => <button key={preset} type="button" onClick={() => { applyPreset(preset); setShowPicker(false); }} className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${periodKey === preset ? "border border-border-subtle bg-card text-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"}`}>{preset === "7d" ? "7 dias" : preset === "30d" ? "30 dias" : "90 dias"}</button>)}
+          <button type="button" onClick={() => { setStartDate(customStartDate); setEndDate(customEndDate); setDateError(null); setShowPicker((value) => !value); }} className={`flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${periodKey === "custom" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"}`}><Calendar className="h-3 w-3" /><span>{periodKey === "custom" ? displayPeriod : "Personalizar"}</span></button>
         </div>
       </div>
 
-      {/* Popover Customizado */}
-      {showPicker && (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border-subtle bg-background p-3">
-          <span className="text-xs font-semibold text-foreground">
-            Selecione o intervalo:
-          </span>
-          <div className="flex items-center gap-2">
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="h-8 rounded-lg border border-input bg-card px-2 text-xs font-medium text-foreground focus:border-accent focus:outline-none"
-            />
-            <span className="text-xs text-muted-foreground">até</span>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="h-8 rounded-lg border border-input bg-card px-2 text-xs font-medium text-foreground focus:border-accent focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setPeriod("custom");
-                setShowPicker(false);
-              }}
-              className="flex h-8 items-center gap-1 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary-hover"
-            >
-              <Check className="h-3.5 w-3.5" />
-              Aplicar
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowPicker(false)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border-subtle bg-card text-muted-foreground hover:bg-muted"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      )}
+      {showPicker ? <div className="mt-4 rounded-xl border border-border-subtle bg-background p-3"><div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold text-foreground">Intervalo personalizado</p><p className="mt-1 text-[11px] text-muted-foreground">Analise uma campanha, lançamento ou operação específica.</p></div><div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_1fr_auto_auto] sm:items-end"><label className="space-y-1 text-[10px] font-bold text-muted-foreground">De<input aria-label="Data inicial da receita" type="date" value={startDate} onChange={(event) => { setStartDate(event.target.value); setDateError(null); }} className="auth-input h-8 text-xs" /></label><span className="hidden pb-2 text-xs text-muted-foreground sm:block">até</span><label className="space-y-1 text-[10px] font-bold text-muted-foreground">Até<input aria-label="Data final da receita" type="date" value={endDate} onChange={(event) => { setEndDate(event.target.value); setDateError(null); }} className="auth-input h-8 text-xs" /></label><button type="button" onClick={handleCustomRange} className="flex h-8 items-center justify-center gap-1 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary-hover"><Check className="h-3.5 w-3.5" />Aplicar</button><button type="button" onClick={() => setShowPicker(false)} aria-label="Fechar personalização de datas" className="flex h-8 w-8 items-center justify-center rounded-lg border border-border-subtle bg-card text-muted-foreground hover:bg-muted"><X className="h-3.5 w-3.5" /></button></div></div>{dateError ? <p role="alert" className="mt-3 rounded-lg border border-danger/20 bg-danger/5 px-3 py-2 text-[11px] font-semibold text-danger">{dateError}</p> : null}</div> : null}
 
-      {/* Container do Gráfico */}
-      <div className="relative mt-6 h-52 w-full">
-        {/* Linhas de Grade */}
-        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
-          <div className="w-full border-b border-dashed border-border-subtle" />
-          <div className="w-full border-b border-dashed border-border-subtle" />
-          <div className="w-full border-b border-dashed border-border-subtle" />
-        </div>
-
-        {/* 1. SVG Apenas para Linha Curva e Gradiente (vector-effect evita deformação do stroke) */}
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="h-full w-full overflow-visible"
-        >
-          <defs>
-            <linearGradient id="goldGradFluid" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.0" />
-            </linearGradient>
-          </defs>
-
-          <path d={gradientD} fill="url(#goldGradFluid)" />
-          <path
-            d={pathD}
-            fill="none"
-            stroke="#D4AF37"
-            strokeWidth="3"
-            vectorEffect="non-scaling-stroke"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-
-        {/* 2. Camada HTML de Bolinhas Perfeitas e Tooltips (100% Imune a deformações) */}
-        <div className="absolute inset-0 pointer-events-none">
-          {current.points.map((pt) => {
-            const isHovered = hoveredPointId === pt.id;
-            
-            // Ajuste para não cortar o tooltip se estiver nas pontas extremas
-            let alignClass = "-translate-x-1/2";
-            if (pt.x === 0) alignClass = "translate-x-0";
-            if (pt.x === 100) alignClass = "-translate-x-full";
-
-            return (
-              <div
-                key={pt.id}
-                style={{ left: `${pt.x}%`, top: `${pt.y}%` }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto group z-10"
-                onMouseEnter={() => setHoveredPointId(pt.id)}
-                onMouseLeave={() => setHoveredPointId(null)}
-              >
-                {/* Hitbox maior para facilitar passar o mouse */}
-                <div className="absolute -inset-3 rounded-full cursor-pointer" />
-
-                {/* Bolinha HTML 100% Redonda */}
-                <div
-                  className={`relative flex items-center justify-center rounded-full bg-card ring-2 ring-[#D4AF37] shadow-sm cursor-pointer transition-all duration-150 ${
-                    isHovered ? "h-4 w-4 scale-110 ring-4" : "h-3 w-3"
-                  }`}
-                >
-                  <div className="h-1 w-1 rounded-full bg-[#D4AF37]" />
-                </div>
-
-                {/* Tooltip HTML */}
-                {isHovered && (
-                  <div
-                    className={`absolute bottom-full mb-2.5 ${alignClass} whitespace-nowrap rounded-xl border border-border-subtle bg-[#111111] px-3 py-1.5 text-center shadow-xl z-30 pointer-events-none transition-all duration-150`}
-                  >
-                    <p className="text-[10px] font-semibold text-[#6E6E73] leading-none">
-                      {pt.label}
-                    </p>
-                    <p className="mt-1 text-xs font-bold text-white leading-none">
-                      {pt.value}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Eixo X - Labels */}
-      <div className="mt-4 flex justify-between border-t border-border-subtle pt-3 text-[11px] font-semibold text-muted-foreground">
-        {current.xLabels.map((lbl) => (
-          <span key={lbl}>{lbl}</span>
-        ))}
-      </div>
+      {points.length ? <>
+        <div className="relative mt-6 h-52 w-full"><div className="pointer-events-none absolute inset-0 flex flex-col justify-between opacity-20"><div className="w-full border-b border-dashed border-border-subtle" /><div className="w-full border-b border-dashed border-border-subtle" /><div className="w-full border-b border-dashed border-border-subtle" /></div><svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full overflow-visible" aria-label="Evolução da receita"><defs><linearGradient id="goldGradFluid" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#D4AF37" stopOpacity="0.25" /><stop offset="100%" stopColor="#D4AF37" stopOpacity="0" /></linearGradient></defs><path d={gradientD} fill="url(#goldGradFluid)" /><path d={pathD} fill="none" stroke="#D4AF37" strokeWidth="3" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" /></svg><div className="pointer-events-none absolute inset-0">{points.map((point) => { const isHovered = hoveredPointId === point.id; const alignClass = point.x === 0 ? "translate-x-0" : point.x === 100 ? "-translate-x-full" : "-translate-x-1/2"; return <div key={point.id} style={{ left: `${point.x}%`, top: `${point.y}%` }} className="pointer-events-auto absolute z-10 -translate-y-1/2" onMouseEnter={() => setHoveredPointId(point.id)} onMouseLeave={() => setHoveredPointId(null)}><div className="absolute -inset-3 rounded-full" /><div className={`relative flex cursor-pointer items-center justify-center rounded-full bg-card shadow-sm ring-2 ring-[#D4AF37] transition-all duration-150 ${isHovered ? "h-4 w-4 scale-110 ring-4" : "h-3 w-3"}`}><div className="h-1 w-1 rounded-full bg-[#D4AF37]" /></div>{isHovered ? <div className={`absolute bottom-full z-30 mb-2.5 ${alignClass} pointer-events-none whitespace-nowrap rounded-xl border border-border-subtle bg-[#111111] px-3 py-1.5 text-center shadow-xl`}><p className="text-[10px] font-semibold leading-none text-[#6E6E73]">{point.label}</p><p className="mt-1 text-xs font-bold leading-none text-white">{point.value}</p></div> : null}</div>; })}</div></div>
+        <div className="mt-4 flex justify-between border-t border-border-subtle pt-3 text-[11px] font-semibold text-muted-foreground">{points.map((point) => <span key={`${point.id}-label`}>{point.label}</span>)}</div>
+      </> : <div className="mt-6 flex min-h-52 flex-col items-center justify-center rounded-xl border border-dashed border-border-subtle bg-muted/10 px-5 text-center"><TrendingUp className="h-5 w-5 text-muted-foreground" /><p className="mt-2 text-xs font-bold text-foreground">Sem receita confirmada neste período</p><p className="mt-1 max-w-xs text-[11px] leading-relaxed text-muted-foreground">Altere o intervalo para comparar o ritmo de vendas da sua loja.</p></div>}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-muted-foreground"><span>{points.length} {points.length === 1 ? "ponto de venda identificado" : "pontos de venda identificados"}</span><span>Pedidos entregues ou em trânsito</span></div>
     </div>
   );
 }

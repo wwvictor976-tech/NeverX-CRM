@@ -1,11 +1,40 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import { ArrowUpRight, ShoppingBag } from "lucide-react";
 import { PlatformLogo } from "@/components/platform-logo";
 import { formatCurrency } from "@/lib/crm-data";
 import { getSalesChannelMetrics } from "@/lib/crm-selectors";
+import { useDashboard } from "./dashboard-context";
 
 export function SalesChannelsChart() {
-  const salesChannels = getSalesChannelMetrics();
-  return <div className="card-surface flex flex-col justify-between p-5 sm:p-6"><div><div className="flex items-center justify-between gap-3"><h3 className="text-sm font-bold text-foreground">Canais que mais vendem</h3><span className="text-[11px] font-semibold text-success">Pedidos confirmados</span></div><p className="mt-0.5 text-xs text-muted-foreground">Faturamento e volume de pedidos por origem.</p></div><div className="mt-6 flex flex-col gap-3.5">{salesChannels.map((channel) => { const isMarketplace = ["Mercado Livre", "Shopee", "SHEIN"].includes(channel.label); return <div key={channel.label} className="group flex flex-col gap-2 rounded-xl border border-border-subtle bg-background/60 p-3 transition-colors hover:border-border hover:bg-muted/50"><div className="flex items-center justify-between gap-2"><div className="flex min-w-0 items-center gap-3"><div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-card shadow-sm">{channel.logo ? <PlatformLogo platform={channel.logo} size="xs" framed={false} /> : <ShoppingBag className="h-4 w-4 text-muted-foreground" />}</div><div className="min-w-0"><div className="flex items-center gap-2"><span className="truncate text-xs font-bold text-foreground">{channel.label}</span><span className="hidden rounded-md border border-border-subtle bg-card px-1.5 py-0.5 text-[9px] font-semibold text-muted-foreground sm:inline-flex">{isMarketplace ? "Marketplace" : "Loja própria"}</span></div><span className="text-[10px] text-muted-foreground">{channel.orders} {channel.orders === 1 ? "pedido" : "pedidos"} identificado(s)</span></div></div><div className="shrink-0 text-right"><span className="block text-xs font-extrabold text-foreground">{formatCurrency(channel.revenue)}</span><span className="text-[10px] font-bold text-muted-foreground">{channel.share} do total</span></div></div><div className="h-1.5 w-full overflow-hidden rounded-full bg-border-subtle/60"><div className="h-full rounded-full bg-accent transition-all duration-300" style={{ width: channel.share }} /></div></div>; })}</div></div>;
+  const { range, isRefreshing } = useDashboard();
+  const salesChannels = getSalesChannelMetrics(range).filter((channel) => channel.orders > 0);
+
+  return (
+    <div className={`card-surface flex flex-col justify-between p-5 transition-opacity duration-200 sm:p-6 ${isRefreshing ? "opacity-60" : "opacity-100"}`} aria-busy={isRefreshing}>
+      <div>
+        <div className="flex items-center justify-between gap-3"><h3 className="text-sm font-bold text-foreground">Canais que mais vendem</h3><ArrowUpRight className="h-4 w-4 text-accent" /></div>
+        <p className="mt-0.5 text-xs text-muted-foreground">Faturamento e volume de pedidos no período selecionado.</p>
+      </div>
+      <div className="mt-6 flex flex-col gap-3.5">
+        {salesChannels.map((channel) => {
+          const isMarketplace = ["Mercado Livre", "Shopee", "SHEIN"].includes(channel.label);
+          const share = Number.parseInt(channel.share, 10) || 0;
+          return (
+            <div key={channel.label} className="group flex flex-col gap-2 rounded-xl border border-border-subtle bg-background/60 p-3 transition-colors hover:border-border hover:bg-muted/50">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-card shadow-sm">{channel.logo ? <PlatformLogo platform={channel.logo} size="xs" framed={false} /> : <ShoppingBag className="h-4 w-4 text-muted-foreground" />}</div>
+                  <div className="min-w-0"><div className="flex items-center gap-2"><span className="truncate text-xs font-bold text-foreground">{channel.label}</span><span className="hidden rounded-md border border-border-subtle bg-card px-1.5 py-0.5 text-[9px] font-semibold text-muted-foreground sm:inline-flex">{isMarketplace ? "Marketplace" : "Loja própria"}</span></div><span className="text-[10px] text-muted-foreground">{channel.orders} {channel.orders === 1 ? "pedido" : "pedidos"} identificado{channel.orders === 1 ? "" : "s"}</span></div>
+                </div>
+                <div className="shrink-0 text-right"><span className="block text-xs font-extrabold text-foreground">{formatCurrency(channel.revenue)}</span><span className="text-[10px] font-bold text-muted-foreground">{channel.share} do total</span></div>
+              </div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-subtle/60"><div className="h-full rounded-full bg-accent transition-all duration-300" style={{ width: `${share}%` }} /></div>
+            </div>
+          );
+        })}
+        {!salesChannels.some((channel) => channel.orders > 0) ? <p className="rounded-xl border border-dashed border-border-subtle p-5 text-center text-xs text-muted-foreground">Sem pedidos identificados neste intervalo.</p> : null}
+      </div>
+    </div>
+  );
 }

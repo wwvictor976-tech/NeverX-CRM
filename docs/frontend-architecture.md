@@ -51,4 +51,14 @@ O catálogo global está em `src/components/platform-logo.tsx`; a lista de integ
 
 ## Validação de rotas
 
-A validação de smoke test respondeu com HTTP 200 para Dashboard, Clientes, Conversas, Pedidos, Financeiro, Campanhas, Jornadas, Automações, Integrações, Relatórios e Configurações. Também responderam correctamente os deep-links `/clientes?cliente=CUS-000184`, `/pedidos?pedido=%23NX-4029` e `/integracoes?integration=nuvemshop`.
+A validação de smoke test respondeu com HTTP 200 para Dashboard, Clientes, Conversas, Pedidos, Financeiro, Campanhas, Jornadas, Automações, Integrações, Relatórios e Configurações. Também responderam corretamente os deep-links `/clientes?cliente=CUS-000184`, `/pedidos?pedido=%23NX-4029` e `/integracoes?integration=nuvemshop`.
+
+## Dashboard operacional
+
+O Dashboard usa `DashboardProvider` como estado de interface. O período selecionado é aplicado de forma consistente a KPIs, receita, canais de venda, canais de atendimento e feed de clientes/conversas. Os presets Hoje, últimos 7, 30 e 90 dias usam a data de referência do dataset demonstrativo; o intervalo personalizado valida início/fim e aceita as datas reais dos registros mockados.
+
+A ação de atualização reprocessa o snapshot em memória, apresenta estado `Sincronizando`, atualiza o timestamp da sessão e recalcula os selectors. Quando o backend estiver conectado, este ponto é o local recomendado para invalidar cache e solicitar o novo `CrmSnapshot`. A exportação CSV usa os mesmos selectors do Dashboard; a opção de impressão delega para a janela nativa do navegador.
+
+A validação interativa do Dashboard confirmou que o botão de atualização apresenta `Sincronizando`, recalcula a interface e termina com timestamp da sessão. O preset Hoje reduziu os indicadores ao conjunto do dia, e o intervalo personalizado de 14/08/2026 a 18/08/2026 atualizou receita, pedidos, canais e feed para os registros correspondentes. A série de receita também foi agrupada por dia para evitar rótulos duplicados.
+
+A exportação CSV foi testada no intervalo personalizado e apresentou confirmação no modal após gerar o arquivo no navegador. O mockup desktop atualizado demonstra o estado final com o resumo operacional, período personalizado, receita agregada por dia e canais filtrados.
